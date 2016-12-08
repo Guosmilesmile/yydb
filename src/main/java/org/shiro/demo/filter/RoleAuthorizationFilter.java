@@ -40,7 +40,7 @@ public class RoleAuthorizationFilter extends AuthorizationFilter {
 		Object principal = subject.getPrincipal();
 		PrincipalCollection principals = subject.getPrincipals();
 		UsernamePasswordToken token = new UsernamePasswordToken();
-		System.out.println("xxxxxx");
+		System.out.println("xxxxxx++++++");
 		subject.login(token);
 		
 		boolean authenticated = subject.isAuthenticated();

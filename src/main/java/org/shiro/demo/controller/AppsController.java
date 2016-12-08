@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/app")
 public class AppsController {
 	
-	//@RequiresPermissions("admin:user")
+	@RequiresPermissions("admin:user")
 	//@RequiresUser
 	@ResponseBody
 	@RequestMapping(value = "/getdata" ,method=RequestMethod.GET)

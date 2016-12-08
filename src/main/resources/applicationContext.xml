@@ -145,10 +145,10 @@
 		<property name="unauthorizedUrl" value="/system/error" />
 		<property name="filters">
             <util:map>
-                <entry key="apps">
+                <entry key="myfilter">
                 	<bean class="org.shiro.demo.filter.RoleAuthorizationFilter" />
                 </entry>
-                <entry key="myfilter">
+                <entry key="apps">
                 	<bean class="org.shiro.demo.filter.MyAccessFilter" />
                 </entry>
             </util:map>
@@ -157,7 +157,7 @@
 			<value>
 			/login = anon
 			/validateCode = anon
-           	/app/** = myfilter
+           	/app/** = apps
            	/** = authc
 			</value>
 		</property>
