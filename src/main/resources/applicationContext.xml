@@ -155,6 +155,8 @@
         </property>
 		<property name="filterChainDefinitions">
 			<value>
+			/getrasrepair = anon
+			/resources/** = anon
 			/login = anon
 			/validateCode = anon
            	/app/** = apps

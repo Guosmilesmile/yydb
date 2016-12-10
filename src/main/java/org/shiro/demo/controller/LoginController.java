@@ -16,14 +16,30 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.util.WebUtils;
+import org.mindrot.jbcrypt.BCrypt;
 import org.shiro.demo.entity.User;
+import org.shiro.demo.service.IUserService;
+import org.shiro.demo.util.FastJsonTool;
+import org.shiro.demo.util.PublicKeyMap;
+import org.shiro.demo.util.RSAUtils;
 import org.shiro.demo.util.ValidateCode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+
 
 @Controller
 public class LoginController {
+	
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	
+	@Autowired
+	private IUserService userService;
 	
 	@RequestMapping(value = "/login" ,method=RequestMethod.POST,produces={"application/json;charset=UTF-8"})
 	public String login(User currUser,HttpSession session, HttpServletRequest request){
@@ -32,15 +48,26 @@ public class LoginController {
 		if (StringUtils.isEmpty(submitCode) || !StringUtils.equals(code,submitCode.toLowerCase())) {
 			return "redirect:/";
 		}*/
-		Subject user = SecurityUtils.getSubject();
-		UsernamePasswordToken token = new UsernamePasswordToken(currUser.getAccount(),currUser.getPassword());
-		//token.setRememberMe(true);
-		System.out.println("xxxxxx");
-		try {
-			user.login(token);
+		Subject subject = SecurityUtils.getSubject();
+		logger.info("rsa:"+currUser.getPassword());
+		String pwd  = RSAUtils.decryptStringByJs(currUser.getPassword());
+		logger.info(pwd);
+		String hashed = BCrypt.hashpw(pwd, BCrypt.gensalt());
+		logger.info("hashed= "+hashed);
+		User user = userService.getByAccount(currUser.getAccount());
+		logger.info("user real pwd: "+user.getPassword());
+		UsernamePasswordToken token = null;
+		try{
+			if(BCrypt.checkpw(pwd, user.getPassword())){
+				token = new UsernamePasswordToken(currUser.getAccount(),user.getPassword());
+			}else{
+				token = new UsernamePasswordToken(currUser.getAccount(),hashed);
+			}
+			subject.login(token);
 			return "redirect:/system/main.jsp";
-		}catch (AuthenticationException e) {
+		}catch(Exception e){
 			token.clear();
+			e.printStackTrace();
 			return "redirect:/";
 		}
 	}
@@ -59,5 +86,13 @@ public class LoginController {
 		response.setContentType("image/jpeg");
 		BufferedImage bim = ValidateCode.generateImageCode(verifyCode, 90, 30, 3, true, Color.WHITE, Color.BLACK, null);
 		ImageIO.write(bim, "JPEG", response.getOutputStream());
+	}
+	
+	@RequestMapping(value="/getrasrepair")
+	@ResponseBody
+	public String getRasRepair(){
+		PublicKeyMap publicKeyMap = RSAUtils.getPublicKeyMap();
+		System.out.println(publicKeyMap);
+		return FastJsonTool.createJsonString(publicKeyMap);
 	}
 }

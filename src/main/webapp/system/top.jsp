@@ -39,9 +39,9 @@
             </div>
             <div class="grid3">
                 <div class="titre">Bloc style</div>
-                <a href="black.html" class="blocChanger" title="Black" style="background:url(css/img/bloctitle.png);"></a>
+                <!-- <a href="black.html" class="blocChanger" title="Black" style="background:url(css/img/bloctitle.png);"></a>
                 <a href="white.html" class="blocChanger active" title="White" style="background:url(css/img/white-title.png);"></a>
-                <a href="wood.html" class="blocChanger" title="Wood" style="background:url(css/img/wood-title.jpg);"></a>
+                <a href="wood.html" class="blocChanger" title="Wood" style="background:url(css/img/wood-title.jpg);"></a> -->
                 <div class="clear"></div>
             </div>
             <div class="grid3">
