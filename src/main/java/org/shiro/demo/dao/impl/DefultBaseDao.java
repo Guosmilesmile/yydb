@@ -66,15 +66,12 @@ public class DefultBaseDao implements IBaseDao {
 		em.merge(entity);
 	}
 
-	public <T> List<T> get(Class<T> clazz,
-			List<QueryCondition> queryConditions, String orderBy,
-			int currentPage, int pageSize) {
+	public <T> List<T> get(Class<T> clazz,List<QueryCondition> queryConditions, String orderBy,int currentPage, int pageSize) {
 		Query query = getQuery(clazz, queryConditions, orderBy, false);
 		if (currentPage == 0 && pageSize == 0) {
 			return query.getResultList();
 		} else {
-			return query.setFirstResult((currentPage - 1) * pageSize)
-					.setMaxResults(pageSize).getResultList();
+			return query.setFirstResult((currentPage - 1) * pageSize).setMaxResults(pageSize).getResultList();
 		}
 
 	}

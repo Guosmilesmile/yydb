@@ -429,11 +429,21 @@ public abstract class RSAUtils {
 		return publicKeyMap;
     }
     
+    /**
+     * 使用公钥加密，调用接口
+     * @param args
+     * @throws DecoderException
+     */
     public static void main(String[] args) throws DecoderException {
+    	//文本
+    	//String text = "admin";
+    	String text  = "a=1&b=2";
     	byte[] exp = Hex.decodeHex("010001".toCharArray());
-    	byte[] model = Hex.decodeHex("0086a59f701b449dea3e89ddfe3d886d872f0c1049d8c5df32283196c3369766450ba28217f642e528fcf8b7907d7532a59acdfa87461bf3ae99b49888b5a9f287b75df63f3bbf7b45df3aad79ca90135a7a66be1ab694873dfe8d5fb8d6a23e01857e067b1b4a3d954fba910bbc41176e9d97be63ec51c23775f89ac361ac8e11".toCharArray());
-		RSAPublicKey generateRSAPublicKey = generateRSAPublicKey(model, exp);
-		String encryptString = encryptString(generateRSAPublicKey, "admin");
+    	//byte[] model = Hex.decodeHex("0086a59f701b449dea3e89ddfe3d886d872f0c1049d8c5df32283196c3369766450ba28217f642e528fcf8b7907d7532a59acdfa87461bf3ae99b49888b5a9f287b75df63f3bbf7b45df3aad79ca90135a7a66be1ab694873dfe8d5fb8d6a23e01857e067b1b4a3d954fba910bbc41176e9d97be63ec51c23775f89ac361ac8e11".toCharArray());
+		//公钥
+    	byte[] model = Hex.decodeHex("008c8866509e2fd5dda1cfd2268504a71f9c773dce97cd6aef6fcb13f50db2ec1b9f30c717047b6ba4d90314e3543b915b7dee92ad2d40f958afed67ba0de9ad0eb02fd336d335265c3cd1abf92373d0c8ec00cfb9f8b98f6fe913511554b9404029db6df23dcc3f3332f91f4db7bc0037b1faf45032d3db4a65d930a0c8287d09".toCharArray());
+    	RSAPublicKey generateRSAPublicKey = generateRSAPublicKey(model, exp);
+		String encryptString = encryptString(generateRSAPublicKey, text);
 		System.out.println(encryptString);
 		String decryptString = decryptString(encryptString);
 		System.out.println(decryptString);

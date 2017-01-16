@@ -68,13 +68,13 @@
                 |
                 <a href="#" onclick="top.location='<%=basePath%>login.jsp'" >Logout</a>
             </div>
-            <div class="right">
+            <!-- <div class="right">
                 <form action="#" id="search" class="search placeholder">
                     <label>Looking for something ?</label>
                     <input type="text" value="" name="q" class="text"/>
                     <input type="submit" value="rechercher" class="submit"/>
                 </form>
-            </div>
+            </div> -->
         </div>
                 
                         
