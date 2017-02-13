@@ -34,20 +34,13 @@
     </head>
     <body>
         
-		<% 
-			String role = request.getSession().getAttribute("role")+"";
-		%>
         <div id="sidebar">
             <ul id="sidebarul">
-            	<% 
-            		if("0".equals(role)){
-            	%>
             	<li><a href="#"><img src="<%=basePath%>/resources/img/icons/menu/brush.png" alt="" />系统管理</a>
                     <ul class="subul">
-                         <li class="current"><a target="rightFrame" href="./manageuser.jsp">用户管理</a></li>
+                         <li class="current"><a target="rightFrame" href="<%=basePath%>system/user/system-manage-user.jsp">用户管理</a></li>
                     </ul>
                 </li>
-                <%}%>
                 <li><a href="#"><img src="<%=basePath%>/resources/img/icons/menu/calendar.png" alt="" />签到管理</a>
                     <ul class="subul">
                          <li class="current"><a target="rightFrame" href="./managecourse.jsp">课程管理</a></li>

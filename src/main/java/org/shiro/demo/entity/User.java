@@ -28,8 +28,8 @@ public class User implements Serializable {
 	private Long id;
 	@Column(length = 50, unique = true)
 	private String account;
+	//@JsonIgnore	//springmvc生成json不包含此字段
 	@Column(length = 100)
-	@JsonIgnore	//springmvc生成json不包含此字段
 	private String password;
 	@Column(length = 50)
 	private String nickname;
