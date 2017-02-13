@@ -8,7 +8,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link rel="shortcut icon" href="http://static.hdslb.com/images/favicon.ico">
-<title>用户管理</title>
+<title>角色管理</title>
 
 <link rel="stylesheet" type="text/css" href="<%=basePath%>resources/css/jquery.multiselect.css" />
 <link rel="stylesheet" type="text/css" href="<%=basePath%>resources/css/style.css" />
@@ -33,7 +33,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	//初始化数据函数
 	function getData(queryParams){
 		$('#grid').datagrid({
-			url: '<%=basePath%>user/systemgetpageuser',
+			url: '<%=basePath%>role/systemgetpagerole',
 			queryParams: queryParams,
 			remoteSort:false,
 			nowrap: false, //换行属性
@@ -51,13 +51,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			]],
 			columns: [[
 				{field:'id',title:'ID',sortable:true,width:60,sortable:true,hidden:true},
-				{field:'account',title:'用户名',sortable:true,width:200,sortable:true,
+				{field:'name',title:'角色名',sortable:true,width:200,sortable:true,
 					editor: { type: 'validatebox' }
 				},
-				{field:'password',title:'密码',sortable:true,width:200,sortable:true,
-					editor: { type: 'validatebox' }
-				},
-				{field:'nickname',title:'名称',sortable:true,width:150,sortable:true,
+				{field:'description',title:'角色描述',sortable:true,width:150,sortable:true,
 					editor: { type: 'validatebox' }
 				},
 			]],
