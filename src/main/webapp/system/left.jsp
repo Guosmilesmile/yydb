@@ -40,6 +40,7 @@
                     <ul class="subul">
                          <li class="current"><a target="rightFrame" href="<%=basePath%>system/user/system-manage-user.jsp">用户管理</a></li>
                          <li ><a target="rightFrame" href="<%=basePath%>system/user/system-manage-role.jsp">角色管理</a></li>
+                         <li ><a target="rightFrame" href="<%=basePath%>system/user/system-manage-user-role.jsp">用户角色管理</a></li>
                     </ul>
                 </li>
                 <li><a href="#"><img src="<%=basePath%>/resources/img/icons/menu/calendar.png" alt="" />签到管理</a>

@@ -7,7 +7,11 @@ import java.util.Map;
 
 import org.shiro.demo.dao.util.Pagination;
 import org.shiro.demo.entity.Role;
-
+/**
+ * 角色显示层
+ * @author Christy
+ *
+ */
 public class RoleVO{
 
 	private Long id;//id

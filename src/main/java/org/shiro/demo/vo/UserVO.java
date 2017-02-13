@@ -9,7 +9,7 @@ import org.shiro.demo.dao.util.Pagination;
 import org.shiro.demo.entity.User;
 
 /**
- * 显示层
+ * 用户显示层
  * @author Christy
  *
  */
