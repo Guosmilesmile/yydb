@@ -13,6 +13,7 @@ import org.shiro.demo.vo.UserVO;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -35,14 +36,16 @@ public class UserController {
 		return userService.register(user);
 	}
 	
+	//int pageSize = Integer.parseInt(request.getParameter("rows"));
+	//int page = Integer.parseInt(request.getParameter("page"));
 	/**
 	 * 分页获取所有用户信息
 	 */
 	@RequestMapping(value = "/systemgetpageuser",method=RequestMethod.POST)
 	@ResponseBody
-	public String systemGetUserByPage(){
+	public String systemGetUserByPage(@RequestParam(value="page")Integer page,@RequestParam(value="rows")Integer pageSize){
 		String returnResult = "";
-		Pagination<User> userPagination = userService.getPagination(User.class, null, null, 1, 2);
+		Pagination<User> userPagination = userService.getPagination(User.class, null, null, page, pageSize);
 		Map<String, Object> userVOMap = UserVO.changeUser2UserVO(userPagination);
 		returnResult =  FastJsonTool.createJsonString(userVOMap);
 		return returnResult;
