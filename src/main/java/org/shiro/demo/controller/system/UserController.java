@@ -51,4 +51,10 @@ public class UserController {
 		return returnResult;
 	}
 	
+	@RequestMapping(value = "/test",method=RequestMethod.POST)
+	@ResponseBody
+	public String sss(@RequestParam(value="roleid")String roleid){
+		System.out.println("roleid is "+ roleid);
+		return "[{\"text\": \"Item1\",\"state\": \"closed\",\"children\": [{\"text\": \"Item11\"},{\"text\": \"Item12\"}]},{\"text\": \"Item2\"}]";
+	}
 }

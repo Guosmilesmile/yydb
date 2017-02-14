@@ -134,7 +134,10 @@
 	
     
 	<!-- 項目自定义的Realm -->
-    <bean id="shiroDbRealm" class="org.shiro.demo.service.realm.ShiroDbRealm" ></bean>
+    <bean id="shiroDbRealm" class="org.shiro.demo.service.realm.ShiroDbRealm" >
+    	<property name="cachingEnabled" value="false"/>
+    	<property name="authenticationCachingEnabled" value="false"/>
+    </bean>
 	
 	<!-- Shiro Filter -->
 	<bean id="shiroFilter"
