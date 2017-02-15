@@ -33,5 +33,27 @@ public class UserServiceImpl extends DefultBaseService implements IUserService{
 		}
 		return flag;
 	}
+
+	public boolean deleteUser(Long id) {
+		boolean flag = false;
+		try {
+			baseService.delete(User.class, id);
+			flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return flag;
+	}
+
+	public boolean updateUser(User user) {
+		boolean flag = false;
+		try {
+			baseService.update(user);
+			flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return flag;
+	}
 	
 }

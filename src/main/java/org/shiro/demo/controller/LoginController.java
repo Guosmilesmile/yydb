@@ -69,7 +69,16 @@ public class LoginController {
 			return "redirect:/";
 		}
 	}
-
+	/**
+	 * 登出
+	 * @return
+	 */
+	@RequestMapping(value = "/loginout" ,method=RequestMethod.GET,produces={"application/json;charset=UTF-8"})
+	public String loginOut(){
+		Subject subject = SecurityUtils.getSubject();
+		subject.logout();
+		return "redirect:/";
+	}
 	/**
 	 * 生成验证码
 	 * @param request

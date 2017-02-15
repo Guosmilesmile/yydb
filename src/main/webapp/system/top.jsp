@@ -66,7 +66,7 @@
                 Hi, 
                 <a href="#"></a>
                 |
-                <a href="#" onclick="top.location='<%=basePath%>login.jsp'" >Logout</a>
+                <a href="#" onclick="top.location='<%=basePath%>loginout'" >Logout</a>
             </div>
             <!-- <div class="right">
                 <form action="#" id="search" class="search placeholder">

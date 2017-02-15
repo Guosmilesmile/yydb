@@ -20,6 +20,7 @@ import javax.persistence.Table;
 @Table(name = "CMSRole")
 public class Role implements Serializable{
 
+	
 	private static final long serialVersionUID = 6177417450707400228L;
 	
 	@Id
@@ -71,4 +72,13 @@ public class Role implements Serializable{
 	public void setPmss(Collection<Permission> pmss) {
 		this.pmss = pmss;
 	}
+	public Role(String name, String description) {
+		super();
+		this.name = name;
+		this.description = description;
+	}
+	public Role() {
+		super();
+	}
+	
 }

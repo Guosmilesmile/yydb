@@ -239,7 +239,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					}	
 					$.ajax({
 			    		type:'post',
-			    		url:"<%=basePath%>DeleteUserDataServlet",
+			    		url:"<%=basePath%>role/systemdeleterole",
 			    		data:{ids: ids.toString()},
 			    		success:function(data){
 			    			if(1==data){//成功
@@ -269,7 +269,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				if (updated.length > 0) {  
 					$.ajax({
 			    		type:'post',
-			    		url:"<%=basePath%>UpdateUserDataServlet",
+			    		url:"<%=basePath%>role/systemupdaterole",
 			    		data:{"rowstr":updatedrow},
 			    		success:function(data){
 			    			if(1==data){//成功
@@ -286,7 +286,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				if (inserted.length > 0) {  
 					$.ajax({
 			    		type:'post',
-			    		url:"<%=basePath%>InserUserDataServlet",
+			    		url:"<%=basePath%>role/systeminsertrole",
 			    		data:{"rowstr":insertrow},
 			    		success:function(data){
 			    			if(1==data){//成功

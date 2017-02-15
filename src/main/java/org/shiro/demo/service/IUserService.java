@@ -18,4 +18,17 @@ public interface IUserService extends IBaseService{
 	 */
 	public boolean register(User user);
 	
+	/**
+	 * 删除用户
+	 * @param id 用户id
+	 * @return
+	 */
+	public boolean deleteUser(Long id);
+	
+	/**
+	 * 更新用户
+	 * @param user 用户
+	 * @return
+	 */
+	public boolean updateUser(User user);
 }

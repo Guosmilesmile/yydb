@@ -58,12 +58,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		getData(queryParams);
 	});
 	$(document).ready(function(){
-    	
+		$('#SelectBtn').click(function(){
+			$.messager.confirm("操作警告", "确定保存后被修改的数据将不可恢复！！", function(data){
+				if(data){
+					//alert("ok");
+					var rows = $('#tt').tree('getChecked');
+				}
+			});
+    	}); 
     });
     //------------------------------------------------------------------------------
 </script>
 </head>
 <body  class = "h2">
+	<a href="javascript:void(0)" id="SelectBtn" class="easyui-linkbutton" iconCls="icon-ok" style="width:100px;height:30px;margin-top: 10px;margin-left: 10px;margin-bottom: 10px;">保存</a>
 	<ul id="tt"></ul>
 </body>
 </html>

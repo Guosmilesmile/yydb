@@ -80,6 +80,27 @@ public class User implements Serializable {
 		this.roles = roles;
 	}
 
+	public User(Long id, String account, String password, String nickname,
+			Collection<Role> roles) {
+		super();
+		this.id = id;
+		this.account = account;
+		this.password = password;
+		this.nickname = nickname;
+		this.roles = roles;
+	}
+
+	public User(String account, String password, String nickname) {
+		super();
+		this.account = account;
+		this.password = password;
+		this.nickname = nickname;
+	}
+
+	public User() {
+		super();
+	}
+
 	/**
 	 * 本函数输出将作为默认的<shiro:principal/>输出.
 	 */
