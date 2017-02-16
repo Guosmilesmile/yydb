@@ -1,5 +1,6 @@
 package org.shiro.demo.controller.system;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -44,6 +45,19 @@ public class UserController {
 		return returnResult;
 	}
 
+	/**
+	 * 分页获取所有用户信息
+	 */
+	@RequestMapping(value = "/systemgetalluser", method = RequestMethod.POST)
+	@ResponseBody
+	public String systemGetAllUser() {
+		String returnResult = "";
+		List<User> alluser = userService.getAll(User.class);
+		List<UserVO> alluservo  = UserVO.changeUser2UserVO(alluser);
+		returnResult = FastJsonTool.createJsonString(alluservo);
+		return returnResult;
+	}
+	
 	/**
 	 * 新增用户
 	 * @param rowstr 用户信息

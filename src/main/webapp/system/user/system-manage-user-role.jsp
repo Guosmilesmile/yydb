@@ -52,10 +52,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			columns: [[
 				{field:'id',title:'ID',sortable:true,width:60,sortable:true,hidden:true},
 				{field:'account',title:'用户名',sortable:true,width:200,sortable:true,
-					editor: { type: 'validatebox' }
 				},
 				{field:'rolename',title:'角色名称',sortable:true,width:200,sortable:true,
-					editor: { type: 'validatebox' }
 				},
 			]],
 			toolbar:[
@@ -63,16 +61,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					   text:"添加",
 					   iconCls: "icon-add",
 					   handler: addData,
-				},'-',
-				{//修改数据
-					   text:"编辑",
-					   iconCls: "icon-edit",
-					   handler: editData,
-				},'-',
-				{//修改数据
-					   text:"保存",
-					   iconCls: "icon-save",
-					   handler: saveData,
 				},'-',
 				{//删除数据
 					   text:"删除",
@@ -137,7 +125,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				//获取数据库全部数据
 			},
 		});
-		$('#searchdialog').dialog('close');
+		$('#adddialog').dialog('close');
 	};
 	
 	function myformatter(value) {//时间转换函数
@@ -205,48 +193,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	});
     }
  
-    //-----------------------编辑------------------------------------------------
-    function editData(){//编辑
-    	var row = $('#grid').datagrid('getSelected');
-		if(row){
-			if(doedit!=null){
-				$('#grid').datagrid('endEdit',doedit);
-				var rowIndex = $('#grid').datagrid('getRowIndex', row);
-				$('#grid').datagrid('beginEdit',rowIndex);
-				doedit = rowIndex;
-			}
-			if(doedit == undefined){
-				var rowIndex = $('#grid').datagrid('getRowIndex', row);
-				$('#grid').datagrid('beginEdit',rowIndex);
-				doedit = rowIndex;
-			}
-		}else{
-			$.messager.alert('警告','请选择需要编辑的数据','error');
-		};
-    }
+   
     //---------------------------------添加----------------------------------------
     function addData(){
-    	if(doedit != undefined){
-			//$('#grid').datagrid('endEdit',doedit);
-		}
-		if(doedit == undefined){
-			var row = $('#grid').datagrid('getSelected');
-			var rowIndex = $('#grid').datagrid('getRowIndex', row);
-			if(row!=null){
-				rowIndex = $('#grid').datagrid('getRowIndex', row);
-				rowIndex = rowIndex + 1;
-			}
-			else{
-				rowIndex = 0;
-			}
-			$('#grid').datagrid('insertRow',{
-				index: rowIndex,
-				row: {
-				}
-			});
-			$('#grid').datagrid('beginEdit',rowIndex);
-			doedit = rowIndex;
-		}
+    	$('#adddialog').dialog('open');
     }
     //----------------------------导入------------------------------------------
     function importData(){
@@ -268,7 +218,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					}	
 					$.ajax({
 			    		type:'post',
-			    		url:"<%=basePath%>DeleteUserDataServlet",
+			    		url:"<%=basePath%>userrole/systemdeleteuserrole",
 			    		data:{ids: ids.toString()},
 			    		success:function(data){
 			    			if(1==data){//成功
@@ -286,51 +236,80 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			});
 		}
     }
-    //-------------------------------保存-------------------------------------------
-	function saveData(){//保存
-		$.messager.confirm("操作警告", "确定保存后被修改的数据将不可恢复！！", function(data){
-			if(data){
-				$('#grid').datagrid('endEdit', doedit);
-				var inserted = $('#grid').datagrid('getChanges', 'inserted');
-				var updated = $('#grid').datagrid('getChanges', 'updated');
-				var insertrow = JSON.stringify(inserted);
-				var updatedrow = JSON.stringify(updated);
-				if (updated.length > 0) {  
-					$.ajax({
-			    		type:'post',
-			    		url:"<%=basePath%>UpdateUserDataServlet",
-			    		data:{"rowstr":updatedrow},
-			    		success:function(data){
-			    			if(1==data){//成功
-			    				$.messager.alert('提示','更新成功','info');
-			    			}else{
-			    				$.messager.alert('提示','更新失败','error');
-			    			}
-			    			$('#grid').datagrid('reload');
-			    		},error:function(){
-			    			console.log("fail");
-			    		}
-			    	});			       
-			    }
-				if (inserted.length > 0) {  
-					$.ajax({
-			    		type:'post',
-			    		url:"<%=basePath%>InserUserDataServlet",
-			    		data:{"rowstr":insertrow},
-			    		success:function(data){
-			    			if(1==data){//成功
-			    				$.messager.alert('提示','添加成功','info');
-			    			}else{
-			    				$.messager.alert('提示','添加失败','error');
-			    			}
-			    			$('#grid').datagrid('reload');
-			    		},error:function(){
-			    			console.log("fail");
-			    		}
-			    	});			       
-			    } 
-			}
-		});
+	//------------------------获取用户列表-------------------
+	function getUserlist(){//获取所有的user
+    	$.ajax({
+    		type:'post',
+    		async:false,
+    		url:"<%=basePath%>user/systemgetalluser",
+    		success:function(data){
+    			var list = eval("("+data+")");
+    			if(list.length>0){
+    				var str1 = "";
+    				for(var i =0;i<list.length;i++){
+    					str1+="<option value='"+list[i].id+"'>"+list[i].account+"</option>";
+    				}
+    				$('#userlist').html(str1);
+    			}
+    			$("#userlist").multiselect({
+    				noneSelectedText: "==请选择==",
+    				multiple: false,
+    		        checkAllText: "全选",
+    		        uncheckAllText: '全不选',
+    		        selectedText:'#项被选中',
+    			}).multiselectfilter();
+    		},error:function(){
+    			console.log("fail");
+    		}
+    	})
+    }
+	//------------------------获取角色列表-------------------
+	function getRolelist(){//获取所有的role
+    	$.ajax({
+    		type:'post',
+    		async:false,
+    		url:"<%=basePath%>role/systemgetallrole",
+    		success:function(data){
+    			//var list = eval("("+data+")");
+    			var list = data;
+    			if(list.length>0){
+    				var str1 = "";
+    				for(var i =0;i<list.length;i++){
+    					str1+="<option value='"+list[i].id+"'>"+list[i].name+"</option>";
+    				}
+    				$('#rolelist').html(str1);
+    			}
+    			$("#rolelist").multiselect({
+    				noneSelectedText: "==请选择==",
+    				multiple: false,
+    		        checkAllText: "全选",
+    		        uncheckAllText: '全不选',
+    		        selectedText:'#项被选中',
+    			}).multiselectfilter();
+    		},error:function(){
+    			console.log("fail");
+    		}
+    	})
+    }
+	//------------------------添加用户角色绑定-------------------
+	function insertUserRole(userid,roleid){
+    	$.ajax({
+    		type:'post',
+    		async:false,
+    		url:"<%=basePath%>userrole/systeminsertuserrole",
+    		data:{'userid':userid,'roleid':roleid},
+    		success:function(data){
+    			if(1==data){//成功
+    				$('#adddialog').dialog('close');
+    				$.messager.alert('提示','添加成功','info');
+    			}else{
+    				$.messager.alert('提示','添加失败','error');
+    			}
+    			$('#grid').datagrid('reload');
+    		},error:function(){
+    			console.log("fail");
+    		}
+    	})
     }
 	//--------------------------------------主体部分！！！-----------------------------
     var doedit = undefined;//用来记录当前编辑的行，如果没有编辑的行则置为undefined
@@ -341,12 +320,39 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		getData(queryParams);
 	});
 	$(document).ready(function(){
-    	
+		getUserlist();
+		getRolelist();
+		$('#addClick').click(function(){//添加新绑定确认按钮
+			var userid = $("#userlist").val();
+    		if(null==userid){
+    			$.messager.alert('提示','选择添加的用户','error');
+    		}else{
+    			var roleid = $("#rolelist").val();
+        		if(null==roleid){
+        			$.messager.alert('提示','选择添加的角色','error');
+        		}else{
+        			insertUserRole(userid[0],roleid[0]);
+        		}
+    		}
+		});
     });
     //------------------------------------------------------------------------------
 </script>
 </head>
 <body  class = "h2">
 	<table id="grid"></table>
+	<div id="adddialog" class="easyui-dialog" title="添加" style="width:400px;height:250px;" data-options="iconCls:'icon-save',resizable:true,modal:true">
+    	<div id="totalplane" style="margin-top: 55px;padding-left: 60px;">
+    		用户列表：<select  multiple="multiple" name="example-basic" size="5" id="userlist" style="width:200px;display: none;">
+			</select>
+			<br/>
+			<br/>
+			角色列表：<select  multiple="multiple" name="example-basic" size="5" id="rolelist" style="width:200px;display: none;">
+			</select>
+			<br/>
+			<br/>
+    		<a href="javascript:void(0)" id="addClick" class="easyui-linkbutton" iconCls="icon-ok" style="width:150px;height:32px;margin-top: 10px;margin-left: 65px">确定</a>
+  		</div>
+	</div>
 </body>
 </html>

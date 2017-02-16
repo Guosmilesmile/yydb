@@ -1,5 +1,6 @@
 package org.shiro.demo.controller.system;
 
+import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
@@ -12,6 +13,7 @@ import org.shiro.demo.service.IRoleService;
 import org.shiro.demo.util.FastJsonTool;
 import org.shiro.demo.util.ReturnDataUtil;
 import org.shiro.demo.vo.RoleVO;
+import org.shiro.demo.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,7 +44,18 @@ public class RoleController {
 		return returnResult;
 	}
 	
-	
+	/**
+	 * 获取所有角色
+	 */
+	@RequestMapping(value = "/systemgetallrole", method = RequestMethod.POST,produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String systemGetAllRole() {
+		String returnResult = "";
+		List<Role> allrole = roleService.getAll(Role.class);
+		List<RoleVO> allrolevo  = RoleVO.changeRole2RoleVO(allrole);
+		returnResult = FastJsonTool.createJsonString(allrolevo);
+		return returnResult;
+	}
 	/**
 	 * 新增角色
 	 * @param rowstr 用户信息

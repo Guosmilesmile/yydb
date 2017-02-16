@@ -76,4 +76,18 @@ public class UserVO {
 		map.put("total", pagination.getPageCount());
 		return map;
 	}
+	
+	/**
+	 * 将实体类转换成显示层实体类
+	 * @param pagination 分页数据
+	 * @return
+	 */
+	public static List<UserVO> changeUser2UserVO(List<User> userlist){
+		List<User> recordList = userlist;
+		List<UserVO> userVOList = new ArrayList<UserVO>();
+		for(User item : recordList){
+			userVOList.add(new UserVO(item));
+		}
+		return userVOList;
+	}
 }

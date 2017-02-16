@@ -70,4 +70,18 @@ public class RoleVO{
 		map.put("total", pagination.getPageCount());
 		return map;
 	}
+	
+	/**
+	 * 将实体类转换成显示层实体类
+	 * @param pagination 分页数据
+	 * @return
+	 */
+	public static List<RoleVO> changeRole2RoleVO(List<Role> recordList){
+		List<RoleVO> roleVOList = new ArrayList<RoleVO>();
+		Map<String, Object> map = new HashMap<String, Object>();
+		for(Role item : recordList){
+			roleVOList.add(new RoleVO(item));
+		}
+		return roleVOList;
+	}
 }
