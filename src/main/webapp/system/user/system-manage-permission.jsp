@@ -42,16 +42,35 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			url: '<%=basePath%>rolepermission/systemgetpertrees',
 			queryParams: queryParams,
 			checkbox: true,
+			onlyLeafCheck:true,
 			animate:true,  
 		    lines:true
 		});
 	};
 	
+	function updateRolePerms(permiss,roleid){//更新权限
+    	$.ajax({
+    		type:'post',
+    		url:"<%=basePath%>rolepermission/systemupdatepermiss",
+    		data:{'permiss':permiss,'roleid':roleid},
+    		success:function(data){
+    			if(1==data){//成功
+    				$.messager.alert('提示','更新成功','info');
+    			}else{
+    				$.messager.alert('提示','更新失败','error');
+    			}
+    			$('#tt').tree('reload');
+    		},error:function(){
+    			console.log("fail");
+    		}
+    	});
+    }
 	
 	//--------------------------------------主体部分！！！-----------------------------
     var doedit = undefined;//用来记录当前编辑的行，如果没有编辑的行则置为undefined
+    var roleid = "";
     $(function(){
-    	var roleid = getUrlParam("roleid");	
+    	roleid = getUrlParam("roleid");	
 		//获取数据的查询参数----过滤数据
 		var queryParams;
 		queryParams = {"roleid":roleid};
@@ -63,6 +82,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				if(data){
 					//alert("ok");
 					var rows = $('#tt').tree('getChecked');
+					var prmsid = [];
+					if(rows.length!=0){
+						for(var i=0;i<rows.length;i++){
+							prmsid.push(rows[i].id);
+						}	
+					}
+					console.log(prmsid);
+					updateRolePerms(prmsid,roleid);
 				}
 			});
     	}); 

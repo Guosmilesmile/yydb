@@ -14,5 +14,16 @@ public class RolePermissionServiceImpl extends DefultBaseService implements IRol
 
 	@Resource(name="baseService")
 	private IBaseService baseService;
+
+	public boolean deletePermissbyRole(Long roleid) {
+		boolean flag = false;
+		try {
+			baseService.executeJpql("delete RolePermission as rp where rp.role.id=?", roleid);
+			flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return flag;
+	}
 	
 }

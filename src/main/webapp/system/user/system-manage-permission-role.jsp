@@ -52,10 +52,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			columns: [[
 				{field:'id',title:'ID',sortable:true,width:60,sortable:true,hidden:true},
 				{field:'name',title:'角色名',sortable:true,width:200,sortable:true,
-					editor: { type: 'validatebox' }
 				},
 				{field:'description',title:'角色描述',sortable:true,width:150,sortable:true,
-					editor: { type: 'validatebox' }
 				},
 			]],
 			toolbar:[

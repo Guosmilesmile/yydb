@@ -14,6 +14,7 @@ import org.shiro.demo.service.IPermissionService;
 import org.shiro.demo.service.IRolePermissionService;
 import org.shiro.demo.service.IRoleService;
 import org.shiro.demo.util.FastJsonTool;
+import org.shiro.demo.util.ReturnDataUtil;
 import org.shiro.demo.vo.PermissionVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -81,7 +82,7 @@ public class RolePermissionController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value="systemgeuserpers",method=RequestMethod.POST)
+	@RequestMapping(value="systemgetuserpers",method=RequestMethod.POST)
 	public String systemGetUserPermission(){
 		String returnData = "";
 		Subject currUser = SecurityUtils.getSubject();
@@ -90,5 +91,34 @@ public class RolePermissionController {
 		List<PermissionVO>  allPersVO = PermissionVO.changeListPers2ListPersVO(allPermissions);
 		returnData = FastJsonTool.createJsonString(allPersVO);
 		return returnData;
+	}
+	
+	/**
+	 * 更新用户权限
+	 * @param permissids 权限id组
+	 * @param roleid 角色id
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="systemupdatepermiss",method=RequestMethod.POST)
+	public String systemUpdatePermission(@RequestParam(value="permiss[]",required=false)Long[] permissids,
+			@RequestParam(value="roleid")Long roleid){
+		String returnData = ReturnDataUtil.FAIL;
+		if(null==permissids){//为空删除该角色所有权限
+			boolean flag = rolePermissionService.deletePermissbyRole(roleid);
+			if(flag){
+				returnData = ReturnDataUtil.SUCCESS;
+			}
+		}else{
+			Role role = roleService.getById(Role.class, roleid);
+			List<Permission> permissions = permissionService.getByIds(Permission.class, permissids);
+			role.setPmss(permissions);
+			boolean flag = roleService.updateRole(role);
+			if(flag){
+				returnData = ReturnDataUtil.SUCCESS;
+			}
+		}
+		return returnData;
+		
 	}
 }
