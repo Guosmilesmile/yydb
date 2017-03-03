@@ -73,7 +73,7 @@ public class UserVO {
 			userVOList.add(new UserVO(item));
 		}
 		map.put("rows", userVOList);
-		map.put("total", pagination.getPageCount());
+		map.put("total", pagination.getRecordCount());
 		return map;
 	}
 	

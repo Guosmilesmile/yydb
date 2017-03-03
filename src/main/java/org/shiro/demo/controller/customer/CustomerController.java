@@ -27,7 +27,7 @@ public class CustomerController {
 	private ICustomerService customerService;
 	
 	/**
-	 * 分页获取所有用户信息
+	 * 分页获取所有客户信息
 	 * @param page 当前页
 	 * @param pageSize 每页的数据量
 	 * @return
@@ -37,8 +37,8 @@ public class CustomerController {
 	public String systemGetCustomerByPage(@RequestParam(value="page")Integer page,@RequestParam(value="rows")Integer pageSize){
 		String returnResult = "";
 		Pagination<Customer> rolePagination = customerService.getPagination(Customer.class, null, null, page, pageSize);
-		Map<String, Object> roleVOMap = CustomerVO.changeCustomer2CustomerVO(rolePagination);
-		returnResult =  FastJsonTool.createJsonString(roleVOMap);
+		Map<String, Object> customerVOMap = CustomerVO.changeCustomer2CustomerVO(rolePagination);
+		returnResult =  FastJsonTool.createJsonString(customerVOMap);
 		return returnResult;
 	}
 	
@@ -54,6 +54,7 @@ public class CustomerController {
 		returnResult = FastJsonTool.createJsonString(allCustomerVOs);
 		return returnResult;
 	}
+	
 	/**
 	 * 新增客户
 	 * @param rowstr 客户信息
@@ -69,7 +70,16 @@ public class CustomerController {
 			JSONObject jsonObject = jsonArray.getJSONObject(0);
 			String wechatid  = jsonObject.getString("wechatid");
 			Double balance = jsonObject.getDouble("balance");
-			Customer customer = new Customer(wechatid, balance);
+			Integer isshop = jsonObject.getInt("isshop");
+			String address = jsonObject.getString("address");
+			String phoneTemp =  jsonObject.getString("phone");
+			Long phone = null ; 
+			if("".equals(phoneTemp) || null == phoneTemp){
+				phone = new Long(0);
+			}else{
+				phone = Long.valueOf(phoneTemp);
+			}
+			Customer customer = new Customer(wechatid, balance, isshop, address, phone);
 			boolean flag = customerService.insertCustomer(customer);
 			if(flag){
 				returnData = ReturnDataUtil.SUCCESS;
@@ -97,7 +107,10 @@ public class CustomerController {
 			Long customerid = jsonObject.getLong("customerid");
 			String wechatid  = jsonObject.getString("wechatid");
 			Double balance = jsonObject.getDouble("balance");
-			Customer customer = new Customer(customerid,wechatid, balance);
+			Integer isshop = jsonObject.getInt("isshop");
+			String address = jsonObject.getString("address");
+			Long phone = jsonObject.getLong("phone");
+			Customer customer = new Customer(customerid,wechatid, balance, isshop, address, phone);
 			boolean flag = customerService.updateCustomer(customer);
 			if(flag){
 				returnData = ReturnDataUtil.SUCCESS;

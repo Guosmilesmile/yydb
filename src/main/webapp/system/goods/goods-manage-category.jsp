@@ -8,7 +8,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link rel="shortcut icon" href="http://static.hdslb.com/images/favicon.ico">
-<title>角色管理</title>
+<title>分类管理</title>
 
 <link rel="stylesheet" type="text/css" href="<%=basePath%>resources/css/jquery.multiselect.css" />
 <link rel="stylesheet" type="text/css" href="<%=basePath%>resources/css/style.css" />
@@ -33,7 +33,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	//初始化数据函数
 	function getData(queryParams){
 		$('#grid').datagrid({
-			url: '<%=basePath%>role/systemgetpagerole',
+			url: '<%=basePath%>category/systemgetpagecategory',
 			queryParams: queryParams,
 			remoteSort:false,
 			nowrap: false, //换行属性
@@ -51,11 +51,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			]],
 			columns: [[
 				{field:'id',title:'ID',sortable:true,width:60,sortable:true,hidden:true},
-				{field:'name',title:'角色名',sortable:true,width:200,sortable:true,
+				{field:'name',title:'分类名',sortable:true,width:200,sortable:true,
 					editor: { type: 'validatebox',options: { required: true} }
-				},
-				{field:'description',title:'角色描述',sortable:true,width:150,sortable:true,
-					editor: { type: 'validatebox' }
 				},
 			]],
 			toolbar:[
@@ -149,32 +146,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			return ss[2] + "-" + ss[0] + "-" + ss[1];
 		else return s;
 	}
-    function getDistinctMetaCode(){//获取所有的jobname
-    	$.ajax({
-    		type:'post',
-    		url:"<%=basePath%>",
-    		success:function(data){
-    			var list = eval("("+data+")");
-    			var jobname = list.jobname;
-    			if(jobname.length>0){
-    				var str1 = "";
-    				for(var i =0;i<jobname.length;i++){
-    					str1+="<option value='"+jobname[i]+"'>"+jobname[i]+"</option>";
-    				}
-    				$('#metacode').html(str1);
-    			}
-    			$('#metacode').show();
-    			$("#metacode").multiselect({
-    				noneSelectedText: "==请选择==",
-    		        checkAllText: "全选",
-    		        uncheckAllText: '全不选',
-    		        selectedText:'#项被选中',
-    			}).multiselectfilter(); 
-    		},error:function(){
-    			console.log("fail");
-    		}
-    	});
-    }
  
     //-----------------------编辑------------------------------------------------
     function editData(){//编辑
@@ -239,7 +210,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					}	
 					$.ajax({
 			    		type:'post',
-			    		url:"<%=basePath%>role/systemdeleterole",
+			    		url:"<%=basePath%>category/systemdeletecategory",
 			    		data:{ids: ids.toString()},
 			    		success:function(data){
 			    			if(1==data){//成功
@@ -269,7 +240,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				if (updated.length > 0) {  
 					$.ajax({
 			    		type:'post',
-			    		url:"<%=basePath%>role/systemupdaterole",
+			    		url:"<%=basePath%>category/systemupdatecategory",
 			    		data:{"rowstr":updatedrow},
 			    		success:function(data){
 			    			if(1==data){//成功
@@ -286,7 +257,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				if (inserted.length > 0) {  
 					$.ajax({
 			    		type:'post',
-			    		url:"<%=basePath%>role/systeminsertrole",
+			    		url:"<%=basePath%>category/systeminsertcategory",
 			    		data:{"rowstr":insertrow},
 			    		success:function(data){
 			    			if(1==data){//成功

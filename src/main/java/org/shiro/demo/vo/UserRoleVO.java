@@ -70,7 +70,7 @@ public class UserRoleVO {
 			list.add(new UserRoleVO(item));
 		}
 		map.put("rows", list);
-		map.put("total", pagination.getPageCount());
+		map.put("total", pagination.getRecordCount());
 		return map;
 	}
 }

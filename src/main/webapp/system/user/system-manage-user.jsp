@@ -52,13 +52,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			columns: [[
 				{field:'id',title:'ID',sortable:true,width:60,sortable:true,hidden:true},
 				{field:'account',title:'用户名',sortable:true,width:200,sortable:true,
-					editor: { type: 'validatebox' }
+					editor: { type: 'validatebox',options: { required: true} }
 				},
 				{field:'password',title:'密码',sortable:true,width:200,sortable:true,
-					editor: { type: 'validatebox' }
+					editor: { type: 'validatebox',options: { required: true} }
 				},
 				{field:'nickname',title:'名称',sortable:true,width:150,sortable:true,
-					editor: { type: 'validatebox' }
+					editor: { type: 'validatebox' ,options: { required: true}}
 				},
 			]],
 			toolbar:[

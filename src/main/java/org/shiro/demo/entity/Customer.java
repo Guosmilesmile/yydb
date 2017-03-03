@@ -17,11 +17,7 @@ import javax.persistence.Table;
 @Table(name="c_customer")
 public class Customer {
 
-	public Customer(String wechatid, Double balance) {
-		super();
-		this.wechatid = wechatid;
-		this.balance = balance;
-	}
+	
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -34,16 +30,20 @@ public class Customer {
 	@Column(name = "balance")
 	private Double balance;//余额
 
+	@Column(name = "isshop")
+	private Integer isshop;//是否商家
+
+	@Column(name = "address")
+	private String address;//商家地址
+
+	@Column(name = "phone")
+	private Long phone;//商家联系方式
+
 	public Customer() {
 		super();
 	}
 
-	public Customer(Long customerid, String wechatid, Double balance) {
-		super();
-		this.customerid = customerid;
-		this.wechatid = wechatid;
-		this.balance = balance;
-	}
+	
 
 	public Long getCustomerid() {
 		return customerid;
@@ -68,5 +68,62 @@ public class Customer {
 	public void setBalance(Double balance) {
 		this.balance = balance;
 	}
+
+
+
+	public Integer getIsshop() {
+		return isshop;
+	}
+
+
+
+	public void setIsshop(Integer isshop) {
+		this.isshop = isshop;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public Long getPhone() {
+		return phone;
+	}
+
+
+
+	public void setPhone(Long phone) {
+		this.phone = phone;
+	}
+
+
+
+	public Customer(Long customerid, String wechatid, Double balance,
+			Integer isshop, String address, Long phone) {
+		super();
+		this.customerid = customerid;
+		this.wechatid = wechatid;
+		this.balance = balance;
+		this.isshop = isshop;
+		this.address = address;
+		this.phone = phone;
+	}
+
+
+
+	public Customer(String wechatid, Double balance, Integer isshop,
+			String address, Long phone) {
+		super();
+		this.wechatid = wechatid;
+		this.balance = balance;
+		this.isshop = isshop;
+		this.address = address;
+		this.phone = phone;
+	}
 	
+	
+
 }

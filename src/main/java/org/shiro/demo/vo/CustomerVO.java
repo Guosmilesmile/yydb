@@ -17,7 +17,9 @@ public class CustomerVO{
 	private Long customerid;//id
 	private String wechatid;//微信id
 	private Double balance;//余额
-	
+	private Integer isshop;//是否为商家
+	private Long phone;//联系方式
+	private String address;//地址
 	/**
 	 * 将实体类转换成显示层实体类
 	 * @param pagination 分页数据
@@ -31,7 +33,7 @@ public class CustomerVO{
 			VOList.add(new CustomerVO(item));
 		}
 		map.put("rows", VOList);
-		map.put("total", pagination.getPageCount());
+		map.put("total", pagination.getRecordCount());
 		return map;
 	}
 	
@@ -70,19 +72,15 @@ public class CustomerVO{
 		super();
 	}
 
-	
-	public CustomerVO(Long customerid, String wechatid, Double balance) {
+	public CustomerVO(Long customerid, String wechatid, Double balance,
+			Integer isshop, Long phone, String address) {
 		super();
 		this.customerid = customerid;
 		this.wechatid = wechatid;
 		this.balance = balance;
-	}
-
-	public CustomerVO(Customer customer) {
-		super();
-		this.customerid= customer.getCustomerid();
-		this.wechatid = customer.getWechatid();
-		this.balance = customer.getBalance();
+		this.isshop = isshop;
+		this.phone = phone;
+		this.address = address;
 	}
 
 	public Long getCustomerid() {
@@ -91,5 +89,39 @@ public class CustomerVO{
 
 	public void setCustomerid(Long customerid) {
 		this.customerid = customerid;
+	}
+
+	public Integer getIsshop() {
+		return isshop;
+	}
+
+	public void setIsshop(Integer isshop) {
+		this.isshop = isshop;
+	}
+
+	public Long getPhone() {
+		return phone;
+	}
+
+	public void setPhone(Long phone) {
+		this.phone = phone;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	
+	public CustomerVO(Customer customer) {
+		super();
+		this.customerid= customer.getCustomerid();
+		this.wechatid = customer.getWechatid();
+		this.balance = customer.getBalance();
+		this.isshop = customer.getIsshop();
+		this.phone = customer.getPhone();
+		this.address = customer.getAddress();
 	}
 }

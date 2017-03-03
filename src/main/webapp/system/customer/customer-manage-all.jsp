@@ -52,10 +52,33 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			columns: [[
 				{field:'customerid',title:'ID',sortable:true,width:60,sortable:true,hidden:true},
 				{field:'wechatid',title:'微信id',sortable:true,width:200,sortable:true,
-					editor: { type: 'validatebox' }
+					editor: { type: 'validatebox',options: { required: true} }
 				},
 				{field:'balance',title:'余额',sortable:true,width:200,sortable:true,
-					editor: { type: 'numberbox',options:{precision:2} }
+					editor: { type: 'numberbox',options:{precision:2,value:0} }
+				},
+				{field:'isshop',title:'是否为商家',sortable:true,width:200,sortable:true,
+					editor:{
+                		type : 'combobox',
+                		options : {
+                			valueField: "value", textField: "text"  ,
+                        	data:[{"value": "1", "text": "是"},{"value": "0", "text": "否"}],
+                        	editable:false ,
+                		}
+                    },
+					formatter:function(value,row,index){
+						if(1==value){
+							return "是";
+						}else if(0==value){
+							return "否";
+						}
+					},
+				},
+				{field:'phone',title:'联系方式',sortable:true,width:200,sortable:true,
+					editor: { type: 'numberbox' }
+				},
+				{field:'address',title:'地址',sortable:true,width:200,sortable:true,
+					editor: { type: 'validatebox' }
 				},
 				
 			]],
@@ -129,6 +152,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			}
 			return date.getFullYear()+"-"+(date.getMonth() + 1) +"-"+ date.getDate()+" "+ hour + ":" + minute +":"+ second;
 		}
+	}
+	function isNull( str ){
+		if ( str == "" ) return true;
+		var regu = "^[ ]+$";
+		var re = new RegExp(regu);
+		return re.test(str);
 	}
 	function formatterDate(date) {//时间转换
 		var day = date.getDate() > 9 ? date.getDate() : "0" + date.getDate();
@@ -239,41 +268,72 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				$('#grid').datagrid('endEdit', doedit);
 				var inserted = $('#grid').datagrid('getChanges', 'inserted');
 				var updated = $('#grid').datagrid('getChanges', 'updated');
-				var insertrow = JSON.stringify(inserted);
-				var updatedrow = JSON.stringify(updated);
-				if (updated.length > 0) {  
-					$.ajax({
-			    		type:'post',
-			    		url:"<%=basePath%>customer/systemupdatecustomer",
-			    		data:{"rowstr":updatedrow},
-			    		success:function(data){
-			    			if(1==data){//成功
-			    				$.messager.alert('提示','更新成功','info');
-			    			}else{
-			    				$.messager.alert('提示','更新失败','error');
-			    			}
-			    			$('#grid').datagrid('reload');
-			    		},error:function(){
-			    			console.log("fail");
-			    		}
-			    	});			       
+				if (updated.length > 0) { 
+					balance = updated[0].balance;
+					if(""==balance){
+						updated[0].balance = 0;
+					}
+					var updatedrow = JSON.stringify(updated);
+					var isshop = updated[0].isshop;
+					var address = updated[0].address;
+					var flag = 1;
+					if(1==isshop){
+						if(isNull(address)){
+							flag = 0;
+						}
+					}
+					if(flag==1){
+						$.ajax({
+				    		type:'post',
+				    		url:"<%=basePath%>customer/systemupdatecustomer",
+				    		data:{"rowstr":updatedrow},
+				    		success:function(data){
+				    			if(1==data){//成功
+				    				$.messager.alert('提示','更新成功','info');
+				    			}else{
+				    				$.messager.alert('提示','更新失败','error');
+				    			}
+				    			$('#grid').datagrid('reload');
+				    		},error:function(){
+				    			console.log("fail");
+				    		}
+				    	});						
+					}
 			    }
-				if (inserted.length > 0) {  
-					$.ajax({
-			    		type:'post',
-			    		url:"<%=basePath%>customer/systeminsertcustomer",
-			    		data:{"rowstr":insertrow},
-			    		success:function(data){
-			    			if(1==data){//成功
-			    				$.messager.alert('提示','添加成功','info');
-			    			}else{
-			    				$.messager.alert('提示','添加失败','error');
-			    			}
-			    			$('#grid').datagrid('reload');
-			    		},error:function(){
-			    			console.log("fail");
-			    		}
-			    	});			       
+				if (inserted.length > 0) { 
+					var balance = inserted[0].balance;
+					if(""==balance){
+						inserted[0].balance = 0;
+					}
+					var insertrow = JSON.stringify(inserted);
+					var isshop = inserted[0].isshop;
+					var address = inserted[0].address;
+					var flag = 1;
+					if(1==isshop){
+						if(isNull(address)){
+							flag = 0;
+						}
+					}
+					if(flag==1){
+						$.ajax({
+				    		type:'post',
+				    		url:"<%=basePath%>customer/systeminsertcustomer",
+				    		data:{"rowstr":insertrow},
+				    		success:function(data){
+				    			if(1==data){//成功
+				    				$.messager.alert('提示','添加成功','info');
+				    			}else{
+				    				$.messager.alert('提示','添加失败','error');
+				    			}
+				    			$('#grid').datagrid('reload');
+				    		},error:function(){
+				    			console.log("fail");
+				    		}
+				    	});	
+					}else{
+						$.messager.alert('提示','请填写地址和联系方式','error');
+						$('#grid').datagrid('reload');
+					}
 			    } 
 			}
 		});
