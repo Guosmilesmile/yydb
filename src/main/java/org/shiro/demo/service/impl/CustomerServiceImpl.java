@@ -1,7 +1,11 @@
 package org.shiro.demo.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Resource;
 
+import org.shiro.demo.dao.util.QueryCondition;
 import org.shiro.demo.entity.Customer;
 import org.shiro.demo.service.IBaseService;
 import org.shiro.demo.service.ICustomerService;
@@ -44,6 +48,15 @@ public class CustomerServiceImpl extends DefultBaseService implements ICustomerS
 			e.printStackTrace();
 		}
 		return flag;
+	}
+
+	public List<Customer> getAllShop() {
+		List<Customer> resultList = null;
+		List<QueryCondition> queryConditions = new ArrayList<QueryCondition>();
+		QueryCondition queryCondition = new QueryCondition("isshop", QueryCondition.EQ, 1);
+		queryConditions.add(queryCondition);
+		resultList = baseService.get(Customer.class, queryConditions);
+		return resultList;
 	}
 	
 }

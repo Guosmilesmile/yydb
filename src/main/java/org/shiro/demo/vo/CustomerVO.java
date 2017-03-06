@@ -20,6 +20,8 @@ public class CustomerVO{
 	private Integer isshop;//是否为商家
 	private Long phone;//联系方式
 	private String address;//地址
+	private String name;//商家名称
+	
 	/**
 	 * 将实体类转换成显示层实体类
 	 * @param pagination 分页数据
@@ -114,7 +116,14 @@ public class CustomerVO{
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 	public CustomerVO(Customer customer) {
 		super();
 		this.customerid= customer.getCustomerid();
@@ -123,5 +132,7 @@ public class CustomerVO{
 		this.isshop = customer.getIsshop();
 		this.phone = customer.getPhone();
 		this.address = customer.getAddress();
+		this.name = customer.getName();
 	}
+
 }

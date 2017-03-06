@@ -8,7 +8,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link rel="shortcut icon" href="http://static.hdslb.com/images/favicon.ico">
-<title>客户管理</title>
+<title>商品管理</title>
 
 <link rel="stylesheet" type="text/css" href="<%=basePath%>resources/css/jquery.multiselect.css" />
 <link rel="stylesheet" type="text/css" href="<%=basePath%>resources/css/style.css" />
@@ -33,7 +33,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	//初始化数据函数
 	function getData(queryParams){
 		$('#grid').datagrid({
-			url: '<%=basePath%>customer/getpagecustomer',
+			url: '<%=basePath%>goods/systemgetpageGoods',
 			queryParams: queryParams,
 			remoteSort:false,
 			nowrap: false, //换行属性
@@ -50,40 +50,35 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				{field: 'ck', checkbox: true},          
 			]],
 			columns: [[
-				{field:'customerid',title:'ID',sortable:true,width:60,sortable:true,hidden:true},
-				{field:'wechatid',title:'微信id',sortable:true,width:200,sortable:true,
+				{field:'id',title:'ID',sortable:true,width:60,sortable:true,hidden:true},
+				{field:'name',title:'商品名称',sortable:true,width:200,sortable:true,
 					editor: { type: 'validatebox',options: { required: true} }
 				},
-				{field:'balance',title:'余额',sortable:true,width:200,sortable:true,
-					editor: { type: 'numberbox',options:{precision:2,value:0} }
+				{field:'categoryName',title:'分类名称',sortable:true,width:150,sortable:true,
+					editor: { type: 'validatebox' }
 				},
-				{field:'isshop',title:'是否为商家',sortable:true,width:200,sortable:true,
-					editor:{
-                		type : 'combobox',
-                		options : {
-                			valueField: "value", textField: "text"  ,
-                        	data:[{"value": "1", "text": "是"},{"value": "0", "text": "否"}],
-                        	editable:false 
-                		}
-                    },
+				{field:'shopwechatid',title:'商家微信id',sortable:true,width:150,sortable:true,
+					editor: { type: 'validatebox' }
+				},
+				{field:'shopName',title:'商店名称',sortable:true,width:150,sortable:true,
+					editor: { type: 'validatebox' }
+				},
+				{field:'imgurls',title:'图片',sortable:true,width:150,sortable:true,
+					editor: { type: 'validatebox' },
 					formatter:function(value,row,index){
-						if(1==value){
-							return "是";
-						}else if(0==value){
-							return "否";
+						var str = "";
+						if(!isNull(value)){
+							var splits = value.split(";");
+							for(var i=0;i<splits.length;i++){
+								str+="<img src='"+splits[i]+"' width='70px' height='70px' style='margin-left:40px;'></br>";
+							}
 						}
+						return str;
 					},
 				},
-				{field:'name',title:'名称',sortable:true,width:200,sortable:true,
+				{field:'summary',title:'概要',sortable:true,width:150,sortable:true,
 					editor: { type: 'validatebox' }
 				},
-				{field:'phone',title:'联系方式',sortable:true,width:200,sortable:true,
-					editor: { type: 'numberbox' }
-				},
-				{field:'address',title:'地址',sortable:true,width:200,sortable:true,
-					editor: { type: 'validatebox' }
-				},
-				
 			]],
 			toolbar:[
 				{//添加数据
@@ -136,7 +131,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			},
 		});
 		$('#searchdialog').dialog('close');
-		
 	};
 	
 	function myformatter(value) {//时间转换函数
@@ -183,7 +177,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			return ss[2] + "-" + ss[0] + "-" + ss[1];
 		else return s;
 	}
- 
     //-----------------------编辑------------------------------------------------
     function editData(){//编辑
     	var row = $('#grid').datagrid('getSelected');
@@ -205,28 +198,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     }
     //---------------------------------添加----------------------------------------
     function addData(){
-    	if(doedit != undefined){
-			//$('#grid').datagrid('endEdit',doedit);
-		}
-		if(doedit == undefined){
-			var row = $('#grid').datagrid('getSelected');
-			var rowIndex = $('#grid').datagrid('getRowIndex', row);
-			if(row!=null){
-				rowIndex = $('#grid').datagrid('getRowIndex', row);
-				rowIndex = rowIndex + 1;
-			}
-			else{
-				rowIndex = 0;
-			}
-			$('#grid').datagrid('insertRow',{
-				index: rowIndex,
-				row: {
-					isshop:0
-				}
-			});
-			$('#grid').datagrid('beginEdit',rowIndex);
-			doedit = rowIndex;
-		}
+    	var url = "<%=basePath%>system/goods/goods-insert-goods.jsp";
+		location.href=url;
     }
     //----------------------------导入------------------------------------------
     function importData(){
@@ -244,11 +217,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					//原来代码开始的位置
 					var ids = [];
 					for(var i = 0; i < rows.length; ++i){
-							ids[i] = rows[i].customerid;
+							ids[i] = rows[i].id;
 					}	
 					$.ajax({
 			    		type:'post',
-			    		url:"<%=basePath%>customer/deletecustomer",
+			    		url:"<%=basePath%>goods/systemdeleteGoods",
 			    		data:{ids: ids.toString()},
 			    		success:function(data){
 			    			if(1==data){//成功
@@ -273,72 +246,41 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				$('#grid').datagrid('endEdit', doedit);
 				var inserted = $('#grid').datagrid('getChanges', 'inserted');
 				var updated = $('#grid').datagrid('getChanges', 'updated');
-				if (updated.length > 0) { 
-					balance = updated[0].balance;
-					if(""==balance){
-						updated[0].balance = 0;
-					}
-					var updatedrow = JSON.stringify(updated);
-					var isshop = updated[0].isshop;
-					var address = updated[0].address;
-					var flag = 1;
-					if(1==isshop){
-						if(isNull(address)){
-							flag = 0;
-						}
-					}
-					if(flag==1){
-						$.ajax({
-				    		type:'post',
-				    		url:"<%=basePath%>customer/updatecustomer",
-				    		data:{"rowstr":updatedrow},
-				    		success:function(data){
-				    			if(1==data){//成功
-				    				$.messager.alert('提示','更新成功','info');
-				    			}else{
-				    				$.messager.alert('提示','更新失败','error');
-				    			}
-				    			$('#grid').datagrid('reload');
-				    		},error:function(){
-				    			console.log("fail");
-				    		}
-				    	});						
-					}
+				var insertrow = JSON.stringify(inserted);
+				var updatedrow = JSON.stringify(updated);
+				if (updated.length > 0) {  
+					$.ajax({
+			    		type:'post',
+			    		url:"<%=basePath%>role/systemupdaterole",
+			    		data:{"rowstr":updatedrow},
+			    		success:function(data){
+			    			if(1==data){//成功
+			    				$.messager.alert('提示','更新成功','info');
+			    			}else{
+			    				$.messager.alert('提示','更新失败','error');
+			    			}
+			    			$('#grid').datagrid('reload');
+			    		},error:function(){
+			    			console.log("fail");
+			    		}
+			    	});			       
 			    }
-				if (inserted.length > 0) { 
-					var balance = inserted[0].balance;
-					if(""==balance){
-						inserted[0].balance = 0;
-					}
-					var insertrow = JSON.stringify(inserted);
-					var isshop = inserted[0].isshop;
-					var address = inserted[0].address;
-					var flag = 1;
-					if(1==isshop){
-						if(isNull(address)){
-							flag = 0;
-						}
-					}
-					if(flag==1){
-						$.ajax({
-				    		type:'post',
-				    		url:"<%=basePath%>customer/insertcustomer",
-				    		data:{"rowstr":insertrow},
-				    		success:function(data){
-				    			if(1==data){//成功
-				    				$.messager.alert('提示','添加成功','info');
-				    			}else{
-				    				$.messager.alert('提示','添加失败','error');
-				    			}
-				    			$('#grid').datagrid('reload');
-				    		},error:function(){
-				    			console.log("fail");
-				    		}
-				    	});	
-					}else{
-						$.messager.alert('提示','请填写地址和联系方式','error');
-						$('#grid').datagrid('reload');
-					}
+				if (inserted.length > 0) {  
+					$.ajax({
+			    		type:'post',
+			    		url:"<%=basePath%>role/systeminsertrole",
+			    		data:{"rowstr":insertrow},
+			    		success:function(data){
+			    			if(1==data){//成功
+			    				$.messager.alert('提示','添加成功','info');
+			    			}else{
+			    				$.messager.alert('提示','添加失败','error');
+			    			}
+			    			$('#grid').datagrid('reload');
+			    		},error:function(){
+			    			console.log("fail");
+			    		}
+			    	});			       
 			    } 
 			}
 		});

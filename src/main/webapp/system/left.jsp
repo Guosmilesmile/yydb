@@ -55,6 +55,7 @@
                 <li><a href="#"><img src="<%=basePath%>/resources/img/icons/menu/calendar.png" alt="" />商品管理</a>
                     <ul class="subul">
                          <li ><a target="rightFrame" href="<%=basePath%>system/goods/goods-manage-category.jsp">分类管理</a></li>
+                         <li ><a target="rightFrame" href="<%=basePath%>system/goods/goods-manage-goods.jsp">商品管理</a></li>
                     </ul>
                 </li>
             </ul>

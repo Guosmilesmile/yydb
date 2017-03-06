@@ -35,15 +35,16 @@ public class Customer {
 
 	@Column(name = "address")
 	private String address;//商家地址
-
+	
 	@Column(name = "phone")
 	private Long phone;//商家联系方式
+	
+	@Column(name = "name")
+	private String name;//商家名称
 
 	public Customer() {
 		super();
 	}
-
-	
 
 	public Long getCustomerid() {
 		return customerid;
@@ -69,13 +70,9 @@ public class Customer {
 		this.balance = balance;
 	}
 
-
-
 	public Integer getIsshop() {
 		return isshop;
 	}
-
-
 
 	public void setIsshop(Integer isshop) {
 		this.isshop = isshop;
@@ -93,16 +90,20 @@ public class Customer {
 		return phone;
 	}
 
-
-
 	public void setPhone(Long phone) {
 		this.phone = phone;
 	}
 
+	public String getName() {
+		return name;
+	}
 
-
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 	public Customer(Long customerid, String wechatid, Double balance,
-			Integer isshop, String address, Long phone) {
+			Integer isshop, String address, Long phone,String name) {
 		super();
 		this.customerid = customerid;
 		this.wechatid = wechatid;
@@ -110,20 +111,18 @@ public class Customer {
 		this.isshop = isshop;
 		this.address = address;
 		this.phone = phone;
+		this.name = name;
 	}
 
-
-
 	public Customer(String wechatid, Double balance, Integer isshop,
-			String address, Long phone) {
+			String address, Long phone,String name) {
 		super();
 		this.wechatid = wechatid;
 		this.balance = balance;
 		this.isshop = isshop;
 		this.address = address;
 		this.phone = phone;
+		this.name = name;
 	}
-	
-	
 
 }

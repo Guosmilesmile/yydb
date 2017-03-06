@@ -32,9 +32,9 @@ public class CustomerController {
 	 * @param pageSize 每页的数据量
 	 * @return
 	 */
-	@RequestMapping(value = "/systemgetpagecustomer",method=RequestMethod.POST)
+	@RequestMapping(value = "/getpagecustomer",method=RequestMethod.POST)
 	@ResponseBody
-	public String systemGetCustomerByPage(@RequestParam(value="page")Integer page,@RequestParam(value="rows")Integer pageSize){
+	public String GetCustomerByPage(@RequestParam(value="page")Integer page,@RequestParam(value="rows")Integer pageSize){
 		String returnResult = "";
 		Pagination<Customer> rolePagination = customerService.getPagination(Customer.class, null, null, page, pageSize);
 		Map<String, Object> customerVOMap = CustomerVO.changeCustomer2CustomerVO(rolePagination);
@@ -45,11 +45,24 @@ public class CustomerController {
 	/**
 	 * 获取所有客户
 	 */
-	@RequestMapping(value = "/systemgetallcustomer", method = RequestMethod.POST,produces = "text/json;charset=UTF-8")
+	@RequestMapping(value = "/getallcustomer", method = RequestMethod.POST,produces = "text/json;charset=UTF-8")
 	@ResponseBody
-	public String systemGetAllCustomer() {
+	public String getAllCustomer() {
 		String returnResult = "";
 		List<Customer> customers = customerService.getAll(Customer.class);
+		List<CustomerVO> allCustomerVOs  = CustomerVO.changeCustomer2CustomerVO(customers);
+		returnResult = FastJsonTool.createJsonString(allCustomerVOs);
+		return returnResult;
+	}
+	
+	/**
+	 * 获取所有商家
+	 */
+	@RequestMapping(value = "/getallshop", method = RequestMethod.POST,produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String getAllShop() {
+		String returnResult = "";
+		List<Customer> customers = customerService.getAllShop();
 		List<CustomerVO> allCustomerVOs  = CustomerVO.changeCustomer2CustomerVO(customers);
 		returnResult = FastJsonTool.createJsonString(allCustomerVOs);
 		return returnResult;
@@ -60,9 +73,9 @@ public class CustomerController {
 	 * @param rowstr 客户信息
 	 * @return
 	 */
-	@RequestMapping(value = "/systeminsertcustomer", method = RequestMethod.POST)
+	@RequestMapping(value = "/insertcustomer", method = RequestMethod.POST)
 	@ResponseBody
-	public String systemInsertRole(@RequestParam(value="rowstr")String rowstr){
+	public String insertRole(@RequestParam(value="rowstr")String rowstr){
 		System.out.println(rowstr);
 		String returnData = ReturnDataUtil.FAIL;
 		try {
@@ -73,13 +86,19 @@ public class CustomerController {
 			Integer isshop = jsonObject.getInt("isshop");
 			String address = jsonObject.getString("address");
 			String phoneTemp =  jsonObject.getString("phone");
+			String name = jsonObject.getString("name");
 			Long phone = null ; 
 			if("".equals(phoneTemp) || null == phoneTemp){
 				phone = new Long(0);
 			}else{
 				phone = Long.valueOf(phoneTemp);
 			}
-			Customer customer = new Customer(wechatid, balance, isshop, address, phone);
+			if(0==isshop){
+				address = "";
+				phone = new Long(0);
+				name = "";
+			}
+			Customer customer = new Customer(wechatid, balance, isshop, address, phone,name);
 			boolean flag = customerService.insertCustomer(customer);
 			if(flag){
 				returnData = ReturnDataUtil.SUCCESS;
@@ -96,9 +115,9 @@ public class CustomerController {
 	 * @param rowstr 客户信息
 	 * @return
 	 */
-	@RequestMapping(value = "/systemupdatecustomer", method = RequestMethod.POST)
+	@RequestMapping(value = "/updatecustomer", method = RequestMethod.POST)
 	@ResponseBody
-	public String systemUpdateRole(@RequestParam(value="rowstr")String rowstr){
+	public String updateRole(@RequestParam(value="rowstr")String rowstr){
 		System.out.println(rowstr);
 		String returnData = ReturnDataUtil.FAIL;
 		try {
@@ -110,7 +129,13 @@ public class CustomerController {
 			Integer isshop = jsonObject.getInt("isshop");
 			String address = jsonObject.getString("address");
 			Long phone = jsonObject.getLong("phone");
-			Customer customer = new Customer(customerid,wechatid, balance, isshop, address, phone);
+			String name = jsonObject.getString("name");
+			if(0==isshop){
+				address = "";
+				phone = new Long(0);
+				name = "";
+			}
+			Customer customer = new Customer(customerid,wechatid, balance, isshop, address, phone,name);
 			boolean flag = customerService.updateCustomer(customer);
 			if(flag){
 				returnData = ReturnDataUtil.SUCCESS;
@@ -126,9 +151,9 @@ public class CustomerController {
 	 * @param ids 客户id
 	 * @return
 	 */
-	@RequestMapping(value = "/systemdeletecustomer", method = RequestMethod.POST)
+	@RequestMapping(value = "/deletecustomer", method = RequestMethod.POST)
 	@ResponseBody
-	public String systemDeleteRole(@RequestParam(value="ids")Long id){
+	public String deleteRole(@RequestParam(value="ids")Long id){
 		String returnData = ReturnDataUtil.FAIL;
 		try {
 			customerService.deleteCustomer(id);

@@ -1,5 +1,7 @@
 package org.shiro.demo.service;
 
+import java.util.List;
+
 import org.shiro.demo.entity.Customer;
 
 /**
@@ -29,4 +31,10 @@ public interface ICustomerService extends IBaseService{
 	 * @return
 	 */
 	public boolean updateCustomer(Customer customer);
+	
+	/**
+	 * 获取所有的商家
+	 * @return
+	 */
+	public List<Customer> getAllShop();
 }
