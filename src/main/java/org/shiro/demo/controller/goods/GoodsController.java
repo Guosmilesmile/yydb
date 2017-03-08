@@ -1,7 +1,13 @@
 package org.shiro.demo.controller.goods;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -9,6 +15,8 @@ import org.shiro.demo.dao.util.Pagination;
 import org.shiro.demo.entity.Category;
 import org.shiro.demo.entity.Customer;
 import org.shiro.demo.entity.Goods;
+import org.shiro.demo.service.ICategoryService;
+import org.shiro.demo.service.ICustomerService;
 import org.shiro.demo.service.IGoodsService;
 import org.shiro.demo.util.FastJsonTool;
 import org.shiro.demo.util.ReturnDataUtil;
@@ -19,14 +27,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.ServletConfigAware;
+import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping(value="/goods")
-public class GoodsController {
+public class GoodsController implements ServletConfigAware,ServletContextAware{
+	
+	private ServletContext servletContext; 
+	private ServletConfig servletConfig;  
+   
+	public void setServletConfig(ServletConfig servletConfig) {
+		this.servletConfig = servletConfig;
+	}
 
+	public void setServletContext(ServletContext servletContext) {
+		this.servletContext = servletContext;
+	}
+	
 	@Autowired
 	private IGoodsService goodsService;
+	
+	@Autowired
+	private ICustomerService customerService;
+	
+	@Autowired
+	private ICategoryService categoryService;
 	
 	/**
 	 * 分页获取所有商品信息
@@ -135,13 +162,59 @@ public class GoodsController {
 	
 	/**
 	 * 上传图片
-	 * @param ids 商品id
 	 * @return
 	 */
 	@RequestMapping(value = "/uploadPictures", method = RequestMethod.POST)
 	@ResponseBody
-	public String uploadPicture( @RequestParam(value = "fileList", required = false) MultipartFile file){
-		System.out.println(FastJsonTool.createJsonString(file));
-		return ReturnDataUtil.SUCCESS;
+	public String uploadPicture( @RequestParam(value = "fileList",required = false) MultipartFile file,HttpServletRequest request,
+			@RequestParam(value="goodsid")Long goodsid){
+		String filePath = servletContext.getRealPath("/") + "upload/";
+        String saveUrl = request.getContextPath() + "/upload/";
+        System.out.println(filePath);
+        File filedir = new File(filePath);
+        if (!filedir.exists()){
+            filedir.mkdir();
+        }
+        String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+        String newfilename = System.currentTimeMillis() + ext;
+        String PathAndName = filePath + newfilename;
+        saveUrl = saveUrl + newfilename;
+        File resultFile = new File(PathAndName);
+        try{
+            file.transferTo(resultFile);
+            goodsService.updateGoods(goodsid,"upload/"+newfilename);
+        } catch (IOException e1){
+            e1.printStackTrace();
+        }
+        return "";
 	}
+
+	
+	/**
+	 * 上传商品信息
+	 * @return
+	 */
+	@RequestMapping(value = "/uploadgoods", method = RequestMethod.POST)
+	@ResponseBody
+	public String uploadGoods(@RequestParam(value="name")String name,@RequestParam(value="categoryid")Long categoryid,
+			@RequestParam(value="summary")String summary,@RequestParam(value="shopid")Long shopid){
+		String returnData = ReturnDataUtil.FAIL;
+		try {
+			Category category = categoryService.getById(Category.class, categoryid);
+			Customer shop = customerService.getById(Customer.class, shopid);
+			Goods goods = new Goods(name, "", summary, category, shop);
+			Long id = goodsService.insertGoodsReturnId(goods);
+			if(null==id){
+				returnData = "-1";
+			}else{
+				returnData = id +"";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return returnData;
+	}
+	
+
+	
 }

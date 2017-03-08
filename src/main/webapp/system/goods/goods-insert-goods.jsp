@@ -36,8 +36,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript" src="<%=basePath%>resources/zyUpload/core/zyFile.js"></script>
 <!-- 引用控制层插件 -->
 <script type="text/javascript" src="<%=basePath%>resources/zyUpload/control/js/zyUpload.js"></script>
-<!-- 引用初始化JS -->
-<script type="text/javascript" src="<%=basePath%>resources/zyUpload/demo.js"></script>
 
 <style type="text/css">
 	body{background: white;}
@@ -45,6 +43,48 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 
 <script>
+
+<%-- $(function(){
+	// 初始化插件
+	$("#demo").zyUpload({
+		width            :   "60%",                 // 宽度
+		height           :   "100px",                 // 高度
+		itemWidth        :   "120px",                 // 文件项的宽度
+		itemHeight       :   "100px",                 // 文件项的高度
+		url              :   "<%=basePath%>/goods/uploadPictures",  // 上传文件的路径
+		multiple         :   true,                    // 是否可以多个文件上传
+		dragDrop         :   true,                    // 是否可以拖动上传文件
+		del              :   true,                    // 是否可以删除文件
+		finishDel        :   false,  				  // 是否在上传文件完成后删除预览
+		/* 外部获得的回调接口 */
+		onSelect: function(files, allFiles){                    // 选择文件的回调方法
+			console.info("当前选择了以下文件：");
+			console.info(files);
+			console.info("之前没上传的文件：");
+			console.info(allFiles);
+		},
+		onDelete: function(file, surplusFiles){                     // 删除一个文件的回调方法
+			console.info("当前删除了此文件：");
+			console.info(file);
+			console.info("当前剩余的文件：");
+			console.info(surplusFiles);
+		},
+		onSuccess: function(file){                    // 文件上传成功的回调方法
+			console.info("此文件上传成功：");
+			console.info(file);
+		},
+		onFailure: function(file){                    // 文件上传失败的回调方法
+			console.info("此文件上传失败：");
+			console.info(file);
+		},
+		onComplete: function(responseInfo){           // 上传完成的回调方法
+			console.info("文件上传完成");
+			console.info(responseInfo);
+		}
+	});
+});
+ --%>
+
 //获取指定名称的cookie的值 
 function getCookie(objName){
 	var arrStr = document.cookie.split("; "); 
@@ -62,69 +102,39 @@ function validate(number){
     }    
 } ;
 function submitForm(){//提交表单
-	editor.sync();
-	var html = document.getElementById('editor_id').value;
-	var token = getCookie("token");
-	var index = token.indexOf("&");
-	var userid = token.substring(0,index);
-	if(userid == null || userid ==""){
-		$.messager.alert('警告','请重新登录','error');
+	
+	var name = $("#name").val();
+	if(name == null || name ==""){
+		$.messager.alert('警告','请填写商品名称','error');
 		return ;
 	}
-	$('#userid').val(userid);
-	var title = $("#title").val();
-	if(title == null || title ==""){
-		$.messager.alert('警告','请填写标题','error');
+	var categorylist = $("#categorylist").val();
+	if(categorylist == null || categorylist ==""){
+		$.messager.alert('警告','请选择商品分类','error');
 		return ;
 	}
-	var author = $("#author").val();
-	if(author == null || author ==""){
-		$.messager.alert('警告','请填写作者','error');
-		return ;
-	}
-	var file  = $('#file').val();
-	if(file ==null || file ==""){
-		$.messager.alert('警告','请选择资讯封面','error');
+	var shoplist = $("#shoplist").val();
+	if(shoplist == null || shoplist ==""){
+		$.messager.alert('警告','请选择商家','error');
 		return ;
 	}
 	var summary = $("#summary").val();
 	if(summary == null || summary ==""){
-		$.messager.alert('警告','请填写概要','error');
+		$.messager.alert('警告','请填写商品概要','error');
 		return ;
 	}
-	
-	var money = $('#money').val();
-	if(money == null || money == ""){
-		$.messager.alert('警告','费用请填写费用','error');
-		return ;
-	}
-	if(!validate(money)){
-		$.messager.alert('警告','费用请填写数字','error');
-		return ;
-	}
-	var timestart = $('#timestart').datebox('getValue');
-	var timeout = $('#timeout').datebox('getValue');
-	if(timestart>timeout){
-		$.messager.alert('警告','下线时间不能大于上线时间','error');
-		return ;
-	}
-	if(timestart == null || timestart ==""){
-		$.messager.alert('警告','请选择上线时间','error');
-		return ;
-	}
-	
-	if(timeout == null || timeout ==""){
-		$.messager.alert('警告','请选择下线时间','error');
-		return ;
-	}
-	$('#timestart').datebox('setValue',timestart);
-	$('#timeout').datebox('setValue',timeout);
 	$('#ff').form('submit',{
 		success:function(data){   
-			if(0==data){
-				$.message.alert('警告','发布失败','error');
-			}else if(1==data){
-				location.href="WatchNews.jsp";
+			if("-1"==data){
+				$.message.alert('警告','添加失败','error');
+			}else {
+				$.messager.confirm("操作", "是否继续上传商品图片", function(confirm){
+					if(confirm){
+						location.href="<%=basePath%>system/goods/goods-upload-picture.jsp?id="+data;
+					}else{
+						location.href="<%=basePath%>system/goods/goods-manage-goods.jsp";
+					}
+				});
 			}
 		}
 	});
@@ -176,7 +186,7 @@ function getShoplist(){//获取所有的shop
 			if(list.length>0){
 				var str1 = "";
 				for(var i =0;i<list.length;i++){
-					str1+="<option value='"+list[i].id+"'>"+list[i].name+"  微信id："+list[i].wechatid+"</option>";
+					str1+="<option value='"+list[i].customerid+"'>"+list[i].name+"  微信id："+list[i].wechatid+"</option>";
 				}
 				$('#shoplist').html(str1);
 			}
@@ -192,6 +202,7 @@ function getShoplist(){//获取所有的shop
 		}
 	});
 }
+
 $(document).ready(function(){
 	getCategorylist();
 	getShoplist();
@@ -203,11 +214,11 @@ $(document).ready(function(){
 </head>
 
 <body bgcolor="#DDF3FF" class = "h2" >
-	<form action="<%=basePath%>news.do?method=addnews" id="ff" method="post" style="height: 98%;margin-left: 2%;margin-top: 2%;" enctype="multipart/form-data">
+	<form action="<%=basePath%>goods/uploadgoods" id="ff" method="post" style="height: 98%;margin-left: 2%;margin-top: 2%;">
 		<input type="hidden" name="userid" id="userid">
 		<fieldset class="simpborder" style="width: 48%; float: left; margin-right: 3%;">
 			<label>商品名称</label>
-			<input type="text" name="title" id="title">
+			<input type="text" name="name" id="name">
 		</fieldset>
 		<fieldset class="simpborder" style="width: 48%; float: left; ">
 			<label class="titlelabel">分类</label> 
@@ -215,7 +226,7 @@ $(document).ready(function(){
 					<option value="1">是</option>
 					<option selected="selected" value="0">否</option>
 			</select> -->
-			<select  multiple="multiple" name="example-basic" size="5" id="categorylist" style="width:40%;display: none;"> </select>
+			<select  multiple="multiple" name="categoryid" size="5" id="categorylist" style="width:40%;display: none;"> </select>
 		</fieldset>
 		<fieldset class="simpborder"  style="width: 48%; float: left;margin-right: 3%;">
 			<label class="titlelabel">商家</label>
@@ -223,17 +234,17 @@ $(document).ready(function(){
 					<option value="1">是</option>
 					<option selected="selected" value="0">否</option>
 			</select> -->
-			<select  multiple="multiple" name="example-basic" size="5" id="shoplist" style="width:40%;display:none;"></select>
+			<select  multiple="multiple" name="shopid" size="5" id="shoplist" style="width:40%;display:none;"></select>
 		</fieldset>
 		<fieldset class="simpborder" style="width: 48%; float: left;">
 			<label>概要</label>
 			<input type="text" name="summary" id="summary">
 		</fieldset>
-		<fieldset class="simpborder" style="width: 100%; height:900px; float: left; ">
+		<!-- <fieldset class="simpborder" style="width: 100%; height:900px; float: left; ">
 			<label class="titlelabel">图片</label>
-			<!-- <input  type="file" name="file" id="file"> -->
+			<input  type="file" name="file" id="file">
 			<div id="demo" class="demo"></div>   
-		</fieldset>
+		</fieldset> -->
 		<br/>
 		<fieldset style="width:99%;">
 		<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()" id="formsubmit">Submit</a>

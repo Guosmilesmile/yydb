@@ -70,7 +70,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						if(!isNull(value)){
 							var splits = value.split(";");
 							for(var i=0;i<splits.length;i++){
-								str+="<img src='"+splits[i]+"' width='70px' height='70px' style='margin-left:40px;'></br>";
+								if(""==splits[i]){
+									continue;
+								}else{
+									str+="<img src='<%=basePath%>"+splits[i]+"' width='100px' height='100px' style='margin-left:60px;'></br>";
+								}
+								
 							}
 						}
 						return str;

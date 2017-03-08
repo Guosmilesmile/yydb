@@ -174,5 +174,7 @@ public interface IBaseService {
      */
     public Object getUniqueResultByJpql(String jpql,Object...objects);
     
+ 
+    public <T>List<T> executeBySQLList(String sql, Object... params);
 }
 

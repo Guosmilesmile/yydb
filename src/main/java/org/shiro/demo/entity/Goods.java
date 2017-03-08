@@ -109,4 +109,12 @@ public class Goods {
 		this.shop = shop;
 	}
 	
+	public void appendImgurls(String imgurl){
+		if("".equals(this.imgurls)){
+			this.imgurls = this.imgurls + imgurl;
+		}else{
+			this.imgurls = this.imgurls +";"+ imgurl;
+		}
+		
+	}
 }

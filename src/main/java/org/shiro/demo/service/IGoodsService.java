@@ -18,6 +18,13 @@ public interface IGoodsService extends IBaseService{
 	public boolean insertGoods(Goods goods);
 	
 	/**
+	 * 新增商品,返回id
+	 * @param user
+	 * @return
+	 */
+	public Long insertGoodsReturnId(Goods goods);
+	
+	/**
 	 * 删除商品
 	 * @param id 用户id
 	 * @return
@@ -25,10 +32,18 @@ public interface IGoodsService extends IBaseService{
 	public boolean deleteGoods(Long id);
 	
 	/**
-	 * 更新用户
-	 * @param user 用户
+	 * 更新商品
+	 * @param goods 商品
 	 * @return
 	 */
 	public boolean updateGoods(Goods goods);
+	
+	/**
+	 * 更新商品图片
+	 * @param goods 商品
+	 * @return
+	 */
+	public boolean updateGoods(Long goodsid,String imgurl);
+
 	
 }

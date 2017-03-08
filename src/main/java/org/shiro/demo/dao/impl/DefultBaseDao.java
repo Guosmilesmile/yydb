@@ -3,10 +3,13 @@ package org.shiro.demo.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
+import java.util.Map;
+
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+
 import org.shiro.demo.dao.IBaseDao;
 import org.shiro.demo.dao.util.Pagination;
 import org.shiro.demo.dao.util.QueryCondition;
@@ -264,6 +267,18 @@ public class DefultBaseDao implements IBaseDao {
 			}
 		}
 		return query.executeUpdate();
+    }
+    
+    public <T>List<T> executeBySQLList(String sql, Object... params){
+    	Query query = em.createNativeQuery(sql);
+		if (params != null) {
+			if (params != null) {
+				for (int i = 0; i < params.length; i++) {
+					query.setParameter(i + 1, params[i]);
+				}
+			}
+		}
+		return query.getResultList();
     }
 	
 	public <T>List<T> getPageQuery(int currentPage, int pageSize,
