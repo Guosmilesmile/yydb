@@ -52,19 +52,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			columns: [[
 				{field:'id',title:'ID',sortable:true,width:60,sortable:true,hidden:true},
 				{field:'name',title:'商品名称',sortable:true,width:200,sortable:true,
-					editor: { type: 'validatebox',options: { required: true} }
 				},
 				{field:'categoryName',title:'分类名称',sortable:true,width:150,sortable:true,
-					editor: { type: 'validatebox' }
 				},
 				{field:'shopwechatid',title:'商家微信id',sortable:true,width:150,sortable:true,
-					editor: { type: 'validatebox' }
 				},
 				{field:'shopName',title:'商店名称',sortable:true,width:150,sortable:true,
-					editor: { type: 'validatebox' }
 				},
 				{field:'imgurls',title:'图片',sortable:true,width:150,sortable:true,
-					editor: { type: 'validatebox' },
 					formatter:function(value,row,index){
 						var str = "";
 						if(!isNull(value)){
@@ -82,7 +77,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					},
 				},
 				{field:'summary',title:'概要',sortable:true,width:150,sortable:true,
-					editor: { type: 'validatebox' }
 				},
 			]],
 			toolbar:[
@@ -97,9 +91,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					   handler: editData,
 				},'-',
 				{//修改数据
-					   text:"保存",
-					   iconCls: "icon-save",
-					   handler: saveData,
+					   text:"编辑图片",
+					   iconCls: "icon-edit",
+					   handler: editDataImgurl,
 				},'-',
 				{//删除数据
 					   text:"删除",
@@ -186,17 +180,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     function editData(){//编辑
     	var row = $('#grid').datagrid('getSelected');
 		if(row){
-			if(doedit!=null){
-				$('#grid').datagrid('endEdit',doedit);
-				var rowIndex = $('#grid').datagrid('getRowIndex', row);
-				$('#grid').datagrid('beginEdit',rowIndex);
-				doedit = rowIndex;
-			}
-			if(doedit == undefined){
-				var rowIndex = $('#grid').datagrid('getRowIndex', row);
-				$('#grid').datagrid('beginEdit',rowIndex);
-				doedit = rowIndex;
-			}
+			var goodsis = row.id;
+			location.href="<%=basePath%>system/goods/goods-update-goods.jsp?id="+goodsis;
+		
+		}else{
+			$.messager.alert('警告','请选择需要编辑的数据','error');
+		};
+    }
+  //-----------------------编辑图片------------------------------------------------
+    function editDataImgurl(){//编辑图片
+    	var row = $('#grid').datagrid('getSelected');
+		if(row){
+			var goodsis = row.id;
+			location.href="<%=basePath%>system/goods/goods-upload-picture.jsp?id="+goodsis;
 		}else{
 			$.messager.alert('警告','请选择需要编辑的数据','error');
 		};
@@ -244,52 +240,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			});
 		}
     }
-    //-------------------------------保存-------------------------------------------
-	function saveData(){//保存
-		$.messager.confirm("操作警告", "确定保存后被修改的数据将不可恢复！！", function(data){
-			if(data){
-				$('#grid').datagrid('endEdit', doedit);
-				var inserted = $('#grid').datagrid('getChanges', 'inserted');
-				var updated = $('#grid').datagrid('getChanges', 'updated');
-				var insertrow = JSON.stringify(inserted);
-				var updatedrow = JSON.stringify(updated);
-				if (updated.length > 0) {  
-					$.ajax({
-			    		type:'post',
-			    		url:"<%=basePath%>role/systemupdaterole",
-			    		data:{"rowstr":updatedrow},
-			    		success:function(data){
-			    			if(1==data){//成功
-			    				$.messager.alert('提示','更新成功','info');
-			    			}else{
-			    				$.messager.alert('提示','更新失败','error');
-			    			}
-			    			$('#grid').datagrid('reload');
-			    		},error:function(){
-			    			console.log("fail");
-			    		}
-			    	});			       
-			    }
-				if (inserted.length > 0) {  
-					$.ajax({
-			    		type:'post',
-			    		url:"<%=basePath%>role/systeminsertrole",
-			    		data:{"rowstr":insertrow},
-			    		success:function(data){
-			    			if(1==data){//成功
-			    				$.messager.alert('提示','添加成功','info');
-			    			}else{
-			    				$.messager.alert('提示','添加失败','error');
-			    			}
-			    			$('#grid').datagrid('reload');
-			    		},error:function(){
-			    			console.log("fail");
-			    		}
-			    	});			       
-			    } 
-			}
-		});
-    }
+    
 	//--------------------------------------主体部分！！！-----------------------------
     var doedit = undefined;//用来记录当前编辑的行，如果没有编辑的行则置为undefined
     $(function(){

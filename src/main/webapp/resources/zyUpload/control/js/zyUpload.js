@@ -342,6 +342,7 @@
 							// 重新设置统计栏信息
 							self.funSetStatusInfo(ZYFILE.funReturnNeedFiles());
 						}
+						$('#grid').datagrid('reload');
 					},
 					onFailure: function(file) {
 						$("#uploadProgress_" + file.index).hide();

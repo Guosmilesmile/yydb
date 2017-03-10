@@ -78,6 +78,19 @@ public class GoodsServiceImpl extends DefultBaseService implements IGoodsService
 		return flag;
 	}
 
-
+	public boolean deleteGoodsImgurl(Long id,String imgurl) {
+		boolean flag = false;
+		try {
+			Goods goods = baseService.getById(Goods.class, id);
+			String imgurls = goods.getImgurls();
+			String newImgurls = imgurls.replaceFirst(imgurl+";", "");
+			goods.setImgurls(newImgurls);
+			baseService.update(goods);
+			flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return flag;
+	}
 	
 }

@@ -129,7 +129,45 @@ public class GoodsVO {
 		}
 		return roleVOList;
 	}
+	
+	/**
+	 * 将实体类转换成显示层实体类
+	 * @param pagination 分页数据
+	 * @return
+	 */
+	public static List<String> change2Imgurls(Goods goods){
+		List<String> returnList = new ArrayList<String>();
+		String imgurls = goods.getImgurls();
+		String[] imgBlocks = imgurls.split(";");
+		for(String item : imgBlocks){
+			returnList.add(item);
+		}
+		return returnList;
+	}
 
+	/**
+	 * 将实体类转换成显示层实体类
+	 * @param pagination 分页数据
+	 * @return
+	 */
+	public static Map<String, Object> change2Imgurls(Pagination<Goods> pagination){
+		List<Goods> recordList = pagination.getRecordList();
+		List<String> returnList = new ArrayList<String>();
+		Map<String, Object> map = new HashMap<String, Object>();
+		for(Goods goods : recordList){
+			String imgurls = goods.getImgurls();
+			if(!"".equals(imgurls)){
+				String[] imgBlocks = imgurls.split(";");
+				for(String item : imgBlocks){
+					returnList.add(item);
+				}
+			}
+		}
+		map.put("rows", returnList);
+		map.put("total", returnList.size());
+		return map;
+	}
+	
 	public GoodsVO(Long id, String name, String imgurls, String categoryName,
 			String shopwechatid, String shopName, String summary) {
 		super();

@@ -40,10 +40,19 @@ public interface IGoodsService extends IBaseService{
 	
 	/**
 	 * 更新商品图片
-	 * @param goods 商品
+	 * @param goodsid 商品id
+	 * @param imgurl 图片地址
 	 * @return
 	 */
 	public boolean updateGoods(Long goodsid,String imgurl);
 
+	
+	/**
+	 * 删除图片
+	 * @param id 
+	 * @param imgurl
+	 * @return
+	 */
+	public boolean deleteGoodsImgurl(Long id,String imgurl);
 	
 }

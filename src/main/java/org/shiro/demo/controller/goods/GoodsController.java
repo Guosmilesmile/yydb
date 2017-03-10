@@ -2,6 +2,7 @@ package org.shiro.demo.controller.goods;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.shiro.demo.dao.util.Pagination;
+import org.shiro.demo.dao.util.QueryCondition;
 import org.shiro.demo.entity.Category;
 import org.shiro.demo.entity.Customer;
 import org.shiro.demo.entity.Goods;
@@ -21,6 +23,7 @@ import org.shiro.demo.service.IGoodsService;
 import org.shiro.demo.util.FastJsonTool;
 import org.shiro.demo.util.ReturnDataUtil;
 import org.shiro.demo.vo.GoodsVO;
+import org.shiro.demo.vo.UGoodsVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -120,19 +123,21 @@ public class GoodsController implements ServletConfigAware,ServletContextAware{
 	 * @param rowstr 商品信息
 	 * @return
 	 */
-	@RequestMapping(value = "/systemupdateGoods", method = RequestMethod.POST)
+	@RequestMapping(value = "/updateGoods", method = RequestMethod.POST)
 	@ResponseBody
-	public String systemUpdateGoods(@RequestParam(value="rowstr")String rowstr){
-		System.out.println(rowstr);
+	public String updateGoods(@RequestParam(value="goodsid")Long goodsid,@RequestParam(value="name")String name,@RequestParam(value="categoryid")Long categoryid,
+			@RequestParam(value="summary")String summary,@RequestParam(value="shopid")Long shopid){
 		String returnData = ReturnDataUtil.FAIL;
 		try {
-			JSONArray jsonArray = new JSONArray(rowstr);
-			JSONObject jsonObject = jsonArray.getJSONObject(0);
-			Long id = jsonObject.getLong("id");
-			String name  = jsonObject.getString("name");
-			Goods Goods = goodsService.getById(Goods.class, id);
-			Goods.setName(name);
-			boolean flag = goodsService.updateGoods(Goods);
+			
+			Goods goods = goodsService.getById(Goods.class, goodsid);
+			goods.setName(name);
+			goods.setSummary(summary);
+			Category category = categoryService.getById(Category.class, categoryid);
+			goods.setCategory(category);
+			Customer shop = customerService.getById(Customer.class, shopid);
+			goods.setShop(shop);
+			boolean flag = goodsService.updateGoods(goods);
 			if(flag){
 				returnData = ReturnDataUtil.SUCCESS;
 			}
@@ -216,5 +221,55 @@ public class GoodsController implements ServletConfigAware,ServletContextAware{
 	}
 	
 
+	/**
+	 * 分页获取指定商品的图片
+	 * @param page 当前页
+	 * @param pageSize 每页的数据量
+	 * @return
+	 */
+	@RequestMapping(value = "/getpagegoodsimgurls",method=RequestMethod.POST)
+	@ResponseBody
+	public String getGoodsImgurlsByPage(@RequestParam(value="page")Integer page,@RequestParam(value="rows")Integer pageSize,
+			@RequestParam(value="goodsid")Long goodsid){
+		String returnResult = "";
+		List<QueryCondition> query = new ArrayList<QueryCondition>();
+		QueryCondition queryCondition = new QueryCondition("goodsid", QueryCondition.EQ, goodsid);
+		query.add(queryCondition);
+		Pagination<Goods> GoodsPagination = goodsService.getPagination(Goods.class, query , null, page, pageSize);
+		Map<String, Object> GoodsVOMap = GoodsVO.change2Imgurls(GoodsPagination);
+		returnResult =  FastJsonTool.createJsonString(GoodsVOMap);
+		return returnResult;
+	}
+	
+	
+	/**
+	 * 删除商品图片
+	 * @param ids 商品id
+	 * @return
+	 */
+	@RequestMapping(value = "/deletegoodsimgurl", method = RequestMethod.POST)
+	@ResponseBody
+	public String deleteGoodsImgurls(@RequestParam(value="ids")Long id,@RequestParam(value="imgurl")String imgurl){
+		String returnData = ReturnDataUtil.FAIL;
+		try {
+			goodsService.deleteGoodsImgurl(id,imgurl);
+			returnData = ReturnDataUtil.SUCCESS;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return returnData;
+	}
+	
+	/**
+	 * 获取商品信息
+	 */
+	@RequestMapping(value = "/getgoodswithid", method = RequestMethod.POST,produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String getGoodsWithid(@RequestParam(value="goodsid")Long id) {
+		String returnResult = "";
+		Goods goods = goodsService.getById(Goods.class,id);
+		returnResult = FastJsonTool.createJsonString(new UGoodsVO(goods));
+		return returnResult;
+	}
 	
 }
