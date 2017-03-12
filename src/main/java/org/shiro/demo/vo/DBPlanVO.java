@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.shiro.demo.dao.util.Pagination;
 import org.shiro.demo.entity.DBPlan;
 
 public class DBPlanVO {
 
-	private Long dbplanid;
+	private Long id;
 	
 	private Integer block;//分区（1：一元区，2：十元区，3：百元区，4：千元区）
 	
@@ -25,13 +26,9 @@ public class DBPlanVO {
 	
 	private String goodsName;//商品名称
 	
-	public Long getDbplanid() {
-		return dbplanid;
-	}
-
-	public void setDbplanid(Long dbplanid) {
-		this.dbplanid = dbplanid;
-	}
+	private String shopName;//商家名称
+	
+	
 
 	public Integer getBlock() {
 		return block;
@@ -93,10 +90,12 @@ public class DBPlanVO {
 		super();
 	}
 	
-	public DBPlanVO(Long dbplanid, Integer block, Long split, Long startTime,
-			Long endTime, Integer number, Double money, String goodsName) {
+
+	public DBPlanVO(Long id, Integer block, Long split, Long startTime,
+			Long endTime, Integer number, Double money, String goodsName,
+			String shopName) {
 		super();
-		this.dbplanid = dbplanid;
+		this.id = id;
 		this.block = block;
 		this.split = split;
 		this.startTime = startTime;
@@ -104,11 +103,12 @@ public class DBPlanVO {
 		this.number = number;
 		this.money = money;
 		this.goodsName = goodsName;
+		this.shopName = shopName;
 	}
 
 	public DBPlanVO(DBPlan dbPlan) {
 		super();
-		this.dbplanid = dbPlan.getDbplanid();
+		this.id = dbPlan.getDbplanid();
 		this.block = dbPlan.getBlock();
 		this.split = dbPlan.getSplit();
 		this.startTime = dbPlan.getStartTime();
@@ -116,6 +116,7 @@ public class DBPlanVO {
 		this.number = dbPlan.getNumber();
 		this.money = dbPlan.getMoney();
 		this.goodsName = dbPlan.getGoods().getName();
+		this.shopName = dbPlan.getGoods().getShop().getName();
 	}
 
 	/**
@@ -147,6 +148,22 @@ public class DBPlanVO {
 			roleVOList.add(new DBPlanVO(item));
 		}
 		return roleVOList;
+	}
+
+	public String getShopName() {
+		return shopName;
+	}
+
+	public void setShopName(String shopName) {
+		this.shopName = shopName;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 }

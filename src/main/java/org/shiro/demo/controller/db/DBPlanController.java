@@ -8,9 +8,12 @@ import org.json.JSONObject;
 import org.mindrot.jbcrypt.BCrypt;
 import org.shiro.demo.dao.util.Pagination;
 import org.shiro.demo.entity.DBPlan;
+import org.shiro.demo.entity.Goods;
 import org.shiro.demo.service.IDBPlanService;
+import org.shiro.demo.service.IGoodsService;
 import org.shiro.demo.util.FastJsonTool;
 import org.shiro.demo.util.ReturnDataUtil;
+import org.shiro.demo.util.TimeUtil;
 import org.shiro.demo.vo.DBPlanVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,6 +28,9 @@ public class DBPlanController {
 
 	@Autowired
 	private IDBPlanService dbplanService;
+	
+	@Autowired
+	private IGoodsService goodsService;
 	
 	/**
 	 * 分页获取所有夺宝计划信息
@@ -50,15 +56,17 @@ public class DBPlanController {
 	 */
 	@RequestMapping(value = "/insertdbplan", method = RequestMethod.POST)
 	@ResponseBody
-	public String insertDBPlan(@RequestParam(value="rowstr")String rowstr){
-		System.out.println(rowstr);
+	public String insertDBPlan(@RequestParam(value="goodsid")Long goodsid,@RequestParam(value="money")Double money,
+			@RequestParam(value="number")Integer number,@RequestParam(value="split")Long split,
+			@RequestParam(value="starttime")String starttimestr,@RequestParam(value="endtime")String endtimestr){
 		String returnData = ReturnDataUtil.FAIL;
 		try {
-			JSONArray jsonArray = new JSONArray(rowstr);
-			JSONObject jsonObject = jsonArray.getJSONObject(0);
-			String name  = jsonObject.getString("name");
-			String description = jsonObject.getString("description");
-			DBPlan dbPlan = null;
+			System.out.println(starttimestr);
+			System.out.println(endtimestr);
+			Long starttime = TimeUtil.convert2Long(starttimestr, "yyyy-MM-dd HH:mm:ss")/1000;
+			Long endtime = TimeUtil.convert2Long(endtimestr, "yyyy-MM-dd HH:mm:ss")/1000;
+			Goods goods = goodsService.getById(Goods.class, goodsid);
+			DBPlan dbPlan = new DBPlan(split, starttime, endtime, number, money, goods );
 			boolean flag = dbplanService.insertDBPlan(dbPlan );
 			if(flag){
 				returnData = ReturnDataUtil.SUCCESS;

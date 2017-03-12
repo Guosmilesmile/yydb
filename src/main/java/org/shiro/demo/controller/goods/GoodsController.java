@@ -77,9 +77,9 @@ public class GoodsController implements ServletConfigAware,ServletContextAware{
 	/**
 	 * 获取所有商品
 	 */
-	@RequestMapping(value = "/systemgetallGoods", method = RequestMethod.POST,produces = "text/json;charset=UTF-8")
+	@RequestMapping(value = "/getallGoods", method = RequestMethod.POST,produces = "text/json;charset=UTF-8")
 	@ResponseBody
-	public String systemGetAllGoods() {
+	public String getAllGoods() {
 		String returnResult = "";
 		List<Goods> allGoods = goodsService.getAll(Goods.class);
 		List<GoodsVO> allGoodsvo  = GoodsVO.changeGoods2GoodsVO(allGoods);

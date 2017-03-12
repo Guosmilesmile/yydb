@@ -33,7 +33,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	//初始化数据函数
 	function getData(queryParams){
 		$('#grid').datagrid({
-			url: '<%=basePath%>role/systemgetpagerole',
+			url: '<%=basePath%>dbplan/getpagedbplan',
 			queryParams: queryParams,
 			remoteSort:false,
 			nowrap: false, //换行属性
@@ -51,11 +51,36 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			]],
 			columns: [[
 				{field:'id',title:'ID',sortable:true,width:60,sortable:true,hidden:true},
-				{field:'name',title:'角色名',sortable:true,width:200,sortable:true,
+				{field:'goodsName',title:'商品名称',sortable:true,width:200,sortable:true,
 					editor: { type: 'validatebox',options: { required: true} }
 				},
-				{field:'description',title:'角色描述',sortable:true,width:150,sortable:true,
+				{field:'shopName',title:'商家名称',sortable:true,width:150,sortable:true,
 					editor: { type: 'validatebox' }
+				},
+				{field:'money',title:'价格',sortable:true,width:150,sortable:true,
+					editor: { type: 'numberbox' }
+				},
+				{field:'number',title:'数量',sortable:true,width:150,sortable:true,
+					editor: { type: 'numberbox' }
+				},
+				{field:'split',title:'单次竞标价格',sortable:true,width:150,sortable:true,
+					editor: { type: 'validatebox' }
+				},
+				{field:'startTime',title:'竞标开始时间',sortable:true,width:150,sortable:true,
+					editor: { type : 'datetimebox',options: { required: true } },
+					formatter:function(value,row,index){
+						var time = myformatter(value);
+						row.startTime = time;
+						return time;
+					},
+				},
+				{field:'endTime',title:'竞标结束时间',sortable:true,width:150,sortable:true,
+					editor: { type : 'datetimebox',options: { required: true} },
+					formatter:function(value,row,index){
+						var time = myformatter(value);
+						row.endTime = time;
+						return time;
+					},
 				},
 			]],
 			toolbar:[
@@ -110,7 +135,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		});
 		$('#searchdialog').dialog('close');
 	};
-	
 	function myformatter(value) {//时间转换函数
 		if(value != null && value != ""){
 			var date = new Date(value*1000);
@@ -197,27 +221,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     }
     //---------------------------------添加----------------------------------------
     function addData(){
-    	if(doedit != undefined){
-			//$('#grid').datagrid('endEdit',doedit);
-		}
-		if(doedit == undefined){
-			var row = $('#grid').datagrid('getSelected');
-			var rowIndex = $('#grid').datagrid('getRowIndex', row);
-			if(row!=null){
-				rowIndex = $('#grid').datagrid('getRowIndex', row);
-				rowIndex = rowIndex + 1;
-			}
-			else{
-				rowIndex = 0;
-			}
-			$('#grid').datagrid('insertRow',{
-				index: rowIndex,
-				row: {
-				}
-			});
-			$('#grid').datagrid('beginEdit',rowIndex);
-			doedit = rowIndex;
-		}
+    	var url = "<%=basePath%>system/db/db-insert-dbplan.jsp";
+		location.href=url;
     }
     //----------------------------导入------------------------------------------
     function importData(){
@@ -239,7 +244,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					}	
 					$.ajax({
 			    		type:'post',
-			    		url:"<%=basePath%>role/systemdeleterole",
+			    		url:"<%=basePath%>dbplan/deletedbplan",
 			    		data:{ids: ids.toString()},
 			    		success:function(data){
 			    			if(1==data){//成功
@@ -269,7 +274,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				if (updated.length > 0) {  
 					$.ajax({
 			    		type:'post',
-			    		url:"<%=basePath%>role/systemupdaterole",
+			    		url:"<%=basePath%>",
 			    		data:{"rowstr":updatedrow},
 			    		success:function(data){
 			    			if(1==data){//成功
@@ -286,7 +291,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				if (inserted.length > 0) {  
 					$.ajax({
 			    		type:'post',
-			    		url:"<%=basePath%>role/systeminsertrole",
+			    		url:"<%=basePath%>",
 			    		data:{"rowstr":insertrow},
 			    		success:function(data){
 			    			if(1==data){//成功

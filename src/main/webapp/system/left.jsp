@@ -60,7 +60,7 @@
                 </li>
                 <li><a href="#"><img src="<%=basePath%>/resources/img/icons/menu/pen.png" alt="" />夺宝管理</a>
                     <ul class="subul">
-                         <li ><a target="rightFrame" href="<%=basePath%>system/goods/goods-manage-category.jsp">夺宝计划管理</a></li>
+                         <li ><a target="rightFrame" href="<%=basePath%>system/db/db-manage-dbplan.jsp">夺宝计划管理</a></li>
                     </ul>
                 </li>
             </ul>

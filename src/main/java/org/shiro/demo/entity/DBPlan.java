@@ -14,13 +14,23 @@ import javax.persistence.Table;
 @Table(name="db_dbplan")
 public class DBPlan {
 
+	public final static Integer BLOCKONE = 1;//一元区
+	
+	public final static Integer BLOCKTEN = 2;//十元区
+	
+	public final static Integer BLOCKHUNDRED = 3;//百元区
+	
+	public final static Integer BLOCKTHOUSAND = 4;//千元区
+	
+	public final static Integer BLOCKWANG = 5;//万元区
+	
 	@Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="dbplanid")
 	private Long dbplanid;
 	
 	@Column(name="block")
-	private Integer block;//分区（1：一元区，2：十元区，3：百元区，4：千元区）
+	private Integer block;//分区（1：一元区，2：十元区，3：百元区，4：千元区，5：万元区）
 	
 	@Column(name="split")
 	private Long split;//单次竞标价
@@ -64,6 +74,28 @@ public class DBPlan {
 		this.number = number;
 		this.money = money;
 		this.goods = goods;
+	}
+	
+	public DBPlan(Long split, Long startTime, Long endTime,
+			Integer number, Double money, Goods goods) {
+		super();
+		this.split = split;
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.number = number;
+		this.money = money;
+		this.goods = goods;
+		if(split>0&&split<=10){
+			this.block = DBPlan.BLOCKONE;
+		}else if(split>10&&split<=100){
+			this.block = DBPlan.BLOCKTEN;
+		}else if(split>100&&split<=1000){
+			this.block = DBPlan.BLOCKHUNDRED;
+		}else if(split>1000&&split<=10000){
+			this.block = DBPlan.BLOCKTHOUSAND;
+		}else if(split>100000){
+			this.block = DBPlan.BLOCKWANG;
+		}
 	}
 
 	public DBPlan() {
@@ -133,7 +165,5 @@ public class DBPlan {
 	public void setGoods(Goods goods) {
 		this.goods = goods;
 	}
-	
-	
 	
 }

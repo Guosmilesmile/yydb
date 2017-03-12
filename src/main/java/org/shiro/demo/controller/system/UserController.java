@@ -37,8 +37,7 @@ public class UserController {
 	@ResponseBody
 	public String systemGetUserByPage(@RequestParam(value = "page") Integer page,@RequestParam(value = "rows") Integer pageSize) {
 		String returnResult = "";
-		Pagination<User> userPagination = userService.getPagination(User.class,
-				null, null, page, pageSize);
+		Pagination<User> userPagination = userService.getPagination(User.class,null, "order by userid desc", page, pageSize);
 		Map<String, Object> userVOMap = UserVO
 				.changeUser2UserVO(userPagination);
 		returnResult = FastJsonTool.createJsonString(userVOMap);
