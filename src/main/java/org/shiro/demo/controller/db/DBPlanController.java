@@ -15,6 +15,8 @@ import org.shiro.demo.util.FastJsonTool;
 import org.shiro.demo.util.ReturnDataUtil;
 import org.shiro.demo.util.TimeUtil;
 import org.shiro.demo.vo.DBPlanVO;
+import org.shiro.demo.vo.UDBPlanVO;
+import org.shiro.demo.vo.UGoodsVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -85,17 +87,18 @@ public class DBPlanController {
 	 */
 	@RequestMapping(value = "/updatedbplan", method = RequestMethod.POST)
 	@ResponseBody
-	public String updateDBPlan(@RequestParam(value="rowstr")String rowstr){
-		System.out.println(rowstr);
+	public String updateDBPlan(@RequestParam(value="dbplanid")Long dbplanid,@RequestParam(value="goodsid")Long goodsid,@RequestParam(value="money")Double money,
+			@RequestParam(value="number")Integer number,@RequestParam(value="split")Long split,
+			@RequestParam(value="starttime")String starttimestr,@RequestParam(value="endtime")String endtimestr){
 		String returnData = ReturnDataUtil.FAIL;
 		try {
-			JSONArray jsonArray = new JSONArray(rowstr);
-			JSONObject jsonObject = jsonArray.getJSONObject(0);
-			Long id = jsonObject.getLong("id");
-			String name  = jsonObject.getString("name");
-			String description = jsonObject.getString("description");
-			DBPlan dbPlan = dbplanService.getById(DBPlan.class, id);
-			boolean flag = dbplanService.updateDBPlan(dbPlan);
+			System.out.println(starttimestr);
+			System.out.println(endtimestr);
+			Long starttime = TimeUtil.convert2Long(starttimestr, "yyyy-MM-dd HH:mm:ss")/1000;
+			Long endtime = TimeUtil.convert2Long(endtimestr, "yyyy-MM-dd HH:mm:ss")/1000;
+			Goods goods = goodsService.getById(Goods.class, goodsid);
+			DBPlan dbPlan = new DBPlan(dbplanid,split, starttime, endtime, number, money, goods );
+			boolean flag = dbplanService.updateDBPlan(dbPlan );
 			if(flag){
 				returnData = ReturnDataUtil.SUCCESS;
 			}
@@ -121,5 +124,17 @@ public class DBPlanController {
 			e.printStackTrace();
 		}
 		return returnData;
+	}
+	
+	/**
+	 * 根据id获取详细的夺宝计划
+	 */
+	@RequestMapping(value = "/getdbplanwithid", method = RequestMethod.POST,produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String getdbplanWithid(@RequestParam(value="id")Long id) {
+		String returnResult = "";
+		DBPlan dbPlan = dbplanService.getById(DBPlan.class,id);
+		returnResult = FastJsonTool.createJsonString(new UDBPlanVO(dbPlan));
+		return returnResult;
 	}
 }

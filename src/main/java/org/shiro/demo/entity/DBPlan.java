@@ -76,6 +76,29 @@ public class DBPlan {
 		this.goods = goods;
 	}
 	
+	public DBPlan(Long id,Long split, Long startTime, Long endTime,
+			Integer number, Double money, Goods goods) {
+		super();
+		this.dbplanid = id;
+		this.split = split;
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.number = number;
+		this.money = money;
+		this.goods = goods;
+		if(split>0&&split<=10){
+			this.block = DBPlan.BLOCKONE;
+		}else if(split>10&&split<=100){
+			this.block = DBPlan.BLOCKTEN;
+		}else if(split>100&&split<=1000){
+			this.block = DBPlan.BLOCKHUNDRED;
+		}else if(split>1000&&split<=10000){
+			this.block = DBPlan.BLOCKTHOUSAND;
+		}else if(split>100000){
+			this.block = DBPlan.BLOCKWANG;
+		}
+	}
+	
 	public DBPlan(Long split, Long startTime, Long endTime,
 			Integer number, Double money, Goods goods) {
 		super();

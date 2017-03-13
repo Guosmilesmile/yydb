@@ -173,48 +173,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			return ss[2] + "-" + ss[0] + "-" + ss[1];
 		else return s;
 	}
-    function getDistinctMetaCode(){//获取所有的jobname
-    	$.ajax({
-    		type:'post',
-    		url:"<%=basePath%>",
-    		success:function(data){
-    			var list = eval("("+data+")");
-    			var jobname = list.jobname;
-    			if(jobname.length>0){
-    				var str1 = "";
-    				for(var i =0;i<jobname.length;i++){
-    					str1+="<option value='"+jobname[i]+"'>"+jobname[i]+"</option>";
-    				}
-    				$('#metacode').html(str1);
-    			}
-    			$('#metacode').show();
-    			$("#metacode").multiselect({
-    				noneSelectedText: "==请选择==",
-    		        checkAllText: "全选",
-    		        uncheckAllText: '全不选',
-    		        selectedText:'#项被选中',
-    			}).multiselectfilter(); 
-    		},error:function(){
-    			console.log("fail");
-    		}
-    	});
-    }
  
     //-----------------------编辑------------------------------------------------
     function editData(){//编辑
     	var row = $('#grid').datagrid('getSelected');
 		if(row){
-			if(doedit!=null){
-				$('#grid').datagrid('endEdit',doedit);
-				var rowIndex = $('#grid').datagrid('getRowIndex', row);
-				$('#grid').datagrid('beginEdit',rowIndex);
-				doedit = rowIndex;
-			}
-			if(doedit == undefined){
-				var rowIndex = $('#grid').datagrid('getRowIndex', row);
-				$('#grid').datagrid('beginEdit',rowIndex);
-				doedit = rowIndex;
-			}
+			var id = row.id;
+			var url = "<%=basePath%>system/db/db-update-dbplan.jsp?id="+id;
+			location.href=url;
 		}else{
 			$.messager.alert('警告','请选择需要编辑的数据','error');
 		};
