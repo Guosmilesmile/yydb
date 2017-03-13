@@ -7,16 +7,14 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.mindrot.jbcrypt.BCrypt;
 import org.shiro.demo.dao.util.Pagination;
-import org.shiro.demo.entity.DBPlan;
+import org.shiro.demo.entity.DBAttend;
 import org.shiro.demo.entity.Goods;
-import org.shiro.demo.service.IDBPlanService;
+import org.shiro.demo.service.IDBAttendService;
 import org.shiro.demo.service.IGoodsService;
 import org.shiro.demo.util.FastJsonTool;
 import org.shiro.demo.util.ReturnDataUtil;
 import org.shiro.demo.util.TimeUtil;
-import org.shiro.demo.vo.DBPlanVO;
-import org.shiro.demo.vo.UDBPlanVO;
-import org.shiro.demo.vo.UGoodsVO;
+import org.shiro.demo.vo.DBAttendVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,11 +23,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping(value="/dbplan")
-public class DBPlanController {
+@RequestMapping(value="/dbattend")
+public class DBAttendController {
 
 	@Autowired
-	private IDBPlanService dbplanService;
+	private IDBAttendService dbAttendService;
 	
 	@Autowired
 	private IGoodsService goodsService;
@@ -40,12 +38,12 @@ public class DBPlanController {
 	 * @param pageSize 每页的数据量
 	 * @return
 	 */
-	@RequestMapping(value = "/getpagedbplan",method=RequestMethod.POST)
+	@RequestMapping(value = "/getpagedbattend",method=RequestMethod.POST)
 	@ResponseBody
-	public String getDBPlanByPage(@RequestParam(value="page")Integer page,@RequestParam(value="rows")Integer pageSize){
+	public String getDBAttendByPage(@RequestParam(value="page")Integer page,@RequestParam(value="rows")Integer pageSize){
 		String returnResult = "";
-		Pagination<DBPlan> dbPlanPagination = dbplanService.getPagination(DBPlan.class, null, "order by dbplanid desc", page, pageSize);
-		Map<String, Object> VOMap = DBPlanVO.changeDBPlan2DBPlanVO(dbPlanPagination);
+		Pagination<DBAttend> DBAttendPagination = dbAttendService.getPagination(DBAttend.class, null, "order by attendid desc", page, pageSize);
+		Map<String, Object> VOMap = DBAttendVO.changeDBAttend2DBAttendVO(DBAttendPagination);
 		returnResult =  FastJsonTool.createJsonString(VOMap);
 		return returnResult;
 	}
@@ -56,9 +54,9 @@ public class DBPlanController {
 	 * @param rowstr 信息
 	 * @return
 	 */
-	@RequestMapping(value = "/insertdbplan", method = RequestMethod.POST)
+	@RequestMapping(value = "/insertDBAttend", method = RequestMethod.POST)
 	@ResponseBody
-	public String insertDBPlan(@RequestParam(value="goodsid")Long goodsid,@RequestParam(value="money")Double money,
+	public String insertDBAttend(@RequestParam(value="goodsid")Long goodsid,@RequestParam(value="money")Double money,
 			@RequestParam(value="number")Integer number,@RequestParam(value="split")Long split,
 			@RequestParam(value="starttime")String starttimestr,@RequestParam(value="endtime")String endtimestr){
 		String returnData = ReturnDataUtil.FAIL;
@@ -68,8 +66,8 @@ public class DBPlanController {
 			Long starttime = TimeUtil.convert2Long(starttimestr, "yyyy-MM-dd HH:mm:ss")/1000;
 			Long endtime = TimeUtil.convert2Long(endtimestr, "yyyy-MM-dd HH:mm:ss")/1000;
 			Goods goods = goodsService.getById(Goods.class, goodsid);
-			DBPlan dbPlan = new DBPlan(split, starttime, endtime, number, money, goods );
-			boolean flag = dbplanService.insertDBPlan(dbPlan );
+			DBAttend DBAttend = null;
+			boolean flag = dbAttendService.insertDBAttend(DBAttend );
 			if(flag){
 				returnData = ReturnDataUtil.SUCCESS;
 			}
@@ -85,9 +83,9 @@ public class DBPlanController {
 	 * @param rowstr 信息
 	 * @return
 	 */
-	@RequestMapping(value = "/updatedbplan", method = RequestMethod.POST)
+	@RequestMapping(value = "/updateDBAttend", method = RequestMethod.POST)
 	@ResponseBody
-	public String updateDBPlan(@RequestParam(value="dbplanid")Long dbplanid,@RequestParam(value="goodsid")Long goodsid,@RequestParam(value="money")Double money,
+	public String updateDBAttend(@RequestParam(value="DBAttendid")Long DBAttendid,@RequestParam(value="goodsid")Long goodsid,@RequestParam(value="money")Double money,
 			@RequestParam(value="number")Integer number,@RequestParam(value="split")Long split,
 			@RequestParam(value="starttime")String starttimestr,@RequestParam(value="endtime")String endtimestr){
 		String returnData = ReturnDataUtil.FAIL;
@@ -97,8 +95,8 @@ public class DBPlanController {
 			Long starttime = TimeUtil.convert2Long(starttimestr, "yyyy-MM-dd HH:mm:ss")/1000;
 			Long endtime = TimeUtil.convert2Long(endtimestr, "yyyy-MM-dd HH:mm:ss")/1000;
 			Goods goods = goodsService.getById(Goods.class, goodsid);
-			DBPlan dbPlan = new DBPlan(dbplanid,split, starttime, endtime, number, money, goods );
-			boolean flag = dbplanService.updateDBPlan(dbPlan );
+			DBAttend DBAttend = null;
+			boolean flag = dbAttendService.updateDBAttend(DBAttend );
 			if(flag){
 				returnData = ReturnDataUtil.SUCCESS;
 			}
@@ -113,12 +111,12 @@ public class DBPlanController {
 	 * @param ids id
 	 * @return
 	 */
-	@RequestMapping(value = "/deletedbplan", method = RequestMethod.POST)
+	@RequestMapping(value = "/deletedbattend", method = RequestMethod.POST)
 	@ResponseBody
-	public String deleteDBPlan(@RequestParam(value="ids")Long id){
+	public String deleteDBAttend(@RequestParam(value="ids")Long id){
 		String returnData = ReturnDataUtil.FAIL;
 		try {
-			dbplanService.deleteDBPlan(id);
+			dbAttendService.deleteDBAttend(id);
 			returnData = ReturnDataUtil.SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -129,12 +127,12 @@ public class DBPlanController {
 	/**
 	 * 根据id获取详细的夺宝计划
 	 */
-	@RequestMapping(value = "/getdbplanwithid", method = RequestMethod.POST,produces = "text/json;charset=UTF-8")
+	@RequestMapping(value = "/getDBAttendwithid", method = RequestMethod.POST,produces = "text/json;charset=UTF-8")
 	@ResponseBody
-	public String getdbplanWithid(@RequestParam(value="id")Long id) {
+	public String getDBAttendWithid(@RequestParam(value="id")Long id) {
 		String returnResult = "";
-		DBPlan dbPlan = dbplanService.getById(DBPlan.class,id);
-		returnResult = FastJsonTool.createJsonString(new UDBPlanVO(dbPlan));
+		DBAttend DBAttend = dbAttendService.getById(DBAttend.class,id);
+		returnResult = "";//FastJsonTool.createJsonString(new UDBAttendVO(DBAttend));
 		return returnResult;
 	}
 }

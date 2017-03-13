@@ -38,6 +38,7 @@ public class AppsController {
 		String encryptString = RSAUtils.decryptString(params);
 		System.out.println(encryptString);
 		Map<String, String> splitParams = SplitParamsUtil.splitParams(encryptString, "&", "=");
-		return FastJsonTool.createJsonString(splitParams);
+		String resultdata = RSAUtils.encryptString(FastJsonTool.createJsonString(splitParams));
+		return resultdata;
 	}
 }

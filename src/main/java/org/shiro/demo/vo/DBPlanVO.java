@@ -8,6 +8,11 @@ import java.util.Map;
 import org.shiro.demo.dao.util.Pagination;
 import org.shiro.demo.entity.DBPlan;
 
+/**
+ * 夺宝计划显示层
+ * @author Christy
+ *
+ */
 public class DBPlanVO {
 
 	private Long id;
