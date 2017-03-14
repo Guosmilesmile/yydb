@@ -7,14 +7,19 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.mindrot.jbcrypt.BCrypt;
 import org.shiro.demo.dao.util.Pagination;
+import org.shiro.demo.entity.Customer;
 import org.shiro.demo.entity.DBAttend;
+import org.shiro.demo.entity.DBPlan;
 import org.shiro.demo.entity.Goods;
+import org.shiro.demo.service.ICustomerService;
 import org.shiro.demo.service.IDBAttendService;
+import org.shiro.demo.service.IDBPlanService;
 import org.shiro.demo.service.IGoodsService;
 import org.shiro.demo.util.FastJsonTool;
 import org.shiro.demo.util.ReturnDataUtil;
 import org.shiro.demo.util.TimeUtil;
 import org.shiro.demo.vo.DBAttendVO;
+import org.shiro.demo.vo.UDBAttendVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +37,11 @@ public class DBAttendController {
 	@Autowired
 	private IGoodsService goodsService;
 	
+	@Autowired
+	private IDBPlanService dbPlanService;
+	
+	@Autowired
+	private ICustomerService customerService;
 	/**
 	 * 分页获取所有夺宝计划信息
 	 * @param page 当前页
@@ -56,17 +66,13 @@ public class DBAttendController {
 	 */
 	@RequestMapping(value = "/insertDBAttend", method = RequestMethod.POST)
 	@ResponseBody
-	public String insertDBAttend(@RequestParam(value="goodsid")Long goodsid,@RequestParam(value="money")Double money,
-			@RequestParam(value="number")Integer number,@RequestParam(value="split")Long split,
-			@RequestParam(value="starttime")String starttimestr,@RequestParam(value="endtime")String endtimestr){
+	public String insertDBAttend(@RequestParam(value="dbplanid")Long dbplanid,@RequestParam(value="customerid")Long customerid,
+			@RequestParam(value="isplay")Integer isplay){
 		String returnData = ReturnDataUtil.FAIL;
 		try {
-			System.out.println(starttimestr);
-			System.out.println(endtimestr);
-			Long starttime = TimeUtil.convert2Long(starttimestr, "yyyy-MM-dd HH:mm:ss")/1000;
-			Long endtime = TimeUtil.convert2Long(endtimestr, "yyyy-MM-dd HH:mm:ss")/1000;
-			Goods goods = goodsService.getById(Goods.class, goodsid);
-			DBAttend DBAttend = null;
+			Customer customer =  customerService.getById(Customer.class, customerid);
+			DBPlan dbPlan = dbPlanService.getById(DBPlan.class, dbplanid);
+			DBAttend DBAttend = new DBAttend(System.currentTimeMillis()/1000, isplay, customer, dbPlan);
 			boolean flag = dbAttendService.insertDBAttend(DBAttend );
 			if(flag){
 				returnData = ReturnDataUtil.SUCCESS;
@@ -83,20 +89,19 @@ public class DBAttendController {
 	 * @param rowstr 信息
 	 * @return
 	 */
-	@RequestMapping(value = "/updateDBAttend", method = RequestMethod.POST)
+	@RequestMapping(value = "/updatedbattend", method = RequestMethod.POST)
 	@ResponseBody
-	public String updateDBAttend(@RequestParam(value="DBAttendid")Long DBAttendid,@RequestParam(value="goodsid")Long goodsid,@RequestParam(value="money")Double money,
-			@RequestParam(value="number")Integer number,@RequestParam(value="split")Long split,
-			@RequestParam(value="starttime")String starttimestr,@RequestParam(value="endtime")String endtimestr){
+	public String updateDBAttend(@RequestParam(value="dbattendid")Long dbattendid,@RequestParam(value="dbplanid")Long dbplanid,@RequestParam(value="customerid")Long customerid,
+			@RequestParam(value="isplay")Integer isplay){
 		String returnData = ReturnDataUtil.FAIL;
 		try {
-			System.out.println(starttimestr);
-			System.out.println(endtimestr);
-			Long starttime = TimeUtil.convert2Long(starttimestr, "yyyy-MM-dd HH:mm:ss")/1000;
-			Long endtime = TimeUtil.convert2Long(endtimestr, "yyyy-MM-dd HH:mm:ss")/1000;
-			Goods goods = goodsService.getById(Goods.class, goodsid);
-			DBAttend DBAttend = null;
-			boolean flag = dbAttendService.updateDBAttend(DBAttend );
+			Customer customer =  customerService.getById(Customer.class, customerid);
+			DBPlan dbPlan = dbPlanService.getById(DBPlan.class, dbplanid);
+			DBAttend dbAttend = dbAttendService.getById(DBAttend.class, dbattendid);
+			dbAttend.setCustomer(customer);
+			dbAttend.setDbPlan(dbPlan);
+			dbAttend.setIsplay(isplay);
+			boolean flag = dbAttendService.updateDBAttend(dbAttend );
 			if(flag){
 				returnData = ReturnDataUtil.SUCCESS;
 			}
@@ -132,7 +137,7 @@ public class DBAttendController {
 	public String getDBAttendWithid(@RequestParam(value="id")Long id) {
 		String returnResult = "";
 		DBAttend DBAttend = dbAttendService.getById(DBAttend.class,id);
-		returnResult = "";//FastJsonTool.createJsonString(new UDBAttendVO(DBAttend));
+		returnResult = FastJsonTool.createJsonString(new UDBAttendVO(DBAttend));
 		return returnResult;
 	}
 }

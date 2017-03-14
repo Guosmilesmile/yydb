@@ -52,6 +52,15 @@ public class DBAttend {
 		this.dbPlan = dbPlan;
 	}
 
+	public DBAttend(Long createTime, Integer isplay, Customer customer,
+			DBPlan dbPlan) {
+		super();
+		this.createTime = createTime;
+		this.isplay = isplay;
+		this.customer = customer;
+		this.dbPlan = dbPlan;
+	}
+
 	public Long getAttendid() {
 		return attendid;
 	}

@@ -181,7 +181,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	var row = $('#grid').datagrid('getSelected');
 		if(row){
 			var id = row.id;
-			var url = "<%=basePath%>system/db/db-update-dbplan.jsp?id="+id;
+			var url = "<%=basePath%>system/db/db-update-dbattend.jsp?id="+id;
 			location.href=url;
 		}else{
 			$.messager.alert('警告','请选择需要编辑的数据','error');
@@ -189,7 +189,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     }
     //---------------------------------添加----------------------------------------
     function addData(){
-    	var url = "<%=basePath%>system/db/db-insert-dbplan.jsp";
+    	var url = "<%=basePath%>system/db/db-insert-dbattend.jsp";
 		location.href=url;
     }
     //----------------------------导入------------------------------------------

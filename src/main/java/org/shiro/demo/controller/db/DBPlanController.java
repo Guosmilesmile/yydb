@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.mindrot.jbcrypt.BCrypt;
 import org.shiro.demo.dao.util.Pagination;
+import org.shiro.demo.entity.Customer;
 import org.shiro.demo.entity.DBPlan;
 import org.shiro.demo.entity.Goods;
 import org.shiro.demo.service.IDBPlanService;
@@ -14,6 +15,7 @@ import org.shiro.demo.service.IGoodsService;
 import org.shiro.demo.util.FastJsonTool;
 import org.shiro.demo.util.ReturnDataUtil;
 import org.shiro.demo.util.TimeUtil;
+import org.shiro.demo.vo.CustomerVO;
 import org.shiro.demo.vo.DBPlanVO;
 import org.shiro.demo.vo.UDBPlanVO;
 import org.shiro.demo.vo.UGoodsVO;
@@ -135,6 +137,20 @@ public class DBPlanController {
 		String returnResult = "";
 		DBPlan dbPlan = dbplanService.getById(DBPlan.class,id);
 		returnResult = FastJsonTool.createJsonString(new UDBPlanVO(dbPlan));
+		return returnResult;
+	}
+	
+	
+	/**
+	 * 获取所有客户
+	 */
+	@RequestMapping(value = "/getalldbplan", method = RequestMethod.POST,produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String getAllCustomer() {
+		String returnResult = "";
+		List<DBPlan> dbPlans = dbplanService.getAll(DBPlan.class);
+		List<DBPlanVO> dbPlanVOs  = DBPlanVO.changeDBPlan2DBPlanVO(dbPlans);
+		returnResult = FastJsonTool.createJsonString(dbPlanVOs);
 		return returnResult;
 	}
 }
