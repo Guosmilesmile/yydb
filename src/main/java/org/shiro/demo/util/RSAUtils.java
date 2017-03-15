@@ -26,6 +26,7 @@ import java.util.Date;
 import javax.crypto.Cipher;
 
 import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.FileUtils;
@@ -435,7 +436,7 @@ public abstract class RSAUtils {
      * @throws DecoderException
      */
     public static void main(String[] args) throws DecoderException {
-    	//文本
+    	/*//文本
     	//String text = "admin";
     	String text  = "a=1&b=2";
     	byte[] exp = Hex.decodeHex("010001".toCharArray());
@@ -446,6 +447,30 @@ public abstract class RSAUtils {
 		String encryptString = encryptString(generateRSAPublicKey, text);
 		System.out.println(encryptString);
 		String decryptString = decryptString(encryptString);
-		System.out.println(decryptString);
+		System.out.println(decryptString);*/
+    	
+    	String text = "admin";
+    	FileInputStream fis = null;
+        ObjectInputStream ois = null;
+        KeyPair keyPair = null;
+        try {
+            fis = FileUtils.openInputStream(new File("D:\\javawork\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\yydb\\WEB-INF\\__RSA_PAIR.txt"));
+            ois = new ObjectInputStream(fis);
+            keyPair = (KeyPair) ois.readObject();
+            PublicKey public1 = keyPair.getPublic();
+            PrivateKey private1 = keyPair.getPrivate();
+            System.out.println(new String(Base64.encodeBase64(public1.getEncoded()))  );
+            System.out.println(new String(Base64.encodeBase64(private1.getEncoded()))  );
+            String encryptString = encryptString(public1, text);
+            System.out.println(encryptString);
+            String decryptString = decryptString(private1, encryptString);
+            System.out.println(decryptString);
+           
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            IOUtils.closeQuietly(ois);
+            IOUtils.closeQuietly(fis);
+        }
     }
 }

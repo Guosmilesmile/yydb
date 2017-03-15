@@ -62,6 +62,7 @@
                     <ul class="subul">
                          <li ><a target="rightFrame" href="<%=basePath%>system/db/db-manage-dbplan.jsp">夺宝计划管理</a></li>
                          <li ><a target="rightFrame" href="<%=basePath%>system/db/db-manage-dbattend.jsp">夺宝参与情况管理</a></li>
+                         <li ><a target="rightFrame" href="<%=basePath%>system/db/db-manage-dbsituation.jsp">夺宝情况管理</a></li>
                     </ul>
                 </li>
             </ul>
