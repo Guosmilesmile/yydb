@@ -19,6 +19,8 @@ import javax.persistence.Table;
 @Table(name="db_situation")
 public class DBSituation {
 
+
+
 	@Id
 	@Column(name="situationid")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -79,5 +81,10 @@ public class DBSituation {
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
 	}
-	
+	public DBSituation(Integer istake, DBPlan dbPlan, Customer customer) {
+		super();
+		this.istake = istake;
+		this.dbPlan = dbPlan;
+		this.customer = customer;
+	}
 }

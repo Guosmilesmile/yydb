@@ -9,6 +9,8 @@ public class DBSituationVO {
 
 	private Long id;
 	
+	private Long dbplanid;//计划id
+	
 	private String goodsName;//商品名称
 	
 	private String shopName;//商家名称
@@ -23,16 +25,21 @@ public class DBSituationVO {
 		super();
 	}
 	
-	public DBSituationVO(Long id, String goodsName, String shopName,
-			String wechatid, Integer istake, Integer situation) {
+	
+
+	public DBSituationVO(Long id, Long dbplanid, String goodsName,
+			String shopName, String wechatid, Integer istake, Integer situation) {
 		super();
 		this.id = id;
+		this.dbplanid = dbplanid;
 		this.goodsName = goodsName;
 		this.shopName = shopName;
 		this.wechatid = wechatid;
 		this.istake = istake;
 		this.situation = situation;
 	}
+
+
 
 	public Long getId() {
 		return id;
@@ -80,6 +87,14 @@ public class DBSituationVO {
 
 	public void setSituation(Integer situation) {
 		this.situation = situation;
+	}
+
+	public Long getDbplanid() {
+		return dbplanid;
+	}
+
+	public void setDbplanid(Long dbplanid) {
+		this.dbplanid = dbplanid;
 	}
 
 	

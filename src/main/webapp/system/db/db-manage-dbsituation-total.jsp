@@ -51,11 +51,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			]],
 			columns: [[
 				{field:'id',title:'ID',sortable:true,width:60,sortable:true,hidden:true},
+				{field:'dbplanid',title:'ID',sortable:true,width:60,sortable:true,hidden:true},
 				{field:'goodsName',title:'商品名称',sortable:true,width:200,sortable:true,
-					editor: { type: 'validatebox',options: { required: true} }
 				},
 				{field:'shopName',title:'商家名称',sortable:true,width:150,sortable:true,
-					editor: { type: 'validatebox' }
 				},
 				{field:'situation',title:'状态',sortable:true,width:150,sortable:true,
 					editor:{
@@ -76,25 +75,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				},
 			]],
 			toolbar:[
-				{//添加数据
-					   text:"添加",
-					   iconCls: "icon-add",
-					   handler: addData,
-				},'-',
 				{//修改数据
 					   text:"查看中奖名单",
 					   iconCls: "icon-edit",
 					   handler: editData,
-				},'-',
-				{//修改数据
-					   text:"保存",
-					   iconCls: "icon-save",
-					   handler: saveData,
-				},'-',
-				{//删除数据
-					   text:"删除",
-					   iconCls: "icon-remove",
-					   handler: removeData,
 				},'-',
 			],
 			onAfterEdit: function(rowIndex,rowData,changes){
@@ -166,105 +150,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		else return s;
 	}
  
-    //-----------------------编辑------------------------------------------------
-    function editData(){//编辑
+    //-----------------------查看中奖名单------------------------------------------------
+    function editData(){//查看中奖名单
     	var row = $('#grid').datagrid('getSelected');
 		if(row){
-			var id = row.id;
-			var url = "<%=basePath%>system/db/db-update-dbplan.jsp?id="+id;
-			location.href=url;
+			var situation = row.situation;
+			//if(1==situation){
+				var id = row.dbplanid;
+				var url = "<%=basePath%>system/db/db-manage-absituation-detail.jsp?dbplanid="+id;
+				location.href=url;
+			//}else{
+				//$.messager.alert('警告','请选择需要非流标商品','error');
+			//}
+			
 		}else{
 			$.messager.alert('警告','请选择需要编辑的数据','error');
 		};
-    }
-    //---------------------------------添加----------------------------------------
-    function addData(){
-    	var url = "<%=basePath%>system/db/db-insert-dbplan.jsp";
-		location.href=url;
-    }
-    //----------------------------导入------------------------------------------
-    function importData(){
-    	$('#searchdialog').dialog('open');
-    }
-    //-------------------------------删除-------------------------------------------
-    function removeData(){
-    	var rows = $('#grid').datagrid('getSelections');
-		if(rows.length <= 0){
-			$.messager.alert('警告','您没有选择','error');
-		}
-		else if(rows.length >= 1){
-			$.messager.confirm("操作警告", "确定删除后将不可恢复！！", function(data){
-				if(data){
-					//原来代码开始的位置
-					var ids = [];
-					for(var i = 0; i < rows.length; ++i){
-							ids[i] = rows[i].id;
-					}	
-					$.ajax({
-			    		type:'post',
-			    		url:"<%=basePath%>dbplan/deletedbplan",
-			    		data:{ids: ids.toString()},
-			    		success:function(data){
-			    			if(1==data){//成功
-			    				$.messager.alert('提示','删除成功','info');
-			    			}else{
-			    				$.messager.alert('提示','删除失败','error');
-			    			}
-			    			$('#grid').datagrid('reload');
-			    		},error:function(){
-			    			console.log("fail");
-			    		}
-			    	});	
-					
-				}
-			});
-		}
-    }
-    //-------------------------------保存-------------------------------------------
-	function saveData(){//保存
-		$.messager.confirm("操作警告", "确定保存后被修改的数据将不可恢复！！", function(data){
-			if(data){
-				$('#grid').datagrid('endEdit', doedit);
-				var inserted = $('#grid').datagrid('getChanges', 'inserted');
-				var updated = $('#grid').datagrid('getChanges', 'updated');
-				var insertrow = JSON.stringify(inserted);
-				var updatedrow = JSON.stringify(updated);
-				if (updated.length > 0) {  
-					$.ajax({
-			    		type:'post',
-			    		url:"<%=basePath%>",
-			    		data:{"rowstr":updatedrow},
-			    		success:function(data){
-			    			if(1==data){//成功
-			    				$.messager.alert('提示','更新成功','info');
-			    			}else{
-			    				$.messager.alert('提示','更新失败','error');
-			    			}
-			    			$('#grid').datagrid('reload');
-			    		},error:function(){
-			    			console.log("fail");
-			    		}
-			    	});			       
-			    }
-				if (inserted.length > 0) {  
-					$.ajax({
-			    		type:'post',
-			    		url:"<%=basePath%>",
-			    		data:{"rowstr":insertrow},
-			    		success:function(data){
-			    			if(1==data){//成功
-			    				$.messager.alert('提示','添加成功','info');
-			    			}else{
-			    				$.messager.alert('提示','添加失败','error');
-			    			}
-			    			$('#grid').datagrid('reload');
-			    		},error:function(){
-			    			console.log("fail");
-			    		}
-			    	});			       
-			    } 
-			}
-		});
     }
 	//--------------------------------------主体部分！！！-----------------------------
     var doedit = undefined;//用来记录当前编辑的行，如果没有编辑的行则置为undefined

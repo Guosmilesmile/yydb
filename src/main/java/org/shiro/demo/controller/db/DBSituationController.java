@@ -1,12 +1,21 @@
 package org.shiro.demo.controller.db;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.shiro.demo.dao.util.Pagination;
+import org.shiro.demo.dao.util.QueryCondition;
+import org.shiro.demo.entity.Customer;
+import org.shiro.demo.entity.DBAttend;
 import org.shiro.demo.entity.DBPlan;
+import org.shiro.demo.entity.DBSituation;
 import org.shiro.demo.entity.Goods;
+import org.shiro.demo.entity.Role;
+import org.shiro.demo.service.ICustomerService;
 import org.shiro.demo.service.IDBPlanService;
 import org.shiro.demo.service.IDBSituationService;
 import org.shiro.demo.service.IGoodsService;
@@ -35,6 +44,9 @@ public class DBSituationController {
 	@Autowired
 	private IGoodsService goodsService;
 	
+	@Autowired
+	private ICustomerService customerService;
+	
 	/**
 	 * 分页获取所有夺宝计划信息
 	 * @param page 当前页
@@ -56,28 +68,24 @@ public class DBSituationController {
 	
 	
 	/**
-	 * 新增夺宝计划
+	 * 新增
 	 * @param rowstr 信息
 	 * @return
 	 */
-	@RequestMapping(value = "/insertdbplan", method = RequestMethod.POST)
+	@RequestMapping(value = "/insertdbsituation", method = RequestMethod.POST)
 	@ResponseBody
-	public String insertDBPlan(@RequestParam(value="goodsid")Long goodsid,@RequestParam(value="money")Double money,
-			@RequestParam(value="number")Integer number,@RequestParam(value="split")Long split,
-			@RequestParam(value="starttime")String starttimestr,@RequestParam(value="endtime")String endtimestr){
+	public String insertDBSituation(@RequestParam(value="dbplanid")Long dbplanid,@RequestParam(value="customerid")Long customerid,
+			@RequestParam(value="istake")Integer istake){
 		String returnData = ReturnDataUtil.FAIL;
 		try {
-			System.out.println(starttimestr);
-			System.out.println(endtimestr);
-			Long starttime = TimeUtil.convert2Long(starttimestr, "yyyy-MM-dd HH:mm:ss")/1000;
-			Long endtime = TimeUtil.convert2Long(endtimestr, "yyyy-MM-dd HH:mm:ss")/1000;
-			Goods goods = goodsService.getById(Goods.class, goodsid);
-			DBPlan dbPlan = new DBPlan(split, starttime, endtime, number, money, goods );
-			boolean flag = dbplanService.insertDBPlan(dbPlan );
+			DBPlan dbPlan = dbplanService.getById(DBPlan.class, dbplanid);
+			Customer customer = customerService.getById(Customer.class, customerid);
+			DBSituation dbSituation = new DBSituation(istake, dbPlan , customer );
+			boolean flag = dbSituationService.insertDBSituation(dbSituation);
 			if(flag){
 				returnData = ReturnDataUtil.SUCCESS;
 			}
-		} catch (Exception e) {
+		} catch (Exception e){
 			e.printStackTrace();
 		}
 		return returnData;
@@ -89,20 +97,19 @@ public class DBSituationController {
 	 * @param rowstr 信息
 	 * @return
 	 */
-	@RequestMapping(value = "/updatedbplan", method = RequestMethod.POST)
+	@RequestMapping(value = "/updatedbsituation", method = RequestMethod.POST)
 	@ResponseBody
-	public String updateDBPlan(@RequestParam(value="dbplanid")Long dbplanid,@RequestParam(value="goodsid")Long goodsid,@RequestParam(value="money")Double money,
-			@RequestParam(value="number")Integer number,@RequestParam(value="split")Long split,
-			@RequestParam(value="starttime")String starttimestr,@RequestParam(value="endtime")String endtimestr){
+	public String updateDBSituation(@RequestParam(value="rowstr")String rowstr){
+		System.out.println(rowstr);
 		String returnData = ReturnDataUtil.FAIL;
 		try {
-			System.out.println(starttimestr);
-			System.out.println(endtimestr);
-			Long starttime = TimeUtil.convert2Long(starttimestr, "yyyy-MM-dd HH:mm:ss")/1000;
-			Long endtime = TimeUtil.convert2Long(endtimestr, "yyyy-MM-dd HH:mm:ss")/1000;
-			Goods goods = goodsService.getById(Goods.class, goodsid);
-			DBPlan dbPlan = new DBPlan(dbplanid,split, starttime, endtime, number, money, goods );
-			boolean flag = dbplanService.updateDBPlan(dbPlan );
+			JSONArray jsonArray = new JSONArray(rowstr);
+			JSONObject jsonObject = jsonArray.getJSONObject(0);
+			Long id = jsonObject.getLong("id");
+			Integer istake = jsonObject.getInt("istake");
+			DBSituation dbSituation = dbSituationService.getById(DBSituation.class, id);
+			dbSituation.setIstake(istake);
+			boolean flag = dbSituationService.updateDBSituation(dbSituation);
 			if(flag){
 				returnData = ReturnDataUtil.SUCCESS;
 			}
@@ -117,18 +124,46 @@ public class DBSituationController {
 	 * @param ids id
 	 * @return
 	 */
-	@RequestMapping(value = "/deletedbplan", method = RequestMethod.POST)
+	@RequestMapping(value = "/deletedbsituation", method = RequestMethod.POST)
 	@ResponseBody
-	public String deleteDBPlan(@RequestParam(value="ids")Long id){
+	public String deleteDBSituation(@RequestParam(value="ids")Long id){
 		String returnData = ReturnDataUtil.FAIL;
 		try {
-			dbplanService.deleteDBPlan(id);
+			dbSituationService.deleteDBSituation(id);
 			returnData = ReturnDataUtil.SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return returnData;
 	}
+	
+	
+	/**
+	 * 根据id获取详细的夺宝计划
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "/getdbsituationWithdbplanid", method = RequestMethod.POST,produces = "text/json;charset=UTF-8")
+	@ResponseBody
+	public String getdbsituationWithdbplanid(@RequestParam(value="page")Integer page,@RequestParam(value="rows")Integer pageSize,@RequestParam(value="dbplanid")Long dbplanid) {
+		String returnResult = "";
+		List<DBSituation> list = dbSituationService.getPaginationJpql(page, pageSize, "from DBSituation as s where s.dbPlan.dbplanid = ?", dbplanid);
+		int number = dbSituationService.getByJpql("from DBSituation as s where s.dbPlan.dbplanid = ?", dbplanid).size();
+		List<DBSituationVO> returnlist = new ArrayList<DBSituationVO>();
+		for(DBSituation item : list ){
+			DBSituationVO dbSituationVO = new DBSituationVO();
+			dbSituationVO.setId(item.getSituationid());
+			dbSituationVO.setWechatid(item.getCustomer().getWechatid());
+			dbSituationVO.setIstake(item.getIstake());
+			returnlist.add(dbSituationVO);
+		}
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("rows", returnlist);
+		map.put("total", number);
+		returnResult = FastJsonTool.createJsonString(map);
+		return returnResult;
+	}
+		 
 	/*
 	*//**
 	 * 根据id获取详细的夺宝计划
