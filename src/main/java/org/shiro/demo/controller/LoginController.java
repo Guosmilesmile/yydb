@@ -17,7 +17,7 @@ import org.shiro.demo.entity.User;
 import org.shiro.demo.service.IUserService;
 import org.shiro.demo.util.FastJsonTool;
 import org.shiro.demo.util.PublicKeyMap;
-import org.shiro.demo.util.RSAUtils;
+import org.shiro.demo.util.RSAUtils2;
 import org.shiro.demo.util.ValidateCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +48,7 @@ public class LoginController {
 	public String login(User currUser,HttpSession session, HttpServletRequest request){
 		Subject subject = SecurityUtils.getSubject();
 		logger.info("rsa:"+currUser.getPassword());
-		String pwd  = RSAUtils.decryptStringByJs(currUser.getPassword());
+		String pwd  = RSAUtils2.decryptStringByJs(currUser.getPassword());//RSAUtils.decryptStringByJs(currUser.getPassword());
 		logger.info(pwd);
 		String hashed = BCrypt.hashpw(pwd, BCrypt.gensalt());
 		logger.info("hashed= "+hashed);
@@ -102,7 +102,7 @@ public class LoginController {
 	@RequestMapping(value="/getrasrepair")
 	@ResponseBody
 	public String getRasRepair(){
-		PublicKeyMap publicKeyMap = RSAUtils.getPublicKeyMap();
+		PublicKeyMap publicKeyMap = RSAUtils2.getPublicKeyMap();//RSAUtils.getPublicKeyMap();
 		System.out.println(publicKeyMap);
 		return FastJsonTool.createJsonString(publicKeyMap);
 	}
