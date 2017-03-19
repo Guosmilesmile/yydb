@@ -3,6 +3,8 @@ package org.shiro.demo.controller.system;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.mindrot.jbcrypt.BCrypt;
@@ -36,9 +38,10 @@ public class RoleController {
 	 */
 	@RequestMapping(value = "/systemgetpagerole",method=RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"system:role","system:rolepermission"}, logical = Logical.OR)
 	public String systemGetRoleByPage(@RequestParam(value="page")Integer page,@RequestParam(value="rows")Integer pageSize){
 		String returnResult = "";
-		Pagination<Role> rolePagination = roleService.getPagination(Role.class, null, null, page, pageSize);
+		Pagination<Role> rolePagination = roleService.getPagination(Role.class, null, "order by roleid desc", page, pageSize);
 		Map<String, Object> roleVOMap = RoleVO.changeRole2RoleVO(rolePagination);
 		returnResult =  FastJsonTool.createJsonString(roleVOMap);
 		return returnResult;
@@ -49,6 +52,7 @@ public class RoleController {
 	 */
 	@RequestMapping(value = "/systemgetallrole", method = RequestMethod.POST,produces = "text/json;charset=UTF-8")
 	@ResponseBody
+	@RequiresPermissions(value = {"system:role","system:userrole"}, logical = Logical.OR)
 	public String systemGetAllRole() {
 		String returnResult = "";
 		List<Role> allrole = roleService.getAll(Role.class);
@@ -63,6 +67,7 @@ public class RoleController {
 	 */
 	@RequestMapping(value = "/systeminsertrole", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"system:role"}, logical = Logical.OR)
 	public String systemInsertRole(@RequestParam(value="rowstr")String rowstr){
 		System.out.println(rowstr);
 		String returnData = ReturnDataUtil.FAIL;
@@ -90,6 +95,7 @@ public class RoleController {
 	 */
 	@RequestMapping(value = "/systemupdaterole", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"system:role"}, logical = Logical.OR)
 	public String systemUpdateRole(@RequestParam(value="rowstr")String rowstr){
 		System.out.println(rowstr);
 		String returnData = ReturnDataUtil.FAIL;
@@ -119,6 +125,7 @@ public class RoleController {
 	 */
 	@RequestMapping(value = "/systemdeleterole", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"system:role"}, logical = Logical.OR)
 	public String systemDeleteRole(@RequestParam(value="ids")Long id){
 		String returnData = ReturnDataUtil.FAIL;
 		try {

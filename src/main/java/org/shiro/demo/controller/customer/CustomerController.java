@@ -3,6 +3,8 @@ package org.shiro.demo.controller.customer;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.shiro.demo.dao.util.Pagination;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping(value="/customer")
+
 public class CustomerController {
 
 	@Autowired
@@ -32,6 +35,7 @@ public class CustomerController {
 	 * @param pageSize 每页的数据量
 	 * @return
 	 */
+	@RequiresPermissions(value = {"customer:manage"}, logical = Logical.OR)
 	@RequestMapping(value = "/getpagecustomer",method=RequestMethod.POST)
 	@ResponseBody
 	public String GetCustomerByPage(@RequestParam(value="page")Integer page,@RequestParam(value="rows")Integer pageSize){
@@ -47,6 +51,7 @@ public class CustomerController {
 	 */
 	@RequestMapping(value = "/getallcustomer", method = RequestMethod.POST,produces = "text/json;charset=UTF-8")
 	@ResponseBody
+	@RequiresPermissions(value = {"customer:manage","db:dbattend","db:dbsituation"}, logical = Logical.OR)
 	public String getAllCustomer() {
 		String returnResult = "";
 		List<Customer> customers = customerService.getAll(Customer.class);
@@ -60,6 +65,7 @@ public class CustomerController {
 	 */
 	@RequestMapping(value = "/getallshop", method = RequestMethod.POST,produces = "text/json;charset=UTF-8")
 	@ResponseBody
+	@RequiresPermissions(value = {"customer:manage","goods:manage"}, logical = Logical.OR)
 	public String getAllShop() {
 		String returnResult = "";
 		List<Customer> customers = customerService.getAllShop();
@@ -75,6 +81,7 @@ public class CustomerController {
 	 */
 	@RequestMapping(value = "/insertcustomer", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"customer:manage"}, logical = Logical.OR)
 	public String insertRole(@RequestParam(value="rowstr")String rowstr){
 		System.out.println(rowstr);
 		String returnData = ReturnDataUtil.FAIL;
@@ -117,6 +124,7 @@ public class CustomerController {
 	 */
 	@RequestMapping(value = "/updatecustomer", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"customer:manage"}, logical = Logical.OR)
 	public String updateRole(@RequestParam(value="rowstr")String rowstr){
 		System.out.println(rowstr);
 		String returnData = ReturnDataUtil.FAIL;
@@ -159,6 +167,7 @@ public class CustomerController {
 	 */
 	@RequestMapping(value = "/deletecustomer", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"customer:manage"}, logical = Logical.OR)
 	public String deleteRole(@RequestParam(value="ids")Long id){
 		String returnData = ReturnDataUtil.FAIL;
 		try {

@@ -10,6 +10,8 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.shiro.demo.dao.util.Pagination;
@@ -34,21 +36,12 @@ import org.springframework.web.context.ServletConfigAware;
 import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.multipart.MultipartFile;
 
+
 @Controller
 @RequestMapping(value="/goods")
-public class GoodsController implements ServletConfigAware,ServletContextAware{
+public class GoodsController{
 	
-	private ServletContext servletContext; 
-	private ServletConfig servletConfig;  
    
-	public void setServletConfig(ServletConfig servletConfig) {
-		this.servletConfig = servletConfig;
-	}
-
-	public void setServletContext(ServletContext servletContext) {
-		this.servletContext = servletContext;
-	}
-	
 	@Autowired
 	private IGoodsService goodsService;
 	
@@ -58,15 +51,17 @@ public class GoodsController implements ServletConfigAware,ServletContextAware{
 	@Autowired
 	private ICategoryService categoryService;
 	
+	
 	/**
 	 * 分页获取所有商品信息
 	 * @param page 当前页
 	 * @param pageSize 每页的数据量
 	 * @return
 	 */
-	@RequestMapping(value = "/systemgetpageGoods",method=RequestMethod.POST)
+	@RequestMapping(value = "/getpageGoods",method=RequestMethod.POST)
 	@ResponseBody
-	public String systemGetGoodsByPage(@RequestParam(value="page")Integer page,@RequestParam(value="rows")Integer pageSize){
+	@RequiresPermissions(value = {"goods:manage"}, logical = Logical.OR)
+	public String getGoodsByPage(@RequestParam(value="page")Integer page,@RequestParam(value="rows")Integer pageSize){
 		String returnResult = "";
 		Pagination<Goods> GoodsPagination = goodsService.getPagination(Goods.class, null, null, page, pageSize);
 		Map<String, Object> GoodsVOMap = GoodsVO.changeGoods2GoodsVO(GoodsPagination);
@@ -79,6 +74,7 @@ public class GoodsController implements ServletConfigAware,ServletContextAware{
 	 */
 	@RequestMapping(value = "/getallGoods", method = RequestMethod.POST,produces = "text/json;charset=UTF-8")
 	@ResponseBody
+	@RequiresPermissions(value = {"goods:manage","db:dbplan"}, logical = Logical.OR)
 	public String getAllGoods() {
 		String returnResult = "";
 		List<Goods> allGoods = goodsService.getAll(Goods.class);
@@ -95,6 +91,7 @@ public class GoodsController implements ServletConfigAware,ServletContextAware{
 	 */
 	@RequestMapping(value = "/systeminsertGoods", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"goods:manage"}, logical = Logical.OR)
 	public String systemInsertGoods(@RequestParam(value="rowstr")String rowstr){
 		System.out.println(rowstr);
 		String returnData = ReturnDataUtil.FAIL;
@@ -125,6 +122,7 @@ public class GoodsController implements ServletConfigAware,ServletContextAware{
 	 */
 	@RequestMapping(value = "/updateGoods", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"goods:manage"}, logical = Logical.OR)
 	public String updateGoods(@RequestParam(value="goodsid")Long goodsid,@RequestParam(value="name")String name,@RequestParam(value="categoryid")Long categoryid,
 			@RequestParam(value="summary")String summary,@RequestParam(value="shopid")Long shopid){
 		String returnData = ReturnDataUtil.FAIL;
@@ -154,6 +152,7 @@ public class GoodsController implements ServletConfigAware,ServletContextAware{
 	 */
 	@RequestMapping(value = "/systemdeleteGoods", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"goods:manage"}, logical = Logical.OR)
 	public String systemDeleteGoods(@RequestParam(value="ids")Long id){
 		String returnData = ReturnDataUtil.FAIL;
 		try {
@@ -164,16 +163,17 @@ public class GoodsController implements ServletConfigAware,ServletContextAware{
 		}
 		return returnData;
 	}
-	
+
 	/**
 	 * 上传图片
 	 * @return
 	 */
 	@RequestMapping(value = "/uploadPictures", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"goods:manage"}, logical = Logical.OR)
 	public String uploadPicture( @RequestParam(value = "fileList",required = false) MultipartFile file,HttpServletRequest request,
 			@RequestParam(value="goodsid")Long goodsid){
-		String filePath = servletContext.getRealPath("/") + "upload/";
+		String filePath = request.getSession().getServletContext().getRealPath("/") + "upload/";
         String saveUrl = request.getContextPath() + "/upload/";
         System.out.println(filePath);
         File filedir = new File(filePath);
@@ -201,6 +201,7 @@ public class GoodsController implements ServletConfigAware,ServletContextAware{
 	 */
 	@RequestMapping(value = "/uploadgoods", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"goods:manage"}, logical = Logical.OR)
 	public String uploadGoods(@RequestParam(value="name")String name,@RequestParam(value="categoryid")Long categoryid,
 			@RequestParam(value="summary")String summary,@RequestParam(value="shopid")Long shopid){
 		String returnData = ReturnDataUtil.FAIL;
@@ -229,6 +230,7 @@ public class GoodsController implements ServletConfigAware,ServletContextAware{
 	 */
 	@RequestMapping(value = "/getpagegoodsimgurls",method=RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"goods:manage"}, logical = Logical.OR)
 	public String getGoodsImgurlsByPage(@RequestParam(value="page")Integer page,@RequestParam(value="rows")Integer pageSize,
 			@RequestParam(value="goodsid")Long goodsid){
 		String returnResult = "";
@@ -249,6 +251,7 @@ public class GoodsController implements ServletConfigAware,ServletContextAware{
 	 */
 	@RequestMapping(value = "/deletegoodsimgurl", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"goods:manage"}, logical = Logical.OR)
 	public String deleteGoodsImgurls(@RequestParam(value="ids")Long id,@RequestParam(value="imgurl")String imgurl){
 		String returnData = ReturnDataUtil.FAIL;
 		try {
@@ -265,11 +268,11 @@ public class GoodsController implements ServletConfigAware,ServletContextAware{
 	 */
 	@RequestMapping(value = "/getgoodswithid", method = RequestMethod.POST,produces = "text/json;charset=UTF-8")
 	@ResponseBody
+	@RequiresPermissions(value = {"goods:manage"}, logical = Logical.OR)
 	public String getGoodsWithid(@RequestParam(value="goodsid")Long id) {
 		String returnResult = "";
 		Goods goods = goodsService.getById(Goods.class,id);
 		returnResult = FastJsonTool.createJsonString(new UGoodsVO(goods));
 		return returnResult;
 	}
-	
 }

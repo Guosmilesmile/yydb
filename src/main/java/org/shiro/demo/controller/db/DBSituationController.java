@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.shiro.demo.dao.util.Pagination;
@@ -55,6 +57,7 @@ public class DBSituationController {
 	 */
 	@RequestMapping(value = "/getpagedbsituation",method=RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"db:dbsituation"}, logical = Logical.OR)
 	public String getDBSituationByPage(@RequestParam(value="page")Integer page,@RequestParam(value="rows")Integer pageSize){
 		String returnResult = "";
 		List<DBSituationVO> dbSituations = dbSituationService.getDBSituation(page, pageSize);
@@ -74,6 +77,7 @@ public class DBSituationController {
 	 */
 	@RequestMapping(value = "/insertdbsituation", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"db:dbsituation"}, logical = Logical.OR)
 	public String insertDBSituation(@RequestParam(value="dbplanid")Long dbplanid,@RequestParam(value="customerid")Long customerid,
 			@RequestParam(value="istake")Integer istake){
 		String returnData = ReturnDataUtil.FAIL;
@@ -99,6 +103,7 @@ public class DBSituationController {
 	 */
 	@RequestMapping(value = "/updatedbsituation", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"db:dbsituation"}, logical = Logical.OR)
 	public String updateDBSituation(@RequestParam(value="rowstr")String rowstr){
 		System.out.println(rowstr);
 		String returnData = ReturnDataUtil.FAIL;
@@ -126,6 +131,7 @@ public class DBSituationController {
 	 */
 	@RequestMapping(value = "/deletedbsituation", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"db:dbsituation"}, logical = Logical.OR)
 	public String deleteDBSituation(@RequestParam(value="ids")Long id){
 		String returnData = ReturnDataUtil.FAIL;
 		try {
@@ -145,6 +151,7 @@ public class DBSituationController {
 	 */
 	@RequestMapping(value = "/getdbsituationWithdbplanid", method = RequestMethod.POST,produces = "text/json;charset=UTF-8")
 	@ResponseBody
+	@RequiresPermissions(value = {"db:dbsituation"}, logical = Logical.OR)
 	public String getdbsituationWithdbplanid(@RequestParam(value="page")Integer page,@RequestParam(value="rows")Integer pageSize,@RequestParam(value="dbplanid")Long dbplanid) {
 		String returnResult = "";
 		List<DBSituation> list = dbSituationService.getPaginationJpql(page, pageSize, "from DBSituation as s where s.dbPlan.dbplanid = ?", dbplanid);

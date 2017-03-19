@@ -3,6 +3,8 @@ package org.shiro.demo.controller.db;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.mindrot.jbcrypt.BCrypt;
@@ -44,6 +46,7 @@ public class DBPlanController {
 	 */
 	@RequestMapping(value = "/getpagedbplan",method=RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"db:dbplan"}, logical = Logical.OR)
 	public String getDBPlanByPage(@RequestParam(value="page")Integer page,@RequestParam(value="rows")Integer pageSize){
 		String returnResult = "";
 		Pagination<DBPlan> dbPlanPagination = dbplanService.getPagination(DBPlan.class, null, "order by dbplanid desc", page, pageSize);
@@ -60,6 +63,7 @@ public class DBPlanController {
 	 */
 	@RequestMapping(value = "/insertdbplan", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"db:dbplan"}, logical = Logical.OR)
 	public String insertDBPlan(@RequestParam(value="goodsid")Long goodsid,@RequestParam(value="money")Double money,
 			@RequestParam(value="split")Long split,
 			@RequestParam(value="starttime")String starttimestr,@RequestParam(value="endtime")String endtimestr){
@@ -90,6 +94,7 @@ public class DBPlanController {
 	 */
 	@RequestMapping(value = "/updatedbplan", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"db:dbplan"}, logical = Logical.OR)
 	public String updateDBPlan(@RequestParam(value="dbplanid")Long dbplanid,@RequestParam(value="goodsid")Long goodsid,@RequestParam(value="money")Double money,
 			@RequestParam(value="split")Long split,
 			@RequestParam(value="starttime")String starttimestr,@RequestParam(value="endtime")String endtimestr){
@@ -119,6 +124,7 @@ public class DBPlanController {
 	 */
 	@RequestMapping(value = "/deletedbplan", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"db:dbplan"}, logical = Logical.OR)
 	public String deleteDBPlan(@RequestParam(value="ids")Long id){
 		String returnData = ReturnDataUtil.FAIL;
 		try {
@@ -135,6 +141,7 @@ public class DBPlanController {
 	 */
 	@RequestMapping(value = "/getdbplanwithid", method = RequestMethod.POST,produces = "text/json;charset=UTF-8")
 	@ResponseBody
+	@RequiresPermissions(value = {"db:dbplan"}, logical = Logical.OR)
 	public String getdbplanWithid(@RequestParam(value="id")Long id) {
 		String returnResult = "";
 		DBPlan dbPlan = dbplanService.getById(DBPlan.class,id);
@@ -144,11 +151,12 @@ public class DBPlanController {
 	
 	
 	/**
-	 * 获取所有客户
+	 * 获取所有夺宝计划
 	 */
 	@RequestMapping(value = "/getalldbplan", method = RequestMethod.POST,produces = "text/json;charset=UTF-8")
 	@ResponseBody
-	public String getAllCustomer() {
+	@RequiresPermissions(value = {"db:dbplan","db:dbattend"}, logical = Logical.OR)
+	public String getAllDBPlan() {
 		String returnResult = "";
 		List<DBPlan> dbPlans = dbplanService.getAll(DBPlan.class);
 		List<DBPlanVO> dbPlanVOs  = DBPlanVO.changeDBPlan2DBPlanVO(dbPlans);

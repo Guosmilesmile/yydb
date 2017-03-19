@@ -33,7 +33,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	//初始化数据函数
 	function getData(queryParams){
 		$('#grid').datagrid({
-			url: '<%=basePath%>goods/systemgetpageGoods',
+			url: '<%=basePath%>goods/getpageGoods',
 			queryParams: queryParams,
 			remoteSort:false,
 			nowrap: false, //换行属性

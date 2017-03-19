@@ -3,6 +3,8 @@ package org.shiro.demo.controller.goods;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.shiro.demo.dao.util.Pagination;
@@ -33,6 +35,7 @@ public class CategoryController {
 	 */
 	@RequestMapping(value = "/systemgetpagecategory",method=RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"goods:category"}, logical = Logical.OR)
 	public String systemGetCategoryByPage(@RequestParam(value="page")Integer page,@RequestParam(value="rows")Integer pageSize){
 		String returnResult = "";
 		Pagination<Category> categoryPagination = categoryService.getPagination(Category.class, null, null, page, pageSize);
@@ -46,6 +49,7 @@ public class CategoryController {
 	 */
 	@RequestMapping(value = "/systemgetallcategory", method = RequestMethod.POST,produces = "text/json;charset=UTF-8")
 	@ResponseBody
+	@RequiresPermissions(value = {"goods:category","goods:manage"}, logical = Logical.OR)
 	public String systemGetAllCategory() {
 		String returnResult = "";
 		List<Category> allCategory = categoryService.getAll(Category.class);
@@ -62,6 +66,7 @@ public class CategoryController {
 	 */
 	@RequestMapping(value = "/systeminsertcategory", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"goods:category"}, logical = Logical.OR)
 	public String systemInsertCategory(@RequestParam(value="rowstr")String rowstr){
 		System.out.println(rowstr);
 		String returnData = ReturnDataUtil.FAIL;
@@ -88,6 +93,7 @@ public class CategoryController {
 	 */
 	@RequestMapping(value = "/systemupdatecategory", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"goods:category"}, logical = Logical.OR)
 	public String systemUpdateCategory(@RequestParam(value="rowstr")String rowstr){
 		System.out.println(rowstr);
 		String returnData = ReturnDataUtil.FAIL;
@@ -115,6 +121,7 @@ public class CategoryController {
 	 */
 	@RequestMapping(value = "/systemdeletecategory", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"goods:category"}, logical = Logical.OR)
 	public String systemDeleteCategory(@RequestParam(value="ids")Long id){
 		String returnData = ReturnDataUtil.FAIL;
 		try {

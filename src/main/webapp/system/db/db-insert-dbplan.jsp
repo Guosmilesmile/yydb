@@ -164,17 +164,13 @@ $(document).ready(function(){
 		<fieldset class="simpborder" style="width: 48%; float: left; ">
 			<label>价格</label>
 			<input type="text" name="money" id="money">
-		</fieldset>
-		<fieldset class="simpborder" style="width: 48%; float: left; ">
-			<label>价格</label>
-			<input type="text" name="money" id="money">
 			<input type="text" name="dbplanid" id="dbplanid" style="display: none;">
 		</fieldset>
 		<fieldset class="simpborder"  style="width: 48%; float: left;margin-right: 3%;">
 			<label>单次竞标价</label>
 			<input type="text" name="split" id="split">
 		</fieldset>
-		<fieldset class="simpborder" style="width: 48%; float: left;">
+		<fieldset class="simpborder" style="width: 48%; float: left;padding-left: 12px;"">
 			<label>上线时间</label>
 			<input class="easyui-datetimebox" name="starttime" id="starttime" style="width:91%;margin-left: 2%;">
 		</fieldset>

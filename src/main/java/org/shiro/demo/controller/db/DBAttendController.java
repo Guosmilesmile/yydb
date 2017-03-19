@@ -3,6 +3,8 @@ package org.shiro.demo.controller.db;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.mindrot.jbcrypt.BCrypt;
@@ -50,6 +52,7 @@ public class DBAttendController {
 	 */
 	@RequestMapping(value = "/getpagedbattend",method=RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"db:dbattend"}, logical = Logical.OR)
 	public String getDBAttendByPage(@RequestParam(value="page")Integer page,@RequestParam(value="rows")Integer pageSize){
 		String returnResult = "";
 		Pagination<DBAttend> DBAttendPagination = dbAttendService.getPagination(DBAttend.class, null, "order by attendid desc", page, pageSize);
@@ -66,6 +69,7 @@ public class DBAttendController {
 	 */
 	@RequestMapping(value = "/insertDBAttend", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"db:dbattend"}, logical = Logical.OR)
 	public String insertDBAttend(@RequestParam(value="dbplanid")Long dbplanid,@RequestParam(value="customerid")Long customerid,
 			@RequestParam(value="isplay")Integer isplay){
 		String returnData = ReturnDataUtil.FAIL;
@@ -91,6 +95,7 @@ public class DBAttendController {
 	 */
 	@RequestMapping(value = "/updatedbattend", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"db:dbattend"}, logical = Logical.OR)
 	public String updateDBAttend(@RequestParam(value="dbattendid")Long dbattendid,@RequestParam(value="dbplanid")Long dbplanid,@RequestParam(value="customerid")Long customerid,
 			@RequestParam(value="isplay")Integer isplay){
 		String returnData = ReturnDataUtil.FAIL;
@@ -118,6 +123,7 @@ public class DBAttendController {
 	 */
 	@RequestMapping(value = "/deletedbattend", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"db:dbattend"}, logical = Logical.OR)
 	public String deleteDBAttend(@RequestParam(value="ids")Long id){
 		String returnData = ReturnDataUtil.FAIL;
 		try {
@@ -134,6 +140,7 @@ public class DBAttendController {
 	 */
 	@RequestMapping(value = "/getDBAttendwithid", method = RequestMethod.POST,produces = "text/json;charset=UTF-8")
 	@ResponseBody
+	@RequiresPermissions(value = {"db:dbattend"}, logical = Logical.OR)
 	public String getDBAttendWithid(@RequestParam(value="id")Long id) {
 		String returnResult = "";
 		DBAttend DBAttend = dbAttendService.getById(DBAttend.class,id);

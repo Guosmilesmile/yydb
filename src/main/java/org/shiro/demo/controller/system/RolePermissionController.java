@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
 import org.shiro.demo.dao.util.QueryCondition;
@@ -45,6 +46,7 @@ public class RolePermissionController {
 	 */
 	@ResponseBody
 	@RequestMapping(value="systemgetpertrees",method=RequestMethod.POST)
+	@RequiresPermissions(value = {"system:rolepermission"}, logical = Logical.OR)
 	public String systemGetPermissionTree(@RequestParam(value="roleid")Long roleid){
 		String returnData = "";
 		List<Permission> allPermissions = permissionService.getALLPermission();
@@ -68,6 +70,7 @@ public class RolePermissionController {
 	 * @return
 	 */
 	@ResponseBody
+	@RequiresPermissions(value = {"system:rolepermission"}, logical = Logical.OR)
 	@RequestMapping(value="systemgetallpers",method=RequestMethod.POST)
 	public String systemGetAllPermission(){
 		String returnData = "";
@@ -82,6 +85,7 @@ public class RolePermissionController {
 	 * @return
 	 */
 	@ResponseBody
+	@RequiresPermissions(value = {"system:rolepermission"}, logical = Logical.OR)
 	@RequestMapping(value="systemgetuserpers",method=RequestMethod.POST)
 	public String systemGetUserPermission(){
 		String returnData = "";
@@ -100,6 +104,7 @@ public class RolePermissionController {
 	 * @return
 	 */
 	@ResponseBody
+	@RequiresPermissions(value = {"system:rolepermission"}, logical = Logical.OR)
 	@RequestMapping(value="systemupdatepermiss",method=RequestMethod.POST)
 	public String systemUpdatePermission(@RequestParam(value="permiss[]",required=false)Long[] permissids,
 			@RequestParam(value="roleid")Long roleid){

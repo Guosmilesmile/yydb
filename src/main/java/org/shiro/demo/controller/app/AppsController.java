@@ -1,4 +1,4 @@
-package org.shiro.demo.controller;
+package org.shiro.demo.controller.app;
 
 import java.util.Map;
 

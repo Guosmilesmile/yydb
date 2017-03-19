@@ -5,6 +5,8 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -35,6 +37,7 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/systemgetpageuser", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"system:user"}, logical = Logical.OR)
 	public String systemGetUserByPage(@RequestParam(value = "page") Integer page,@RequestParam(value = "rows") Integer pageSize) {
 		String returnResult = "";
 		Pagination<User> userPagination = userService.getPagination(User.class,null, "order by userid desc", page, pageSize);
@@ -45,10 +48,11 @@ public class UserController {
 	}
 
 	/**
-	 * 分页获取所有用户信息
+	 * 获取所有用户信息
 	 */
 	@RequestMapping(value = "/systemgetalluser", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"system:user","system:userrole"}, logical = Logical.OR)
 	public String systemGetAllUser() {
 		String returnResult = "";
 		List<User> alluser = userService.getAll(User.class);
@@ -64,6 +68,7 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/systeminsertuser", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"system:user"}, logical = Logical.OR)
 	public String systemInsertUser(@RequestParam(value="rowstr")String rowstr){
 		System.out.println(rowstr);
 		String returnData = ReturnDataUtil.FAIL;
@@ -94,6 +99,7 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/systemupdateuser", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"system:user"}, logical = Logical.OR)
 	public String systemUpdateUser(@RequestParam(value="rowstr")String rowstr){
 		System.out.println(rowstr);
 		String returnData = ReturnDataUtil.FAIL;
@@ -126,6 +132,7 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/systemdeleteuser", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"system:user"}, logical = Logical.OR)
 	public String systemDeleteUser(@RequestParam(value="ids")Long id){
 		String returnData = ReturnDataUtil.FAIL;
 		try {

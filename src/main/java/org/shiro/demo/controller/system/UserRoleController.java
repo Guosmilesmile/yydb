@@ -2,6 +2,8 @@ package org.shiro.demo.controller.system;
 
 import java.util.Map;
 
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.mindrot.jbcrypt.BCrypt;
@@ -41,6 +43,7 @@ public class UserRoleController {
 	 */
 	@RequestMapping(value = "/systemgetpageuserrole",method=RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"system:userrole"}, logical = Logical.OR)
 	public String systemGetUserRoleByPage(@RequestParam(value="page")Integer page,@RequestParam(value="rows")Integer pageSize){
 		String returnResult = "";
 		Pagination<UserRole> userRolePagination = userRoleService.getPagination(UserRole.class, null, "order by user.id", page, pageSize);
@@ -57,6 +60,7 @@ public class UserRoleController {
 	 */
 	@RequestMapping(value = "/systeminsertuserrole", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"system:userrole"}, logical = Logical.OR)
 	public String systemInsertUserRole(@RequestParam(value="userid")Long userid,@RequestParam(value="roleid")Long roleid){
 		String returnData = ReturnDataUtil.FAIL;
 		try {
@@ -83,6 +87,7 @@ public class UserRoleController {
 	 */
 	@RequestMapping(value = "/systemdeleteuserrole", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"system:userrole"}, logical = Logical.OR)
 	public String systemDeleteUser(@RequestParam(value="ids")Long id){
 		String returnData = ReturnDataUtil.FAIL;
 		try {

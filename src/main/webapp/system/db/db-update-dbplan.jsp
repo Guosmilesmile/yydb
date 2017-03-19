@@ -218,7 +218,7 @@ $(document).ready(function(){
 			<label>单次竞标价</label>
 			<input type="text" name="split" id="split">
 		</fieldset>
-		<fieldset class="simpborder" style="width: 48%; float: left;">
+		<fieldset class="simpborder" style="width: 48%; float: left;padding-left: 12px;"">
 			<label>上线时间</label>
 			<input class="easyui-datetimebox" name="starttime" id="starttime" style="width:91%;margin-left: 2%;">
 		</fieldset>
