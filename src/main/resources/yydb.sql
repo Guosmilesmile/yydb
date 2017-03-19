@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50151
 File Encoding         : 65001
 
-Date: 2017-03-16 17:00:01
+Date: 2017-03-19 10:45:16
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -157,7 +157,7 @@ CREATE TABLE `c_customer` (
 -- ----------------------------
 -- Records of c_customer
 -- ----------------------------
-INSERT INTO `c_customer` VALUES ('1', 'wejfklwjf12', '2.60', null, '0', null, '111');
+INSERT INTO `c_customer` VALUES ('1', 'chris', '2.60', '', '0', '0', '');
 INSERT INTO `c_customer` VALUES ('2', 'ssddddff', '0.00', '厦门市', '1', '12365488978', '戒不掉傻笑');
 INSERT INTO `c_customer` VALUES ('3', 'fsfsf', '0.00', '', '0', '0', '222');
 INSERT INTO `c_customer` VALUES ('4', 'dfgd', '0.00', '水电费发', '1', '424', '333');
@@ -179,14 +179,15 @@ CREATE TABLE `db_dbattend` (
   KEY `FK_jaikym0vv8t3f1c0wn8pfa1rl` (`dbplanid`),
   CONSTRAINT `FK_jaikym0vv8t3f1c0wn8pfa1rl` FOREIGN KEY (`dbplanid`) REFERENCES `db_dbplan` (`dbplanid`),
   CONSTRAINT `FK_lmlk434u8sad3se1j06033c2u` FOREIGN KEY (`customerid`) REFERENCES `c_customer` (`customerid`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of db_dbattend
 -- ----------------------------
 INSERT INTO `db_dbattend` VALUES ('1', '3', '1', '1489319672', '1');
-INSERT INTO `db_dbattend` VALUES ('2', '3', '4', '1489456948', '0');
+INSERT INTO `db_dbattend` VALUES ('2', '1', '4', '1489456948', '1');
 INSERT INTO `db_dbattend` VALUES ('3', '3', '6', '1489459179', '1');
+INSERT INTO `db_dbattend` VALUES ('4', '3', '2', '1489459179', '1');
 
 -- ----------------------------
 -- Table structure for db_dbplan
@@ -201,6 +202,7 @@ CREATE TABLE `db_dbplan` (
   `endtime` varchar(20) DEFAULT NULL,
   `number` int(11) DEFAULT NULL,
   `money` double DEFAULT NULL,
+  `isfinish` int(1) DEFAULT NULL,
   PRIMARY KEY (`dbplanid`),
   KEY `FK_2iyr965ah1f6h0nvulr9k6gvg` (`goodsid`),
   CONSTRAINT `FK_2iyr965ah1f6h0nvulr9k6gvg` FOREIGN KEY (`goodsid`) REFERENCES `g_goods` (`goodsid`)
@@ -209,8 +211,8 @@ CREATE TABLE `db_dbplan` (
 -- ----------------------------
 -- Records of db_dbplan
 -- ----------------------------
-INSERT INTO `db_dbplan` VALUES ('1', '26', '2', '50', '1489319672', '1492080875', '1', '300');
-INSERT INTO `db_dbplan` VALUES ('3', '25', '2', '50', '1489319672', '1492080875', '1', '200');
+INSERT INTO `db_dbplan` VALUES ('1', '26', '2', '50', '1489319672', '1489748075', '2', '100', '0');
+INSERT INTO `db_dbplan` VALUES ('3', '25', '2', '50', '1489319672', '1489748076', '2', '100', '0');
 
 -- ----------------------------
 -- Table structure for db_situation
@@ -226,13 +228,13 @@ CREATE TABLE `db_situation` (
   KEY `FK_iyocdaxpw5t7teq3lduvkli7c` (`dbplanid`),
   CONSTRAINT `FK_ewx04f6je9lvyjm7ubtetbevu` FOREIGN KEY (`customerid`) REFERENCES `c_customer` (`customerid`),
   CONSTRAINT `FK_iyocdaxpw5t7teq3lduvkli7c` FOREIGN KEY (`dbplanid`) REFERENCES `db_dbplan` (`dbplanid`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of db_situation
 -- ----------------------------
-INSERT INTO `db_situation` VALUES ('1', '3', '1', '0');
-INSERT INTO `db_situation` VALUES ('11', '1', '1', '0');
+INSERT INTO `db_situation` VALUES ('9', '1', null, null);
+INSERT INTO `db_situation` VALUES ('10', '3', '2', '0');
 
 -- ----------------------------
 -- Table structure for g_goods
@@ -290,5 +292,76 @@ IF totalnumber > nownumber THEN
 end if;
 select result;
 END
+;;
+DELIMITER ;
+
+-- ----------------------------
+-- Procedure structure for s_selectluckydog
+-- ----------------------------
+DROP PROCEDURE IF EXISTS `s_selectluckydog`;
+DELIMITER ;;
+CREATE DEFINER=`root`@`%` PROCEDURE `s_selectluckydog`()
+BEGIN
+DECLARE t_error INTEGER DEFAULT 0;  
+DECLARE Done INT DEFAULT 0;
+declare nowtime bigint DEFAULT UNIX_TIMESTAMP(sysdate());
+declare singleDbplanid BIGINT default 0;
+DECLARE DbPlanNumber int DEFAULT 0;#计划人数
+declare outCount int DEFAULT 0;
+DECLARE current int DEFAULT 0;
+DECLARE DbAttendNumber int DEFAULT 0;#实际参与人数
+DECLARE luckycustomerid BIGINT DEFAULT null;
+DECLARE rs CURSOR FOR select db_dbplan.dbplanid,db_dbplan.number from db_dbplan where db_dbplan.endtime<nowtime and db_dbplan.isfinish = 0;
+DECLARE CONTINUE HANDLER FOR SQLSTATE '02000' SET done = 1;
+DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET t_error=1;
+select count(dbplanid) into outCount from db_dbplan where db_dbplan.endtime<nowtime and db_dbplan.isfinish = 0;
+if outCount=0 THEN
+	set DONE = 1;
+end if;
+
+open rs;
+#从dbplan中获取已经到时间的计划，选出未被选出结果的计划
+FETCH NEXT FROM rs INTO singleDbplanid,DbPlanNumber;
+repeat
+IF NOT Done THEN
+	#select singleDbNumber;
+	set current = current +1 ;
+	if outCount=current THEN
+		set done = 1;
+	end if;
+	#检查id对应的参与情况，判断是否流标
+	SELECT count(db_dbattend.attendid) INTO DbAttendNumber from db_dbattend where db_dbattend.dbplanid = singleDbplanid and db_dbattend.isplay = 1;
+	START TRANSACTION;  
+		if DbAttendNumber < DbPlanNumber then#如果参与人数不足计划人数，流标
+		#select DbAttendNumber;
+		insert into db_situation (dbplanid,customerid,istake) values (singleDbplanid,null,null);
+		update db_dbplan set db_dbplan.isfinish = 1 where db_dbplan.dbplanid = singleDbplanid;
+	ELSEIF DbAttendNumber >= DbPlanNumber then#如果大于或者超过选出幸运儿
+		#SELECT DbPlanNumber;
+		select customerid into luckycustomerid from db_dbattend WHERE db_dbattend.dbplanid = singleDbplanid order by rand() limit 1;
+		insert into db_situation (dbplanid,customerid,istake) values (singleDbplanid,luckycustomerid,0);
+		update db_dbplan set db_dbplan.isfinish = 1 where db_dbplan.dbplanid = singleDbplanid;
+	end if;
+	IF t_error = 1 THEN  
+		ROLLBACK;	
+	ELSE
+		COMMIT;
+	END IF;
+	set t_error = 0;
+end if;
+FETCH NEXT FROM rs INTO singleDbplanid,DbPlanNumber;
+UNTIL Done END REPEAT;
+CLOSE rs;
+
+END
+;;
+DELIMITER ;
+
+-- ----------------------------
+-- Event structure for even_selectluckydog
+-- ----------------------------
+DROP EVENT IF EXISTS `even_selectluckydog`;
+DELIMITER ;;
+CREATE EVENT `even_selectluckydog` ON SCHEDULE EVERY 2 SECOND STARTS '2017-03-19 10:22:20' ON COMPLETION NOT PRESERVE ENABLE DO call s_selectluckydog()
 ;;
 DELIMITER ;

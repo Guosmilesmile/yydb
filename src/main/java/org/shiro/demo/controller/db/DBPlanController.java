@@ -61,7 +61,7 @@ public class DBPlanController {
 	@RequestMapping(value = "/insertdbplan", method = RequestMethod.POST)
 	@ResponseBody
 	public String insertDBPlan(@RequestParam(value="goodsid")Long goodsid,@RequestParam(value="money")Double money,
-			@RequestParam(value="number")Integer number,@RequestParam(value="split")Long split,
+			@RequestParam(value="split")Long split,
 			@RequestParam(value="starttime")String starttimestr,@RequestParam(value="endtime")String endtimestr){
 		String returnData = ReturnDataUtil.FAIL;
 		try {
@@ -70,6 +70,7 @@ public class DBPlanController {
 			Long starttime = TimeUtil.convert2Long(starttimestr, "yyyy-MM-dd HH:mm:ss")/1000;
 			Long endtime = TimeUtil.convert2Long(endtimestr, "yyyy-MM-dd HH:mm:ss")/1000;
 			Goods goods = goodsService.getById(Goods.class, goodsid);
+			Integer number = (int) Math.ceil(money / split);
 			DBPlan dbPlan = new DBPlan(split, starttime, endtime, number, money, goods );
 			boolean flag = dbplanService.insertDBPlan(dbPlan );
 			if(flag){
@@ -90,7 +91,7 @@ public class DBPlanController {
 	@RequestMapping(value = "/updatedbplan", method = RequestMethod.POST)
 	@ResponseBody
 	public String updateDBPlan(@RequestParam(value="dbplanid")Long dbplanid,@RequestParam(value="goodsid")Long goodsid,@RequestParam(value="money")Double money,
-			@RequestParam(value="number")Integer number,@RequestParam(value="split")Long split,
+			@RequestParam(value="split")Long split,
 			@RequestParam(value="starttime")String starttimestr,@RequestParam(value="endtime")String endtimestr){
 		String returnData = ReturnDataUtil.FAIL;
 		try {
@@ -99,6 +100,7 @@ public class DBPlanController {
 			Long starttime = TimeUtil.convert2Long(starttimestr, "yyyy-MM-dd HH:mm:ss")/1000;
 			Long endtime = TimeUtil.convert2Long(endtimestr, "yyyy-MM-dd HH:mm:ss")/1000;
 			Goods goods = goodsService.getById(Goods.class, goodsid);
+			Integer number = (int) Math.ceil(money / split);
 			DBPlan dbPlan = new DBPlan(dbplanid,split, starttime, endtime, number, money, goods );
 			boolean flag = dbplanService.updateDBPlan(dbPlan );
 			if(flag){

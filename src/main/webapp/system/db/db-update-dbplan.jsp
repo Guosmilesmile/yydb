@@ -72,13 +72,6 @@ function submitForm(){//提交表单
 		$.messager.alert('警告','请填写价格','error');
 		return ;
 	}
-	
-	var number = $("#number").val();
-	if(number == null || number ==""){
-		$.messager.alert('警告','请填写数量','error');
-		return ;
-	}
-	
 	var split = $("#split").val();
 	if(split == null || split ==""){
 		$.messager.alert('警告','请填写单次竞标价','error');
@@ -174,8 +167,6 @@ function getdbplandetail(){//获取夺宝计划详细信息
 		success:function(data){
 			console.log(data);
 			var goodsid = data.goodsid;
-			var number = data.number;
-			$('#number').val(number);
 			var money = data.money;
 			$('#money').val(money);
 			var split = data.split;
@@ -224,21 +215,21 @@ $(document).ready(function(){
 			<input type="text" name="dbplanid" id="dbplanid" style="display: none;">
 		</fieldset>
 		<fieldset class="simpborder"  style="width: 48%; float: left;margin-right: 3%;">
-			<label>数量</label>
-			<input type="text" name="number" id="number">
-		</fieldset>
-		<fieldset class="simpborder" style="width: 48%; float: left;">
 			<label>单次竞标价</label>
 			<input type="text" name="split" id="split">
 		</fieldset>
-		<fieldset class="simpborder" style="width: 47%; float: left;margin-right: 3%;padding-left: 12px;">
+		<fieldset class="simpborder" style="width: 48%; float: left;">
 			<label>上线时间</label>
 			<input class="easyui-datetimebox" name="starttime" id="starttime" style="width:91%;margin-left: 2%;">
 		</fieldset>
-		<fieldset class="simpborder"  style="width: 47%; float: left;padding-left: 12px;">
+		<fieldset class="simpborder" style="width: 47%; float: left;margin-right: 3%;padding-left: 12px;">
 			<label>下线时间</label>
 			<input  class="easyui-datetimebox" name="endtime"id="endtime"  style="width:91%">
 		</fieldset>
+		<!-- <fieldset class="simpborder"  style="width: 47%; float: left;padding-left: 12px;">
+			<label>下线时间</label>
+			<input  class="easyui-datetimebox" name="endtime"id="endtime"  style="width:91%">
+		</fieldset> -->
 		<br/>
 		<fieldset style="width:99%;">
 		<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()" id="formsubmit">Submit</a>

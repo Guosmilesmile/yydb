@@ -128,12 +128,18 @@ public class CustomerController {
 			Double balance = jsonObject.getDouble("balance");
 			Integer isshop = jsonObject.getInt("isshop");
 			String address = jsonObject.getString("address");
-			Long phone = jsonObject.getLong("phone");
+			String phoneTemp = jsonObject.getString("phone");
 			String name = jsonObject.getString("name");
+			Long phone = 0l;
 			if(0==isshop){
 				address = "";
 				phone = new Long(0);
 				name = "";
+			}
+			if("".equals(phoneTemp) || null == phoneTemp){
+				phone = new Long(0);
+			}else{
+				phone = Long.valueOf(phoneTemp);
 			}
 			Customer customer = new Customer(customerid,wechatid, balance, isshop, address, phone,name);
 			boolean flag = customerService.updateCustomer(customer);

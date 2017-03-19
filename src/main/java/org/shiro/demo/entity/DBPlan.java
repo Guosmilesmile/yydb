@@ -47,6 +47,8 @@ public class DBPlan {
 	@Column(name="money")
 	private Double money;//价位
 	
+	@Column(name="isfinish")
+	private Integer isfinish = 0;//是否结束
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "goodsid")
 	private Goods goods;
@@ -188,5 +190,14 @@ public class DBPlan {
 	public void setGoods(Goods goods) {
 		this.goods = goods;
 	}
+
+	public Integer getIsfinish() {
+		return isfinish;
+	}
+
+	public void setIsfinish(Integer isfinish) {
+		this.isfinish = isfinish;
+	}
+	
 	
 }

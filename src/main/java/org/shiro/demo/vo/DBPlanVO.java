@@ -33,7 +33,7 @@ public class DBPlanVO {
 	
 	private String shopName;//商家名称
 	
-	
+	private Integer isfinish;//是否结束
 
 	public Integer getBlock() {
 		return block;
@@ -96,9 +96,10 @@ public class DBPlanVO {
 	}
 	
 
+
 	public DBPlanVO(Long id, Integer block, Long split, Long startTime,
 			Long endTime, Integer number, Double money, String goodsName,
-			String shopName) {
+			String shopName, Integer isfinish) {
 		super();
 		this.id = id;
 		this.block = block;
@@ -109,6 +110,7 @@ public class DBPlanVO {
 		this.money = money;
 		this.goodsName = goodsName;
 		this.shopName = shopName;
+		this.isfinish = isfinish;
 	}
 
 	public DBPlanVO(DBPlan dbPlan) {
@@ -122,6 +124,7 @@ public class DBPlanVO {
 		this.money = dbPlan.getMoney();
 		this.goodsName = dbPlan.getGoods().getName();
 		this.shopName = dbPlan.getGoods().getShop().getName();
+		this.isfinish = dbPlan.getIsfinish();
 	}
 
 	/**
@@ -169,6 +172,14 @@ public class DBPlanVO {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Integer getIsfinish() {
+		return isfinish;
+	}
+
+	public void setIsfinish(Integer isfinish) {
+		this.isfinish = isfinish;
 	}
 	
 }

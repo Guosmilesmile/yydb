@@ -52,34 +52,36 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			columns: [[
 				{field:'id',title:'ID',sortable:true,width:60,sortable:true,hidden:true},
 				{field:'goodsName',title:'商品名称',sortable:true,width:200,sortable:true,
-					editor: { type: 'validatebox',options: { required: true} }
 				},
 				{field:'shopName',title:'商家名称',sortable:true,width:150,sortable:true,
-					editor: { type: 'validatebox' }
 				},
 				{field:'money',title:'价格',sortable:true,width:150,sortable:true,
-					editor: { type: 'numberbox' }
 				},
-				{field:'number',title:'数量',sortable:true,width:150,sortable:true,
-					editor: { type: 'numberbox' }
+				{field:'number',title:'总参与人数',sortable:true,width:150,sortable:true,
 				},
 				{field:'split',title:'单次竞标价格',sortable:true,width:150,sortable:true,
-					editor: { type: 'validatebox' }
 				},
 				{field:'startTime',title:'竞标开始时间',sortable:true,width:150,sortable:true,
-					editor: { type : 'datetimebox',options: { required: true } },
 					formatter:function(value,row,index){
 						var time = myformatter(value);
-						row.startTime = time;
+						//row.startTime = time;
 						return time;
 					},
 				},
 				{field:'endTime',title:'竞标结束时间',sortable:true,width:150,sortable:true,
-					editor: { type : 'datetimebox',options: { required: true} },
 					formatter:function(value,row,index){
 						var time = myformatter(value);
-						row.endTime = time;
+						//row.endTime = time;
 						return time;
+					},
+				},
+				{field:'isfinish',title:'是否竞标结束',sortable:true,width:150,sortable:true,
+					formatter:function(value,row,index){
+						if(1==value){
+							return "结束";
+						}else if(0==value){
+							return "未结束";
+						}
 					},
 				},
 			]],
@@ -93,11 +95,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					   text:"编辑",
 					   iconCls: "icon-edit",
 					   handler: editData,
-				},'-',
-				{//修改数据
-					   text:"保存",
-					   iconCls: "icon-save",
-					   handler: saveData,
 				},'-',
 				{//删除数据
 					   text:"删除",
@@ -227,52 +224,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				}
 			});
 		}
-    }
-    //-------------------------------保存-------------------------------------------
-	function saveData(){//保存
-		$.messager.confirm("操作警告", "确定保存后被修改的数据将不可恢复！！", function(data){
-			if(data){
-				$('#grid').datagrid('endEdit', doedit);
-				var inserted = $('#grid').datagrid('getChanges', 'inserted');
-				var updated = $('#grid').datagrid('getChanges', 'updated');
-				var insertrow = JSON.stringify(inserted);
-				var updatedrow = JSON.stringify(updated);
-				if (updated.length > 0) {  
-					$.ajax({
-			    		type:'post',
-			    		url:"<%=basePath%>",
-			    		data:{"rowstr":updatedrow},
-			    		success:function(data){
-			    			if(1==data){//成功
-			    				$.messager.alert('提示','更新成功','info');
-			    			}else{
-			    				$.messager.alert('提示','更新失败','error');
-			    			}
-			    			$('#grid').datagrid('reload');
-			    		},error:function(){
-			    			console.log("fail");
-			    		}
-			    	});			       
-			    }
-				if (inserted.length > 0) {  
-					$.ajax({
-			    		type:'post',
-			    		url:"<%=basePath%>",
-			    		data:{"rowstr":insertrow},
-			    		success:function(data){
-			    			if(1==data){//成功
-			    				$.messager.alert('提示','添加成功','info');
-			    			}else{
-			    				$.messager.alert('提示','添加失败','error');
-			    			}
-			    			$('#grid').datagrid('reload');
-			    		},error:function(){
-			    			console.log("fail");
-			    		}
-			    	});			       
-			    } 
-			}
-		});
     }
 	//--------------------------------------主体部分！！！-----------------------------
     var doedit = undefined;//用来记录当前编辑的行，如果没有编辑的行则置为undefined
