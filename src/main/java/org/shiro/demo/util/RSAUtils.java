@@ -522,7 +522,7 @@ public abstract class RSAUtils {
 		String decryptString = decryptString(encryptString);
 		System.out.println(decryptString);*/
     	
-    	/*String text = "admin";
+    	String text = "admin";
     	FileInputStream fis = null;
         ObjectInputStream ois = null;
         KeyPair keyPair = null;
@@ -533,16 +533,18 @@ public abstract class RSAUtils {
             PublicKey public1 = keyPair.getPublic();
             PrivateKey private1 = keyPair.getPrivate();
             byte[] encoded = public1.getEncoded();
-            java.security.spec.X509EncodedKeySpec bobPubKeySpec = new java.security.spec.X509EncodedKeySpec(encoded);
-            java.security.KeyFactory keyFactory;
-            keyFactory = java.security.KeyFactory.getInstance("RSA");
-            PublicKey publicKey  = keyFactory.generatePublic(bobPubKeySpec);
-            String encryptString = encryptString(publicKey, text);
-            System.out.println(encryptString);
-            String decryptString = decryptString(private1, encryptString);
-            System.out.println(decryptString);
-            System.out.println(new String(Base64.encodeBase64(public1.getEncoded()))  );
-            System.out.println(new String(Base64.encodeBase64(private1.getEncoded()))  );
+            System.out.println(public1.toString());
+            System.out.println(new String(Base64.encodeBase64(public1.toString().getBytes())));
+            //java.security.spec.X509EncodedKeySpec bobPubKeySpec = new java.security.spec.X509EncodedKeySpec(encoded);
+            //java.security.KeyFactory keyFactory;
+            //keyFactory = java.security.KeyFactory.getInstance("RSA");
+            //PublicKey publicKey  = keyFactory.generatePublic(bobPubKeySpec);
+            //String encryptString = encryptString(publicKey, text);
+            //System.out.println(encryptString);
+            //String decryptString = decryptString(private1, encryptString);
+            //System.out.println(decryptString);
+            //System.out.println(new String(Base64.encodeBase64(public1.getEncoded()))  );
+            //System.out.println(new String(Base64.encodeBase64(private1.getEncoded()))  );
             String encryptString = encryptString(public1, text);
             System.out.println(encryptString);
             String decryptString = decryptString(private1, encryptString);
@@ -553,13 +555,13 @@ public abstract class RSAUtils {
         } finally {
             IOUtils.closeQuietly(ois);
             IOUtils.closeQuietly(fis);
-        }*/
-    	PublicKey publickey = getPublicKeyFromFile("__RSA_PAIR.txt");
+        }
+    	/*PublicKey publickey = getPublicKeyFromFile("__RSA_PAIR.txt");
     	PrivateKey privateKey = getPrivateFromFile("__RSA_PAIR.txt");
     	String text = "admin";
     	String encryptString = encryptString(publickey, text);
         System.out.println(encryptString);
         String decryptString = decryptString(privateKey, encryptString);
-        System.out.println(decryptString);
+        System.out.println(decryptString);*/
     }
 }

@@ -25,7 +25,7 @@ public class DBPlanVO {
 	
 	private Long endTime;//竞标结束
 
-	private Integer number;//数量
+	private Integer number;//总参与人数
 	
 	private Double money;//价位
 	

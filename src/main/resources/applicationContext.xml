@@ -162,7 +162,8 @@
 			/resources/** = anon
 			/login = anon
 			/validateCode = anon
-           	/app/** = apps
+           	/apps/** = apps
+           	/app/** = anon
            	/** = authc
 			</value>
 		</property>

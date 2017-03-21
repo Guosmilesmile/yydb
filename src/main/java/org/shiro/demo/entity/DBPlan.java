@@ -42,7 +42,7 @@ public class DBPlan {
 	private Long endTime;//竞标结束
 	
 	@Column(name="number")
-	private Integer number;//数量
+	private Integer number;//总参与人数
 	
 	@Column(name="money")
 	private Double money;//价位
