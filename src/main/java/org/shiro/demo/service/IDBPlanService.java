@@ -1,5 +1,6 @@
 package org.shiro.demo.service;
 
+import org.shiro.demo.controller.app.vo.AppDBplanVO;
 import org.shiro.demo.entity.DBPlan;
 
 
@@ -30,4 +31,18 @@ public interface IDBPlanService extends IBaseService{
 	 * @return
 	 */
 	public boolean updateDBPlan(DBPlan dbPlan);
+	
+	/**
+	 * 通过id获取夺宝计划
+	 * @param id
+	 * @return
+	 */
+	public AppDBplanVO getAppDBplanVObyId(Long id);
+	
+	/**
+	 * 通过id获取已参加人数
+	 * @param id
+	 * @return
+	 */
+	public int getAttendNumber(Long id);
 }

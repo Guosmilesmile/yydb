@@ -48,7 +48,7 @@
                          <shiro:hasPermission name="system:userrole"> 
                          <li ><a target="rightFrame" href="<%=basePath%>system/user/system-manage-user-role.jsp">用户角色管理</a></li>
                          </shiro:hasPermission>
-                         <shiro:hasPermission name="system:rolepermission"> 
+                         <shiro:hasPermission name="system:rolepermission">
                          <li ><a target="rightFrame" href="<%=basePath%>system/user/system-manage-permission-role.jsp">角色权限管理</a></li>
                     	 </shiro:hasPermission>
                     </ul>

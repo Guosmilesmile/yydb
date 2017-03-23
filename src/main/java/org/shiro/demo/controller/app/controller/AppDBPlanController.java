@@ -73,4 +73,46 @@ public class AppDBPlanController extends AppBaseController{
 		String resultdata = FastJsonTool.createJsonString(returnData);
 		return resultdata;
 	}
+	
+	
+	/**
+	 * 获取所有夺宝计划
+	 * @param params
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="/getDBPlanbyid",method=RequestMethod.POST,produces = "text/json;charset=UTF-8")
+	public String getDBPlanbyid(@RequestParam(value="params")String params){
+		ReturnData returnData = new ReturnData();
+		try {
+			Map<String, String> paramsMap = filterParam(params);
+			Long dbplanid = Long.parseLong(paramsMap.get("dbplanid"));
+			AppDBplanVO appDBplanVO = dbPlanService.getAppDBplanVObyId(dbplanid);
+			returnData.setCode(ReturnData.SUCCESS);
+			returnData.setMessage("成功");
+			returnData.setData(FastJsonTool.createJsonString(appDBplanVO));
+		} catch(EncryptWrongExcetion e){
+			e.printStackTrace();
+			returnData.setCode(ReturnData.FAIL);
+			returnData.setMessage("接口数据有误");
+			returnData.setData("");
+		}catch (TimeOutException e) {
+			e.printStackTrace();
+			returnData.setCode(ReturnData.FAIL);
+			returnData.setMessage("接口已过期");
+			returnData.setData("");
+		}catch (ParamsWromgException e) {
+			e.printStackTrace();
+			returnData.setCode(ReturnData.FAIL);
+			returnData.setMessage("接口数据有误");
+			returnData.setData("");
+		}catch (Exception e) {
+			e.printStackTrace();
+			returnData.setCode(ReturnData.FAIL);
+			returnData.setMessage("接口数据有误");
+			returnData.setData("");
+		}
+		String resultdata = FastJsonTool.createJsonString(returnData);
+		return resultdata;
+	}
 }

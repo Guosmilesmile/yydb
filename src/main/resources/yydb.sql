@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50151
 File Encoding         : 65001
 
-Date: 2017-03-19 10:45:16
+Date: 2017-03-23 15:37:55
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -28,7 +28,7 @@ CREATE TABLE `cmspermission` (
   PRIMARY KEY (`pmsid`),
   KEY `FK_dl60a0nqnys11h5b1xahciren` (`parentid`),
   CONSTRAINT `cmspermission_ibfk_1` FOREIGN KEY (`parentid`) REFERENCES `cmspermission` (`pmsid`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of cmspermission
@@ -36,8 +36,17 @@ CREATE TABLE `cmspermission` (
 INSERT INTO `cmspermission` VALUES ('1', '管理后台系统的全部信息', '系统管理', 'system:manage', null);
 INSERT INTO `cmspermission` VALUES ('2', '系统管理员信息权限管理', '用户管理', 'system:user', '1');
 INSERT INTO `cmspermission` VALUES ('3', '系统角色管理', '角色管理', 'system:role', '1');
-INSERT INTO `cmspermission` VALUES ('4', '第二菜单', '第二菜单', 'test', null);
-INSERT INTO `cmspermission` VALUES ('5', '第二菜单第一子项', '第一子项', 'testone', '4');
+INSERT INTO `cmspermission` VALUES ('4', '管理用户与角色绑定', '用户角色管理', 'system:userrole', '1');
+INSERT INTO `cmspermission` VALUES ('5', '角色与权限的绑定', '角色权限管理', 'system:rolepermission', '1');
+INSERT INTO `cmspermission` VALUES ('6', '客户管理', '客户管理', 'customer:total', null);
+INSERT INTO `cmspermission` VALUES ('7', '客户管理', '客户管理', 'customer:manage', '6');
+INSERT INTO `cmspermission` VALUES ('8', '管理商品', '商品管理', 'goods:total', null);
+INSERT INTO `cmspermission` VALUES ('9', '管理商品分类', '分类管理', 'goods:category', '8');
+INSERT INTO `cmspermission` VALUES ('10', '管理商品的详细信息', '商品管理', 'goods:manage', '8');
+INSERT INTO `cmspermission` VALUES ('11', '管理夺宝', '夺宝管理', 'db:total', null);
+INSERT INTO `cmspermission` VALUES ('12', '夺宝计划详细信息管理', '夺宝计划管理', 'db:dbplan', '11');
+INSERT INTO `cmspermission` VALUES ('13', '夺宝参与计划情况管理', '夺宝参与情况管理', 'db:dbattend', '11');
+INSERT INTO `cmspermission` VALUES ('14', '夺宝中奖情况管理', '夺宝情况管理', 'db:dbsituation', '11');
 
 -- ----------------------------
 -- Table structure for cmsrole
@@ -69,13 +78,22 @@ CREATE TABLE `cmsrolepms` (
   KEY `FK_6sphp8ycu59cwo68b71u2jcye` (`roleid`),
   CONSTRAINT `cmsrolepms_ibfk_1` FOREIGN KEY (`roleid`) REFERENCES `cmsrole` (`roleid`),
   CONSTRAINT `cmsrolepms_ibfk_2` FOREIGN KEY (`pmsid`) REFERENCES `cmspermission` (`pmsid`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of cmsrolepms
 -- ----------------------------
-INSERT INTO `cmsrolepms` VALUES ('7', '1', '2');
-INSERT INTO `cmsrolepms` VALUES ('8', '1', '5');
+INSERT INTO `cmsrolepms` VALUES ('1', '1', '2');
+INSERT INTO `cmsrolepms` VALUES ('19', '1', '3');
+INSERT INTO `cmsrolepms` VALUES ('20', '1', '4');
+INSERT INTO `cmsrolepms` VALUES ('21', '1', '5');
+INSERT INTO `cmsrolepms` VALUES ('22', '1', '6');
+INSERT INTO `cmsrolepms` VALUES ('23', '1', '7');
+INSERT INTO `cmsrolepms` VALUES ('24', '1', '9');
+INSERT INTO `cmsrolepms` VALUES ('25', '1', '10');
+INSERT INTO `cmsrolepms` VALUES ('27', '1', '12');
+INSERT INTO `cmsrolepms` VALUES ('28', '1', '13');
+INSERT INTO `cmsrolepms` VALUES ('29', '1', '14');
 
 -- ----------------------------
 -- Table structure for cmsuser
@@ -211,8 +229,8 @@ CREATE TABLE `db_dbplan` (
 -- ----------------------------
 -- Records of db_dbplan
 -- ----------------------------
-INSERT INTO `db_dbplan` VALUES ('1', '26', '2', '50', '1489319672', '1489748075', '2', '100', '0');
-INSERT INTO `db_dbplan` VALUES ('3', '25', '2', '50', '1489319672', '1489748076', '2', '100', '0');
+INSERT INTO `db_dbplan` VALUES ('1', '26', '2', '50', '1489319672', '1489748075', '4', '200', '0');
+INSERT INTO `db_dbplan` VALUES ('3', '25', '2', '50', '1489319672', '1489748076', '4', '200', '0');
 
 -- ----------------------------
 -- Table structure for db_situation
