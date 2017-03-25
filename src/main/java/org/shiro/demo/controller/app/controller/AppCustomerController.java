@@ -8,10 +8,9 @@ import org.shiro.demo.controller.app.exception.EncryptWrongExcetion;
 import org.shiro.demo.controller.app.exception.ParamsWromgException;
 import org.shiro.demo.controller.app.exception.TimeOutException;
 import org.shiro.demo.entity.Category;
-import org.shiro.demo.service.ICategoryService;
+import org.shiro.demo.entity.Customer;
+import org.shiro.demo.service.ICustomerService;
 import org.shiro.demo.util.FastJsonTool;
-import org.shiro.demo.util.RSAUtils;
-import org.shiro.demo.util.SplitParamsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,28 +19,31 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping(value="app/category")
-public class AppCategoryController extends AppBaseController{
+@RequestMapping(value="app/customer")
+public class AppCustomerController extends AppBaseController{
 
-	
 	@Autowired
-	private ICategoryService categoryService;
+	private ICustomerService customerService;
 	
 	/**
-	 * 获取所有的分类
+	 * 获取用户余额
 	 * @param params
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value="/getCategory",method=RequestMethod.GET,produces = "text/json;charset=UTF-8")
-	public String getCategory(@RequestParam(value="params")String params){
+	@RequestMapping(value="/getbalance",method=RequestMethod.GET,produces = "text/json;charset=UTF-8")
+	public String getBalance(@RequestParam(value="params")String params){
 		ReturnData returnData = new ReturnData();
 		try {
 			Map<String, String> paramsMap = filterParam(params);
-			List<Category> allCategory = categoryService.getAll(Category.class);
+			String wechatid = paramsMap.get("wechatid");
+			//Double balance = Double.parseDouble(paramsMap.get("balance"));
+			Customer customer = customerService.getCustomerbyWechatid(wechatid);
 			returnData.setCode(ReturnData.SUCCESS);
 			returnData.setMessage("成功");
-			returnData.setData(FastJsonTool.createJsonString(allCategory));
+			Customer returnCustomer = new Customer();
+			returnCustomer.setBalance(customer.getBalance());
+			returnData.setData(FastJsonTool.createJsonString(returnCustomer));
 		} catch(EncryptWrongExcetion e){
 			e.printStackTrace();
 			returnData.setCode(ReturnData.FAIL);
@@ -61,5 +63,4 @@ public class AppCategoryController extends AppBaseController{
 		String resultdata = FastJsonTool.createJsonString(returnData);
 		return resultdata;
 	}
-	
 }

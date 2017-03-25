@@ -1,10 +1,15 @@
 package org.shiro.demo.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.shiro.demo.controller.app.vo.AppDBplanVO;
+import org.shiro.demo.dao.util.Pagination;
+import org.shiro.demo.dao.util.QueryCondition;
 import org.shiro.demo.entity.DBPlan;
 import org.shiro.demo.service.IBaseService;
 import org.shiro.demo.service.IDBPlanService;
@@ -72,6 +77,22 @@ public class DBPlanServiceImpl extends DefultBaseService implements IDBPlanServi
 			e.printStackTrace();
 		}
 		return appDBplanVO;
+	}
+
+	public Map<String, Object> getDBPlanWithOrder(int page, int pageSize,String columnName) {
+		List<QueryCondition> params = new ArrayList<QueryCondition>();
+		QueryCondition queryCondition = new QueryCondition("isfinish", QueryCondition.EQ, 0);
+		params.add(queryCondition);
+		Pagination<DBPlan> dbPlanPagination = baseService.getPagination(DBPlan.class, params, "order by "+columnName+" desc", page, pageSize);
+		List<AppDBplanVO> appDBplanVOs = AppDBplanVO.changeDBPlan2APPDBPlanVOList(dbPlanPagination);
+		List<AppDBplanVO> returnAppDBplanVOs = new ArrayList<AppDBplanVO>();
+		for(AppDBplanVO appDBplanVO : appDBplanVOs){
+			returnAppDBplanVOs.add(getAppDBplanVObyId(appDBplanVO.getId()));
+		}
+		Map<String, Object> returnMap = new HashMap<String, Object>();
+		returnMap.put("rows", returnAppDBplanVOs);
+		returnMap.put("total", dbPlanPagination.getRecordCount());
+		return returnMap;
 	}
 	
 }

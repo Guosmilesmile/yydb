@@ -58,5 +58,15 @@ public class CustomerServiceImpl extends DefultBaseService implements ICustomerS
 		resultList = baseService.get(Customer.class, queryConditions);
 		return resultList;
 	}
+
+	public Customer getCustomerbyWechatid(String wechatid) {
+		Customer customer = null;
+		try {
+			customer = (Customer) baseService.getUniqueResultByJpql("from Customer as o where o.wechatid=?", wechatid);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return customer;
+	}
 	
 }

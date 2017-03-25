@@ -1,5 +1,7 @@
 package org.shiro.demo.service;
 
+import java.util.Map;
+
 import org.shiro.demo.controller.app.vo.AppDBplanVO;
 import org.shiro.demo.entity.DBPlan;
 
@@ -11,6 +13,14 @@ import org.shiro.demo.entity.DBPlan;
  */
 public interface IDBPlanService extends IBaseService{
 	
+	/**
+	 * 根据字段排序分页获取夺宝计划
+	 * @param page
+	 * @param pageSize
+	 * @param columnName
+	 * @return
+	 */
+	public Map<String, Object> getDBPlanWithOrder(int page,int pageSize,String columnName);
 	/**
 	 * 新增夺宝计划
 	 * @param user

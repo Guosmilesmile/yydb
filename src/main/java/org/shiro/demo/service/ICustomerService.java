@@ -12,6 +12,13 @@ import org.shiro.demo.entity.Customer;
 public interface ICustomerService extends IBaseService{
 
 	/**
+	 * 通过微信id获取用户
+	 * @param wechatid 微信id
+	 * @return
+	 */
+	public Customer getCustomerbyWechatid(String wechatid);
+	
+	/**
 	 * 新增客户
 	 * @param customer
 	 * @return

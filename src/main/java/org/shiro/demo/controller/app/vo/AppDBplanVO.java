@@ -196,6 +196,20 @@ public class AppDBplanVO {
 	 * @param pagination 分页数据
 	 * @return
 	 */
+	public static List<AppDBplanVO> changeDBPlan2APPDBPlanVOList(Pagination<DBPlan> pagination){
+		List<DBPlan> recordList = pagination.getRecordList();
+		List<AppDBplanVO> VOList = new ArrayList<AppDBplanVO>();
+		for(DBPlan item : recordList){
+			VOList.add(new AppDBplanVO(item));
+		}
+		return VOList;
+	}
+	
+	/**
+	 * 将实体类转换成显示层实体类
+	 * @param pagination 分页数据
+	 * @return
+	 */
 	public static Map<String, Object> changeDBPlan2APPDBPlanVO(Pagination<DBPlan> pagination){
 		List<DBPlan> recordList = pagination.getRecordList();
 		List<AppDBplanVO> VOList = new ArrayList<AppDBplanVO>();
@@ -206,5 +220,19 @@ public class AppDBplanVO {
 		map.put("rows", VOList);
 		map.put("total", pagination.getRecordCount());
 		return map;
+	}
+	
+	/**
+	 * 将实体类转换成显示层实体类
+	 * @param pagination 分页数据
+	 * @return
+	 */
+	public static List<AppDBplanVO> changeDBPlan2APPDBPlanVOList(List<DBPlan> list){
+		List<DBPlan> recordList = list;
+		List<AppDBplanVO> VOList = new ArrayList<AppDBplanVO>();
+		for(DBPlan item : recordList){
+			VOList.add(new AppDBplanVO(item));
+		}
+		return VOList;
 	}
 }
