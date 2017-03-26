@@ -1,11 +1,16 @@
 package org.shiro.demo.controller.app.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.shiro.demo.controller.app.ReturnData;
 import org.shiro.demo.controller.app.exception.EncryptWrongExcetion;
 import org.shiro.demo.controller.app.exception.ParamsWromgException;
 import org.shiro.demo.controller.app.exception.TimeOutException;
+import org.shiro.demo.dao.util.QueryCondition;
+import org.shiro.demo.entity.DBAttend;
+import org.shiro.demo.entity.DBSituation;
 import org.shiro.demo.service.IDBAttendService;
 import org.shiro.demo.util.FastJsonTool;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,5 +75,64 @@ public class AppDBAttendController extends AppBaseController{
 		return resultdata;
 	}
 	
-	
+	/**
+	 * 修改夺宝参与记录的支付状态
+	 * @param params
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="/changeispay",method=RequestMethod.GET,produces = "text/json;charset=UTF-8")
+	public String changeIsPay(@RequestParam(value="params")String params){
+		ReturnData returnData = new ReturnData();
+		try {
+			Map<String, String> paramsMap = filterParam(params);
+			Integer isplay = Integer.parseInt(paramsMap.get("isplay"));
+			String wechatid = paramsMap.get("wechatid");
+			Long dbattendid = Long.parseLong(paramsMap.get("dbattendid"));
+			//Pagination<DBPlan> dbPlanPagination = dbPlanService.getPagination(DBPlan.class, null, "order by dbplanid desc", page, pageSize);
+			//Map<String, Object> dataMap = AppDBplanVO.changeDBPlan2APPDBPlanVO(dbPlanPagination);
+			List<QueryCondition> queryConditions = new ArrayList<QueryCondition>();
+			queryConditions.add(new QueryCondition(" customer.wechatid='"+wechatid+"'"));
+			queryConditions.add(new QueryCondition(" attendid="+dbattendid));
+			List<DBAttend> list = dbAttendService.get(DBAttend.class, queryConditions);
+			if(null==list||list.size()==0){
+				returnData.setCode(ReturnData.FAIL);
+				returnData.setMessage("失败");
+				returnData.setData("");
+			}else{
+				DBAttend dbAttend = list.get(0);
+				if(isplay==0){
+					dbAttendService.delete(DBAttend.class, dbAttend.getAttendid());
+				}else{
+					dbAttend.setIsplay(isplay);
+					dbAttendService.update(dbAttend);
+				}
+				returnData.setCode(ReturnData.SUCCESS);
+				returnData.setMessage("成功");
+				returnData.setData("");
+			}
+		} catch(EncryptWrongExcetion e){
+			e.printStackTrace();
+			returnData.setCode(ReturnData.FAIL);
+			returnData.setMessage("接口数据有误");
+			returnData.setData("");
+		}catch (TimeOutException e) {
+			e.printStackTrace();
+			returnData.setCode(ReturnData.FAIL);
+			returnData.setMessage("接口已过期");
+			returnData.setData("");
+		}catch (ParamsWromgException e) {
+			e.printStackTrace();
+			returnData.setCode(ReturnData.FAIL);
+			returnData.setMessage("接口数据有误");
+			returnData.setData("");
+		}catch (Exception e) {
+			e.printStackTrace();
+			returnData.setCode(ReturnData.FAIL);
+			returnData.setMessage("接口数据有误");
+			returnData.setData("");
+		}
+		String resultdata = FastJsonTool.createJsonString(returnData);
+		return resultdata;
+	}
 }
