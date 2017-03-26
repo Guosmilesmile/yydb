@@ -1,5 +1,8 @@
 package org.shiro.demo.service;
 
+import java.util.List;
+import java.util.Map;
+
 import org.shiro.demo.entity.DBAttend;
 
 
@@ -29,4 +32,14 @@ public interface IDBAttendService extends IBaseService{
 	 * @return
 	 */
 	public boolean updateDBAttend(DBAttend DBAttend);
+	
+	/**
+	 * 分页获取参与记录
+	 * @param page
+	 * @param pageSize
+	 * @param wechatid
+	 * @param isfinish 0、未完结 1、完结  2、全部
+	 * @return
+	 */
+	public Map<String, Object> getDBAttendVOWithWechatid(int page, int pageSize,String wechatid,int isfinish);
 }

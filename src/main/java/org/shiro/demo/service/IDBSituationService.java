@@ -1,6 +1,7 @@
 package org.shiro.demo.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.shiro.demo.entity.DBSituation;
 import org.shiro.demo.vo.DBSituationVO;
@@ -44,4 +45,13 @@ public interface IDBSituationService extends IBaseService{
 	 * @return
 	 */
 	public boolean updateDBSituation(DBSituation dbSituation);
+	
+	/**
+	 * 通过微信id获取中奖记录
+	 * @param page
+	 * @param pageSize
+	 * @param wechatid
+	 * @return
+	 */
+	public Map<String, Object> getDBsituationWithWechatid(int page,int pageSize, String wechatid) ;
 }

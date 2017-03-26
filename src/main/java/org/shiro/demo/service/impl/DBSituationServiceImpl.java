@@ -2,17 +2,27 @@ package org.shiro.demo.service.impl;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javassist.expr.Instanceof;
 
 import javax.annotation.Resource;
 
+import org.shiro.demo.controller.app.vo.AppAttendVO;
+import org.shiro.demo.controller.app.vo.AppDBplanVO;
+import org.shiro.demo.dao.util.QueryCondition;
+import org.shiro.demo.entity.Customer;
+import org.shiro.demo.entity.DBAttend;
+import org.shiro.demo.entity.DBPlan;
 import org.shiro.demo.entity.DBSituation;
 import org.shiro.demo.entity.Goods;
 import org.shiro.demo.service.IBaseService;
+import org.shiro.demo.service.IDBPlanService;
 import org.shiro.demo.service.IDBSituationService;
 import org.shiro.demo.vo.DBSituationVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service("dbsituationService")
@@ -21,6 +31,8 @@ public class DBSituationServiceImpl extends DefultBaseService implements IDBSitu
 	@Resource(name="baseService")
 	private IBaseService baseService;
 
+	@Autowired
+	private IDBPlanService dbPlanService;
 	
 	public boolean insertDBSituation(DBSituation dbSituation) {
 		/*boolean flag = false;
@@ -108,5 +120,35 @@ public class DBSituationServiceImpl extends DefultBaseService implements IDBSitu
 			number = list.size();
 		}
 		return number;
+	}
+	
+	public Map<String, Object> getDBsituationWithWechatid(int page,int pageSize, String wechatid) {
+		String jpql = "";
+		Integer total = 0;
+		
+		jpql = "select o.dbPlan from DBSituation o where o.customer.wechatid=? order by situationid desc";
+		List<DBPlan> dbplans = baseService.getPaginationJpql(page, pageSize, jpql, wechatid);
+		total = baseService.getByJpql(jpql, wechatid).size();
+		
+		List<AppAttendVO> appAttendVOs = new ArrayList<AppAttendVO>();
+		for(DBPlan dbPlan : dbplans){
+			AppAttendVO appAttendVO = new AppAttendVO(dbPlan);
+			appAttendVO.setLuckdogWechatid(wechatid);
+			appAttendVOs.add(appAttendVO);
+		}
+		List<AppAttendVO> returnappAttendVOs = new ArrayList<AppAttendVO>();
+		for(AppAttendVO appAttendVO : appAttendVOs){
+			int attendNumber = dbPlanService.getAttendNumber(appAttendVO.getDbplanid());
+			appAttendVO.setAttendNumber(attendNumber);
+			List<QueryCondition> queryConditions = new ArrayList<QueryCondition>();
+			queryConditions.add(new QueryCondition(" customer.wechatid ='"+wechatid+"' and dbPlan.dbplanid="+appAttendVO.getDbplanid()));
+			List<DBAttend> list = baseService.get(DBAttend.class, queryConditions );
+			appAttendVO.setSelfCount(list.size());
+			returnappAttendVOs.add(appAttendVO);
+		}
+		Map<String, Object> returnMap = new HashMap<String, Object>();
+		returnMap.put("rows", returnappAttendVOs);
+		returnMap.put("total",total);
+		return returnMap;
 	}
 }

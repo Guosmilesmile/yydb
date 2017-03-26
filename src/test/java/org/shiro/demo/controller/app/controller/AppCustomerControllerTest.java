@@ -17,9 +17,11 @@ public class AppCustomerControllerTest {
 		byte[] exp = Hex.decodeHex(AppProperties.exp.toCharArray());
     	byte[] model = Hex.decodeHex(AppProperties.model.toCharArray());
     	RSAPublicKey publicKey = RSAUtils.generateRSAPublicKey(model, exp);
-		
-		String temp = "wechatid=chris&timestamp=1490408844000";
+    	Long currentTime = System.currentTimeMillis();
+		String temp = "wechatid=chris&timestamp="+currentTime;
+		System.out.println(temp);
 		String param = "params="+RSAUtils.encryptString(publicKey, temp);
+		System.out.println(param);
 		String url = "http://127.0.0.1:8080/yydb/app/customer/getbalance?"+ param;
 		System.out.println(url);
 		String sendPost = HttpUtils.sendGet("http://127.0.0.1:8080/yydb/app/customer/getbalance",param);
