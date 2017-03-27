@@ -51,14 +51,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			]],
 			columns: [[
 				{field:'id',title:'ID',sortable:true,width:60,sortable:true,hidden:true},
+				{field:'dbplanid',title:'夺宝编号',sortable:true,width:200,sortable:true,
+				},
 				{field:'goodsname',title:'商品名称',sortable:true,width:200,sortable:true,
-					editor: { type: 'validatebox',options: { required: true} }
 				},
 				{field:'shopName',title:'商家名称',sortable:true,width:150,sortable:true,
-					editor: { type: 'validatebox' }
 				},
 				{field:'wechatid',title:'微信id',sortable:true,width:150,sortable:true,
-					editor: { type: 'validatebox' }
 				},
 				{field:'isplay',title:'是否付款',sortable:true,width:150,sortable:true,
 					editor:{

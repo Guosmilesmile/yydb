@@ -16,8 +16,10 @@ import org.shiro.demo.entity.DBAttend;
  */
 public class DBAttendVO {
 
-
+	
 	private Long id;//id
+	
+	private Long dbplanid;
 	
 	private Long createTime;//创建时间
 	
@@ -48,6 +50,7 @@ public class DBAttendVO {
 	public DBAttendVO(DBAttend dbAttend) {
 		super();
 		this.id = dbAttend.getAttendid();
+		this.dbplanid = dbAttend.getDbPlan().getDbplanid();
 		this.createTime = dbAttend.getCreateTime();
 		this.isplay = dbAttend.getIsplay();
 		this.wechatid = dbAttend.getCustomer().getWechatid();
@@ -132,6 +135,14 @@ public class DBAttendVO {
 			roleVOList.add(new DBAttendVO(item));
 		}
 		return roleVOList;
+	}
+
+	public Long getDbplanid() {
+		return dbplanid;
+	}
+
+	public void setDbplanid(Long dbplanid) {
+		this.dbplanid = dbplanid;
 	}
 
 }

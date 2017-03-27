@@ -131,7 +131,7 @@ function getDBPlanlist(){//获取所有的夺宝计划
 			if(list.length>0){
 				var str1 = "";
 				for(var i =0;i<list.length;i++){
-					str1+="<option value='"+list[i].id+"'>"+list[i].goodsName+"  商家名称："+list[i].shopName+" 单次竞价:"+list[i].split+"</option>";
+					str1+="<option value='"+list[i].id+"'>"+list[i].goodsName+"  商家名称："+list[i].shopName+" 单次竞价:"+list[i].split+" 夺宝编号:"+list[i].id+"</option>";
 				}
 				$('#dbplanlist').html(str1);
 			}

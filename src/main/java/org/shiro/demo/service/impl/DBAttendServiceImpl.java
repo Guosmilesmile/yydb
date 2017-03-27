@@ -32,11 +32,22 @@ public class DBAttendServiceImpl extends DefultBaseService implements IDBAttendS
 	@Autowired
 	private IDBPlanService dbPlanService;
 
-	public boolean insertDBAttend(DBAttend dbAttend) {
-		boolean flag = false;
+	public int insertDBAttend(DBAttend dbAttend,int usebalance) {
+		/*boolean flag = false;
 		try {
 			baseService.save(dbAttend);
 			flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return flag;*/
+		int flag = 0;
+		try {
+			String sql = "call p_insertattend("+dbAttend.getCustomer().getCustomerid()+","+dbAttend.getDbPlan().getDbplanid()+","+usebalance+")";
+			System.out.println(sql);
+			List<Object> executeBySQLList = baseService.executeBySQLList(sql);
+			int returndata = new Integer(executeBySQLList.get(0).toString());
+			return returndata;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

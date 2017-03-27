@@ -9,10 +9,13 @@ import org.shiro.demo.controller.app.exception.EncryptWrongExcetion;
 import org.shiro.demo.controller.app.exception.ParamsWromgException;
 import org.shiro.demo.controller.app.exception.TimeOutException;
 import org.shiro.demo.dao.util.QueryCondition;
+import org.shiro.demo.entity.Customer;
 import org.shiro.demo.entity.DBAttend;
+import org.shiro.demo.entity.DBPlan;
 import org.shiro.demo.entity.DBSituation;
 import org.shiro.demo.service.IDBAttendService;
 import org.shiro.demo.util.FastJsonTool;
+import org.shiro.demo.util.ReturnDataUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -109,6 +112,66 @@ public class AppDBAttendController extends AppBaseController{
 				}
 				returnData.setCode(ReturnData.SUCCESS);
 				returnData.setMessage("成功");
+				returnData.setData("");
+			}
+		} catch(EncryptWrongExcetion e){
+			e.printStackTrace();
+			returnData.setCode(ReturnData.FAIL);
+			returnData.setMessage("接口数据有误");
+			returnData.setData("");
+		}catch (TimeOutException e) {
+			e.printStackTrace();
+			returnData.setCode(ReturnData.FAIL);
+			returnData.setMessage("接口已过期");
+			returnData.setData("");
+		}catch (ParamsWromgException e) {
+			e.printStackTrace();
+			returnData.setCode(ReturnData.FAIL);
+			returnData.setMessage("接口数据有误");
+			returnData.setData("");
+		}catch (Exception e) {
+			e.printStackTrace();
+			returnData.setCode(ReturnData.FAIL);
+			returnData.setMessage("接口数据有误");
+			returnData.setData("");
+		}
+		String resultdata = FastJsonTool.createJsonString(returnData);
+		return resultdata;
+	}
+	
+	/**
+	 * 修改夺宝参与记录的支付状态
+	 * @param params
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="/insertAttend",method=RequestMethod.GET,produces = "text/json;charset=UTF-8")
+	public String insertAttend(@RequestParam(value="params")String params){
+		ReturnData returnData = new ReturnData();
+		try {
+			Map<String, String> paramsMap = filterParam(params);
+			String wechatid = paramsMap.get("wechatid");
+			Integer useBalance = Integer.parseInt(paramsMap.get("usebalance"));
+			Long dbplanid = Long.parseLong(paramsMap.get("dbplanid"));
+			List<QueryCondition> queryConditions = new ArrayList<QueryCondition>();
+			queryConditions.add(new QueryCondition(" wechatid='"+wechatid+"'"));
+			Customer customer =  dbAttendService.get(Customer.class, queryConditions).get(0);
+			DBPlan dbPlan = dbAttendService.getById(DBPlan.class, dbplanid);
+			DBAttend dbattend = new DBAttend(System.currentTimeMillis()/1000, 0, customer, dbPlan);
+			//Pagination<DBPlan> dbPlanPagination = dbPlanService.getPagination(DBPlan.class, null, "order by dbplanid desc", page, pageSize);
+			//Map<String, Object> dataMap = AppDBplanVO.changeDBPlan2APPDBPlanVO(dbPlanPagination);
+			int  flag = dbAttendService.insertDBAttend(dbattend,useBalance);
+			if(flag==1){
+				returnData.setCode(ReturnData.SUCCESS);
+				returnData.setMessage("成功");
+				returnData.setData("");
+			}else if(flag==0){
+				returnData.setCode(ReturnData.FAIL);
+				returnData.setMessage("人数已满");
+				returnData.setData("");
+			}else if(flag ==2){
+				returnData.setCode(ReturnData.FAIL);
+				returnData.setMessage("余额不足");
 				returnData.setData("");
 			}
 		} catch(EncryptWrongExcetion e){

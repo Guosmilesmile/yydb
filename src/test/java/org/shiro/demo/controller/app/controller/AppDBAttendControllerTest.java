@@ -50,4 +50,25 @@ public class AppDBAttendControllerTest {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	@Test
+	public void insertAttend()  {
+		try {
+			byte[] exp = Hex.decodeHex(AppProperties.exp.toCharArray());
+	    	byte[] model = Hex.decodeHex(AppProperties.model.toCharArray());
+	    	RSAPublicKey publicKey = RSAUtils.generateRSAPublicKey(model, exp);
+	    	Long currentTime = System.currentTimeMillis();
+			String temp = "wechatid=chris&timestamp="+currentTime+"&dbplanid=3&usebalance=1";
+			String param = "params="+RSAUtils.encryptString(publicKey, temp);
+			System.out.println(temp);
+			String url = "http://127.0.0.1:8080/yydb/app/dbattend/insertAttend?"+param;
+			System.out.println(url);
+			String sendPost = HttpUtils.sendGet("http://127.0.0.1:8080/yydb/app/dbattend/insertAttend", param);
+			System.out.println(sendPost);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 }

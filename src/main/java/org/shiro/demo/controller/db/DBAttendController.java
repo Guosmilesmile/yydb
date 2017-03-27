@@ -77,8 +77,8 @@ public class DBAttendController {
 			Customer customer =  customerService.getById(Customer.class, customerid);
 			DBPlan dbPlan = dbPlanService.getById(DBPlan.class, dbplanid);
 			DBAttend DBAttend = new DBAttend(System.currentTimeMillis()/1000, isplay, customer, dbPlan);
-			boolean flag = dbAttendService.insertDBAttend(DBAttend );
-			if(flag){
+			int flag =dbAttendService.insertDBAttend(DBAttend,0);
+			if(flag==1){
 				returnData = ReturnDataUtil.SUCCESS;
 			}
 		} catch (Exception e) {

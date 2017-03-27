@@ -18,7 +18,7 @@ public interface IDBAttendService extends IBaseService{
 	 * 新增夺宝参与情况
 	 * @return
 	 */
-	public boolean insertDBAttend(DBAttend dbAttend);
+	public int insertDBAttend(DBAttend dbAttend,int usebalance);
 	
 	/**
 	 * 删除夺宝参与情况
