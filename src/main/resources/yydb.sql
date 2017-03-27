@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50151
 File Encoding         : 65001
 
-Date: 2017-03-23 15:37:55
+Date: 2017-03-27 11:17:09
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -146,7 +146,7 @@ CREATE TABLE `c_category` (
   `categoryid` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT '',
   PRIMARY KEY (`categoryid`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of c_category
@@ -156,6 +156,7 @@ INSERT INTO `c_category` VALUES ('2', '食品');
 INSERT INTO `c_category` VALUES ('3', '家电');
 INSERT INTO `c_category` VALUES ('4', '电子');
 INSERT INTO `c_category` VALUES ('5', '住房');
+INSERT INTO `c_category` VALUES ('6', 'sdfsf');
 
 -- ----------------------------
 -- Table structure for c_customer
@@ -170,17 +171,18 @@ CREATE TABLE `c_customer` (
   `phone` bigint(20) DEFAULT NULL,
   `name` varchar(200) DEFAULT '',
   PRIMARY KEY (`customerid`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of c_customer
 -- ----------------------------
-INSERT INTO `c_customer` VALUES ('1', 'chris', '2.60', '', '0', '0', '');
-INSERT INTO `c_customer` VALUES ('2', 'ssddddff', '0.00', '厦门市', '1', '12365488978', '戒不掉傻笑');
-INSERT INTO `c_customer` VALUES ('3', 'fsfsf', '0.00', '', '0', '0', '222');
-INSERT INTO `c_customer` VALUES ('4', 'dfgd', '0.00', '水电费发', '1', '424', '333');
-INSERT INTO `c_customer` VALUES ('5', 'khjhk', '0.00', '胜多负少', '1', '0', '444');
-INSERT INTO `c_customer` VALUES ('6', 'sdfs', '0.00', '是范德萨', '0', '23424', '555');
+INSERT INTO `c_customer` VALUES ('1', 'chris', '0.00', '', '0', '0', '');
+INSERT INTO `c_customer` VALUES ('2', 'ssddddff', '100.00', '厦门市', '1', '12365488978', '戒不掉傻笑');
+INSERT INTO `c_customer` VALUES ('3', 'fsfsf', '100.00', '', '0', '0', '222');
+INSERT INTO `c_customer` VALUES ('4', 'dfgd', '100.00', '水电费发', '1', '424', '333');
+INSERT INTO `c_customer` VALUES ('5', 'khjhk', '100.00', '胜多负少', '1', '0', '444');
+INSERT INTO `c_customer` VALUES ('6', 'sdfs', '100.00', '是范德萨', '0', '23424', '555');
+INSERT INTO `c_customer` VALUES ('7', 'sfdsf', '100.00', '', '0', '0', '');
 
 -- ----------------------------
 -- Table structure for db_dbattend
@@ -197,15 +199,16 @@ CREATE TABLE `db_dbattend` (
   KEY `FK_jaikym0vv8t3f1c0wn8pfa1rl` (`dbplanid`),
   CONSTRAINT `FK_jaikym0vv8t3f1c0wn8pfa1rl` FOREIGN KEY (`dbplanid`) REFERENCES `db_dbplan` (`dbplanid`),
   CONSTRAINT `FK_lmlk434u8sad3se1j06033c2u` FOREIGN KEY (`customerid`) REFERENCES `c_customer` (`customerid`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of db_dbattend
 -- ----------------------------
 INSERT INTO `db_dbattend` VALUES ('1', '3', '1', '1489319672', '1');
-INSERT INTO `db_dbattend` VALUES ('2', '1', '4', '1489456948', '1');
-INSERT INTO `db_dbattend` VALUES ('3', '3', '6', '1489459179', '1');
-INSERT INTO `db_dbattend` VALUES ('4', '3', '2', '1489459179', '1');
+INSERT INTO `db_dbattend` VALUES ('2', '1', '1', '1489459179', '1');
+INSERT INTO `db_dbattend` VALUES ('3', '3', '1', '1489459179', '1');
+INSERT INTO `db_dbattend` VALUES ('18', '3', '1', '1490584020', '1');
+INSERT INTO `db_dbattend` VALUES ('19', '3', '1', '1490584074', '1');
 
 -- ----------------------------
 -- Table structure for db_dbplan
@@ -224,13 +227,14 @@ CREATE TABLE `db_dbplan` (
   PRIMARY KEY (`dbplanid`),
   KEY `FK_2iyr965ah1f6h0nvulr9k6gvg` (`goodsid`),
   CONSTRAINT `FK_2iyr965ah1f6h0nvulr9k6gvg` FOREIGN KEY (`goodsid`) REFERENCES `g_goods` (`goodsid`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of db_dbplan
 -- ----------------------------
 INSERT INTO `db_dbplan` VALUES ('1', '26', '2', '50', '1489319672', '1489748075', '4', '200', '0');
-INSERT INTO `db_dbplan` VALUES ('3', '25', '2', '50', '1489319672', '1489748076', '4', '200', '0');
+INSERT INTO `db_dbplan` VALUES ('3', '25', '2', '50', '1489319677', '1489748076', '4', '200', '1');
+INSERT INTO `db_dbplan` VALUES ('4', '25', '2', '100', '1489319674', '1489748076', '3', '300', '0');
 
 -- ----------------------------
 -- Table structure for db_situation
@@ -246,13 +250,13 @@ CREATE TABLE `db_situation` (
   KEY `FK_iyocdaxpw5t7teq3lduvkli7c` (`dbplanid`),
   CONSTRAINT `FK_ewx04f6je9lvyjm7ubtetbevu` FOREIGN KEY (`customerid`) REFERENCES `c_customer` (`customerid`),
   CONSTRAINT `FK_iyocdaxpw5t7teq3lduvkli7c` FOREIGN KEY (`dbplanid`) REFERENCES `db_dbplan` (`dbplanid`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of db_situation
 -- ----------------------------
-INSERT INTO `db_situation` VALUES ('9', '1', null, null);
-INSERT INTO `db_situation` VALUES ('10', '3', '2', '0');
+INSERT INTO `db_situation` VALUES ('10', '3', '5', '0');
+INSERT INTO `db_situation` VALUES ('13', '1', '5', '0');
 
 -- ----------------------------
 -- Table structure for g_goods
@@ -279,6 +283,52 @@ INSERT INTO `g_goods` VALUES ('25', '杂粮煎饼', 'upload/1489027333012.jpg;up
 INSERT INTO `g_goods` VALUES ('26', '是否', 'upload/1489027432083.jpg;upload/1489027432105.gif;upload/1489027436960.jpg;upload/1489027530085.JPG;', '2', '5', '沙发');
 
 -- ----------------------------
+-- Procedure structure for p_insertattend
+-- ----------------------------
+DROP PROCEDURE IF EXISTS `p_insertattend`;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `p_insertattend`(IN `a_customerid` bigint,IN `a_dbplanid` bigint,IN `a_usebalance` int)
+BEGIN
+DECLARE t_error INTEGER DEFAULT 0; 
+DECLARE result int DEFAULT 0 ;
+DECLARE totalnumber int DEFAULT 0 ;
+DECLARE nownumber int DEFAULT 0;
+DECLARE current BIGINT DEFAULT 0 ;
+DECLARE currentMoney DOUBLE DEFAULT 0;
+DECLARE dsplit int DEFAULT 0;
+SELECT COUNT(*) into nownumber from db_dbattend WHERE dbplanid = a_dbplanid;
+SELECT number into totalnumber from db_dbplan where dbplanid = a_dbplanid;
+select balance into currentMoney from c_customer where customerid =  a_customerid;
+select split into dsplit from db_dbplan where dbplanid = a_dbplanid;
+START TRANSACTION;  
+if totalnumber > nownumber then
+	if a_usebalance=1 then 
+			if currentMoney >= dsplit then #如果余额够用
+					update c_customer set balance = balance - dsplit where customerid = a_customerid;
+					SELECT UNIX_TIMESTAMP() into current;
+					insert db_dbattend (dbplanid,customerid,isplay,createtime) values (a_dbplanid,a_customerid,1,current);
+					set result = 1;
+			else
+					set result = 2;
+			end if;
+	else
+			SELECT UNIX_TIMESTAMP() into current;
+			insert db_dbattend (dbplanid,customerid,isplay,createtime) values (a_dbplanid,a_customerid,0,current);
+			set result = 1;
+	end if;
+	
+end if;
+IF t_error = 1 THEN  
+		ROLLBACK;	
+ELSE
+	COMMIT;
+END IF;
+select result;
+END
+;;
+DELIMITER ;
+
+-- ----------------------------
 -- Procedure structure for p_insertgoods
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `p_insertgoods`;
@@ -301,12 +351,19 @@ CREATE DEFINER=`root`@`%` PROCEDURE `p_insertsituation`(IN `dbplanid` bigint,IN 
 BEGIN
 DECLARE result int DEFAULT 0 ;
 DECLARE nownumber int DEFAULT 0 ;
-DECLARE totalnumber int DEFAULT 0 ;
-select db_dbplan.number into totalnumber from db_dbplan where db_dbplan.dbplanid = dbplanid;
+DECLARE totalnumber int DEFAULT 1 ;
+declare tempCustomer BIGINT DEFAULT 0;
+#select db_dbplan.number into totalnumber from db_dbplan where db_dbplan.dbplanid = dbplanid;
 select count(db_situation.situationid) into nownumber from db_situation where db_situation.dbplanid = dbplanid;
 IF totalnumber > nownumber THEN
 	insert into db_situation (dbplanid,customerid,istake) VALUES (dbplanid,customerid,istake);
 	set result = 1;
+ELSEIF nownumber = 1 then
+	select db_situation.customerid into tempCustomer from db_situation WHERE db_situation.dbplanid = dbplanid;
+	if tempCustomer is null then 
+		update db_situation set customerid = customerid,istake=istake where dbplanid = dbplanid;
+		set result = 1;
+	end if;
 end if;
 select result;
 END
@@ -326,12 +383,14 @@ declare nowtime bigint DEFAULT UNIX_TIMESTAMP(sysdate());
 declare singleDbplanid BIGINT default 0;
 DECLARE DbPlanNumber int DEFAULT 0;#计划人数
 declare outCount int DEFAULT 0;
+DECLARE d_split int DEFAULT 0;
 DECLARE current int DEFAULT 0;
 DECLARE DbAttendNumber int DEFAULT 0;#实际参与人数
 DECLARE luckycustomerid BIGINT DEFAULT null;
 DECLARE rs CURSOR FOR select db_dbplan.dbplanid,db_dbplan.number from db_dbplan where db_dbplan.endtime<nowtime and db_dbplan.isfinish = 0;
 DECLARE CONTINUE HANDLER FOR SQLSTATE '02000' SET done = 1;
 DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET t_error=1;
+
 select count(dbplanid) into outCount from db_dbplan where db_dbplan.endtime<nowtime and db_dbplan.isfinish = 0;
 if outCount=0 THEN
 	set DONE = 1;
@@ -354,6 +413,8 @@ IF NOT Done THEN
 		#select DbAttendNumber;
 		insert into db_situation (dbplanid,customerid,istake) values (singleDbplanid,null,null);
 		update db_dbplan set db_dbplan.isfinish = 1 where db_dbplan.dbplanid = singleDbplanid;
+		SELECT db_dbplan.split into d_split from db_dbplan where db_dbplan.dbplanid = singleDbplanid;
+		update c_customer set c_customer.balance = c_customer.balance+d_split where customerid in ( select db_dbattend.customerid from db_dbattend where db_dbattend.dbplanid = singleDbplanid);
 	ELSEIF DbAttendNumber >= DbPlanNumber then#如果大于或者超过选出幸运儿
 		#SELECT DbPlanNumber;
 		select customerid into luckycustomerid from db_dbattend WHERE db_dbattend.dbplanid = singleDbplanid order by rand() limit 1;
