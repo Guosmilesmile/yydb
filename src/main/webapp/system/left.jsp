@@ -66,7 +66,7 @@
                          <li ><a target="rightFrame" href="<%=basePath%>system/goods/goods-manage-category.jsp">分类管理</a></li>
                          </shiro:hasPermission>
                          <shiro:hasPermission name="goods:manage"> 
-                         <li ><a target="rightFrame" href="<%=basePath%>system/goods/goods-manage-goods.jsp">商品管理</a></li>
+                         <li ><a target="rightFrame" href="<%=basePath%>system/goods/goods-manage-goods.jsp">商品详情管理</a></li>
                     	 </shiro:hasPermission>
                     </ul>
                 </li>

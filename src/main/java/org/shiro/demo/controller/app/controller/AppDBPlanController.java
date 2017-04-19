@@ -108,7 +108,7 @@ public class AppDBPlanController extends AppBaseController{
 		} catch(EncryptWrongExcetion e){
 			e.printStackTrace();
 			returnData.setCode(ReturnData.FAIL);
-			returnData.setMessage("接口数据有误");
+			returnData.setMessage("接口数据加密有误");
 			returnData.setData("");
 		}catch (TimeOutException e) {
 			e.printStackTrace();

@@ -11,7 +11,7 @@ public class ReturnData {
 
 	public final static Integer SUCCESS = 100;//成功
 	
-	public final static Integer FAIL = 200;//成功
+	public final static Integer FAIL = 200;//失败
 	
 	private Integer code;
 	

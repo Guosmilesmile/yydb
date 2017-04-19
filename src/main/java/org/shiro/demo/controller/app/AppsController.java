@@ -32,7 +32,7 @@ public class AppsController {
 		return "Unauthenticated,return to login";
 	}
 
-	@ResponseBody
+	/*@ResponseBody
 	@RequestMapping(value="/getdata1",method=RequestMethod.GET)
 	public String getdata1(@RequestParam(value="params")String params){
 		String encryptString = RSAUtils.decryptString(params);
@@ -40,5 +40,5 @@ public class AppsController {
 		Map<String, String> splitParams = SplitParamsUtil.splitParams(encryptString, "&", "=");
 		String resultdata = RSAUtils.encryptString(FastJsonTool.createJsonString(splitParams));
 		return resultdata;
-	}
+	}*/
 }

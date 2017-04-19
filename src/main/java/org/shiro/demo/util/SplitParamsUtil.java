@@ -31,8 +31,9 @@ public class SplitParamsUtil {
 	 * @param splitword 类似&的分隔符
 	 * @param equalword xx=xx 分隔符
 	 * @return
+	 * @throws Exception 
 	 */
-	public static Map<String, String> splitParams(String params,String splitword,String equalword){
+	public static Map<String, String> splitParams(String params,String splitword,String equalword) throws Exception{
 		
 		Map<String , String > resultMap = new HashMap<String, String>();
 		try{
@@ -43,7 +44,7 @@ public class SplitParamsUtil {
 			}
 		}catch(Exception e){
 			e.printStackTrace();
-			System.out.println("参数请按照正确格式输入");
+			throw new Exception("参数请按照正确格式输入");
 		}
 		return resultMap;
 	}

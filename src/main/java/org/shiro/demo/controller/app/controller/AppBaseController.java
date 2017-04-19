@@ -35,7 +35,11 @@ public class AppBaseController {
 		if (null == decryptString) {
 			throw new EncryptWrongExcetion("加密数据错误");
 		} else {
-			splitParams = SplitParamsUtil.splitParams(decryptString, "&", "=");
+			try {
+				splitParams = SplitParamsUtil.splitParams(decryptString, "&", "=");
+			} catch (Exception e) {
+				throw new EncryptWrongExcetion("加密数据错误");
+			}
 			Long timestamp = Long.parseLong(splitParams.get("timestamp")) / 1000;
 			Long nowTime = System.currentTimeMillis() / 1000;
 			if (nowTime - timestamp >= ReturnData.TIMEOUT) {

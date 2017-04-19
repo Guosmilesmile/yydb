@@ -34,9 +34,12 @@
     
     <div class="welinfo">
     <span><img src="<%=basePath%>/resources/img/time.png" alt="时间" /></span>
-    <i>您上次登录的时间：2014-xx-xx xx:xx</i> （不是您登录的？<a href="#">请点这里</a>）
+    <i id='systime'></i>
     </div>
-    
+    <script type="text/javascript">
+    	var myDate = new Date(); 
+    	document.getElementById('systime').innerHTML="现在的系统时间："+myDate.toLocaleString( );
+    </script>
     
     <div class="xline"></div>
     <div class="box"></div>
@@ -47,9 +50,12 @@
     </div>
     
     <ul class="infolist">
-    <li><span>您可以快速进行新闻发布</span><a class="ibtn">发布新闻</a></li>
+    <!-- <li><span>您可以快速进行新闻发布</span><a class="ibtn">发布新闻</a></li>
     <li><span>您可以快速查看待处理信息</span><a class="ibtn">待处理信息</a></li>
-    <li><span>您可以进行密码修改等操作</span><a class="ibtn">修改密码</a></li>
+    <li><span>您可以进行密码修改等操作</span><a class="ibtn">修改密码</a></li> -->
+    <li><span>您可以快速进行系统用户管理</span></li>
+    <li><span>您可以快速客户管理</span></li>
+    <li><span>您可以进行商品管理和夺宝管理</span></li>
     </ul>
     
     <div class="xline"></div>
