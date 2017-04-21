@@ -28,7 +28,7 @@ public class AppCustomerController extends AppBaseController{
 	private ICustomerService customerService;
 	
 	/**
-	 * 获取用户余额
+	 * 获取用户余额、微信头像、微信昵称信息
 	 * @param params
 	 * @return
 	 */
@@ -45,6 +45,8 @@ public class AppCustomerController extends AppBaseController{
 			returnData.setMessage("成功");
 			Customer returnCustomer = new Customer();
 			returnCustomer.setBalance(customer.getBalance());
+			returnCustomer.setWxname(customer.getWxname());
+			returnCustomer.setWxavatar(customer.getWxavatar());
 			returnData.setData(FastJsonTool.createJsonString(returnCustomer));
 		} catch(EncryptWrongExcetion e){
 			e.printStackTrace();
@@ -78,7 +80,9 @@ public class AppCustomerController extends AppBaseController{
 		try {
 			Map<String, String> paramsMap = filterParam(params);
 			String wechatid = paramsMap.get("wechatid");
-			Customer customer = new Customer(wechatid, new Double(0), 0, "", 0l, "");
+			String wxname = paramsMap.get("wxname");
+			String wxavatar = paramsMap.get("wxavatar");
+			Customer customer = new Customer(wechatid, new Double(0), 0, "", 0l, "",wxname,wxavatar);
 			boolean flag = customerService.insertCustomer(customer);
 			returnData.setCode(ReturnData.SUCCESS);
 			returnData.setMessage("成功");

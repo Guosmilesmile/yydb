@@ -94,6 +94,8 @@ public class CustomerController {
 			String address = jsonObject.getString("address");
 			String phoneTemp =  jsonObject.getString("phone");
 			String name = jsonObject.getString("name");
+			String wxname = jsonObject.getString("wxname");
+			String wxavatar = jsonObject.getString("wxavatar");
 			Long phone = null ; 
 			if("".equals(phoneTemp) || null == phoneTemp){
 				phone = new Long(0);
@@ -105,7 +107,7 @@ public class CustomerController {
 				phone = new Long(0);
 				name = "";
 			}
-			Customer customer = new Customer(wechatid, balance, isshop, address, phone,name);
+			Customer customer = new Customer(wechatid, balance, isshop, address, phone,name,wxname,wxavatar);
 			boolean flag = customerService.insertCustomer(customer);
 			if(flag){
 				returnData = ReturnDataUtil.SUCCESS;
@@ -138,6 +140,8 @@ public class CustomerController {
 			String address = jsonObject.getString("address");
 			String phoneTemp = jsonObject.getString("phone");
 			String name = jsonObject.getString("name");
+			String wxname = jsonObject.getString("wxname");
+			String wxavatar = jsonObject.getString("wxavatar");
 			Long phone = 0l;
 			if(0==isshop){
 				address = "";
@@ -149,7 +153,7 @@ public class CustomerController {
 			}else{
 				phone = Long.valueOf(phoneTemp);
 			}
-			Customer customer = new Customer(customerid,wechatid, balance, isshop, address, phone,name);
+			Customer customer = new Customer(customerid,wechatid, balance, isshop, address, phone,name,wxname,wxavatar);
 			boolean flag = customerService.updateCustomer(customer);
 			if(flag){
 				returnData = ReturnDataUtil.SUCCESS;

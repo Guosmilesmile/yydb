@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50151
 File Encoding         : 65001
 
-Date: 2017-03-27 11:17:09
+Date: 2017-04-21 09:37:37
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -170,19 +170,21 @@ CREATE TABLE `c_customer` (
   `isshop` int(11) DEFAULT NULL,
   `phone` bigint(20) DEFAULT NULL,
   `name` varchar(200) DEFAULT '',
+  `wxname` varchar(100) DEFAULT '',
+  `wxavatar` varchar(255) DEFAULT '',
   PRIMARY KEY (`customerid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of c_customer
 -- ----------------------------
-INSERT INTO `c_customer` VALUES ('1', 'chris', '0.00', '', '0', '0', '');
-INSERT INTO `c_customer` VALUES ('2', 'ssddddff', '100.00', '厦门市', '1', '12365488978', '戒不掉傻笑');
-INSERT INTO `c_customer` VALUES ('3', 'fsfsf', '100.00', '', '0', '0', '222');
-INSERT INTO `c_customer` VALUES ('4', 'dfgd', '100.00', '水电费发', '1', '424', '333');
-INSERT INTO `c_customer` VALUES ('5', 'khjhk', '100.00', '胜多负少', '1', '0', '444');
-INSERT INTO `c_customer` VALUES ('6', 'sdfs', '100.00', '是范德萨', '0', '23424', '555');
-INSERT INTO `c_customer` VALUES ('7', 'sfdsf', '100.00', '', '0', '0', '');
+INSERT INTO `c_customer` VALUES ('1', 'chris', '0.00', '', '0', '0', '', '呜呜呜', 'http://tva3.sinaimg.cn/crop.195.100.205.205.50/b9d58e9bjw8ewzi8f3i4pj20k50p0tn3.jpg');
+INSERT INTO `c_customer` VALUES ('2', 'ssddddff', '100.00', '厦门市', '1', '12365488978', '戒不掉傻笑', '呜呜呜', 'http://tva3.sinaimg.cn/crop.195.100.205.205.50/b9d58e9bjw8ewzi8f3i4pj20k50p0tn3.jpg');
+INSERT INTO `c_customer` VALUES ('3', 'fsfsf', '100.00', '', '0', '0', '222', '呜呜呜', 'http://tva3.sinaimg.cn/crop.195.100.205.205.50/b9d58e9bjw8ewzi8f3i4pj20k50p0tn3.jpg');
+INSERT INTO `c_customer` VALUES ('4', 'dfgd', '100.00', '思明区', '1', '424', '333', '呜呜呜', 'http://tva3.sinaimg.cn/crop.195.100.205.205.50/b9d58e9bjw8ewzi8f3i4pj20k50p0tn3.jpg');
+INSERT INTO `c_customer` VALUES ('5', 'khjhk', '100.00', '思明区', '1', '0', '444', '呜呜呜', 'http://tva3.sinaimg.cn/crop.195.100.205.205.50/b9d58e9bjw8ewzi8f3i4pj20k50p0tn3.jpg');
+INSERT INTO `c_customer` VALUES ('6', 'sdfs', '100.00', '思明区', '0', '23424', '555', '呜呜呜', 'http://tva3.sinaimg.cn/crop.195.100.205.205.50/b9d58e9bjw8ewzi8f3i4pj20k50p0tn3.jpg');
+INSERT INTO `c_customer` VALUES ('7', 'sfdsf', '100.00', '', '0', '0', '', '呜呜呜', 'http://tva3.sinaimg.cn/crop.195.100.205.205.50/b9d58e9bjw8ewzi8f3i4pj20k50p0tn3.jpg');
 
 -- ----------------------------
 -- Table structure for db_dbattend
@@ -274,13 +276,14 @@ CREATE TABLE `g_goods` (
   KEY `FK_fase2nlaf82nwn85iixkgfsfh` (`shopid`),
   CONSTRAINT `FK_fase2nlaf82nwn85iixkgfsfh` FOREIGN KEY (`shopid`) REFERENCES `c_customer` (`customerid`),
   CONSTRAINT `FK_ihyitlqw009wf831t0h32e1e8` FOREIGN KEY (`categoryid`) REFERENCES `c_category` (`categoryid`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of g_goods
 -- ----------------------------
 INSERT INTO `g_goods` VALUES ('25', '杂粮煎饼', 'upload/1489027333012.jpg;upload/1489027414137.gif;', '1', '4', '是非得');
 INSERT INTO `g_goods` VALUES ('26', '是否', 'upload/1489027432083.jpg;upload/1489027432105.gif;upload/1489027436960.jpg;upload/1489027530085.JPG;', '2', '5', '沙发');
+INSERT INTO `g_goods` VALUES ('27', '辣条', '', '2', '2', '好吃');
 
 -- ----------------------------
 -- Procedure structure for p_insertattend

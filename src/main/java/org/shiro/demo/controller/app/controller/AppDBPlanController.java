@@ -132,7 +132,7 @@ public class AppDBPlanController extends AppBaseController{
 	
 	
 	/**
-	 * 获取所有夺宝计划
+	 * 获取夺宝计划详细信息
 	 * @param params
 	 * @return
 	 */

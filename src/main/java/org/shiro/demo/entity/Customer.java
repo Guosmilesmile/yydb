@@ -41,6 +41,12 @@ public class Customer {
 	
 	@Column(name = "name")
 	private String name;//商家名称
+	
+	@Column(name = "wxname")
+	private String wxname;//微信名称
+	
+	@Column(name = "wxavatar")
+	private String wxavatar;//微信头像
 
 	public Customer() {
 		super();
@@ -101,9 +107,42 @@ public class Customer {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public String getWxname() {
+		return wxname;
+	}
+
+	public void setWxname(String wxname) {
+		this.wxname = wxname;
+	}
+
+	public String getWxavatar() {
+		return wxavatar;
+	}
+
+	public void setWxavatar(String wxavatar) {
+		this.wxavatar = wxavatar;
+	}
 	
+	
+
+	public Customer(String wechatid, Double balance, Integer isshop,
+			String address, Long phone, String name, String wxname,
+			String wxavatar) {
+		super();
+		this.wechatid = wechatid;
+		this.balance = balance;
+		this.isshop = isshop;
+		this.address = address;
+		this.phone = phone;
+		this.name = name;
+		this.wxname = wxname;
+		this.wxavatar = wxavatar;
+	}
+
 	public Customer(Long customerid, String wechatid, Double balance,
-			Integer isshop, String address, Long phone,String name) {
+			Integer isshop, String address, Long phone, String name,
+			String wxname, String wxavatar) {
 		super();
 		this.customerid = customerid;
 		this.wechatid = wechatid;
@@ -112,17 +151,9 @@ public class Customer {
 		this.address = address;
 		this.phone = phone;
 		this.name = name;
+		this.wxname = wxname;
+		this.wxavatar = wxavatar;
 	}
 
-	public Customer(String wechatid, Double balance, Integer isshop,
-			String address, Long phone,String name) {
-		super();
-		this.wechatid = wechatid;
-		this.balance = balance;
-		this.isshop = isshop;
-		this.address = address;
-		this.phone = phone;
-		this.name = name;
-	}
 
 }

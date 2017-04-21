@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.Column;
+
 import org.shiro.demo.dao.util.Pagination;
 import org.shiro.demo.entity.DBPlan;
 
@@ -41,6 +43,10 @@ public class AppDBplanVO {
 	private String goodsName;//商品名称
 	
 	private String shopName;//商家名称
+	
+	private String address;//商家地址
+	
+	private Long phone;//商家联系方式
 	
 	private Integer isfinish;//是否结束
 	
@@ -153,6 +159,22 @@ public class AppDBplanVO {
 	public void setImgurls(String imgurls) {
 		this.imgurls = imgurls;
 	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public Long getPhone() {
+		return phone;
+	}
+
+	public void setPhone(Long phone) {
+		this.phone = phone;
+	}
 	
 	public AppDBplanVO(DBPlan dbPlan) {
 		super();
@@ -167,8 +189,11 @@ public class AppDBplanVO {
 		this.money = dbPlan.getMoney();
 		this.goodsName = dbPlan.getGoods().getName();
 		this.shopName = dbPlan.getGoods().getShop().getName();
+		this.address = dbPlan.getGoods().getShop().getAddress();
+		this.phone = dbPlan.getGoods().getShop().getPhone();
 		this.isfinish = dbPlan.getIsfinish();
 		this.systemTime = System.currentTimeMillis()/1000;
+		
 	}
 
 	public AppDBplanVO(Long id, Integer block, String imgurls, Long split,
@@ -235,4 +260,5 @@ public class AppDBplanVO {
 		}
 		return VOList;
 	}
+
 }
