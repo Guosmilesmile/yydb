@@ -51,6 +51,8 @@ public class AppDBplanVO {
 	private Integer isfinish;//是否结束
 	
 	private Long systemTime;//系统时间
+	
+	private String summary;//商品介绍
 
 	public AppDBplanVO() {
 		super();
@@ -193,6 +195,7 @@ public class AppDBplanVO {
 		this.phone = dbPlan.getGoods().getShop().getPhone();
 		this.isfinish = dbPlan.getIsfinish();
 		this.systemTime = System.currentTimeMillis()/1000;
+		this.summary = dbPlan.getGoods().getSummary();
 		
 	}
 
@@ -259,6 +262,14 @@ public class AppDBplanVO {
 			VOList.add(new AppDBplanVO(item));
 		}
 		return VOList;
+	}
+
+	public String getSummary() {
+		return summary;
+	}
+
+	public void setSummary(String summary) {
+		this.summary = summary;
 	}
 
 }
