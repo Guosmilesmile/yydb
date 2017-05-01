@@ -19,7 +19,7 @@ public class AppDBSituationControllerTest {
 	    	byte[] model = Hex.decodeHex(AppProperties.model.toCharArray());
 	    	RSAPublicKey publicKey = RSAUtils.generateRSAPublicKey(model, exp);
 	    	Long currentTime = System.currentTimeMillis();
-			String temp = "wechatid=chris&timestamp="+currentTime+"&page=1&pageSize=5";
+			String temp = "wechatid=khjhk&timestamp="+currentTime+"&page=1&pageSize=5";
 			String param = "params="+RSAUtils.encryptString(publicKey, temp);
 			System.out.println(temp);
 			String url = "http://127.0.0.1:8080/yydb/app/situation/getDBsituationWithWechatid?"+param;
@@ -31,7 +31,24 @@ public class AppDBSituationControllerTest {
 		}
 	}
 	
-	
+	@Test
+	public void getLastDBsituation()  {
+		try {
+			byte[] exp = Hex.decodeHex(AppProperties.exp.toCharArray());
+	    	byte[] model = Hex.decodeHex(AppProperties.model.toCharArray());
+	    	RSAPublicKey publicKey = RSAUtils.generateRSAPublicKey(model, exp);
+	    	Long currentTime = System.currentTimeMillis();
+			String temp = "wechatid=chris&timestamp="+currentTime+"&page=1&pageSize=5";
+			String param = "params="+RSAUtils.encryptString(publicKey, temp);
+			System.out.println(temp);
+			String url = "http://127.0.0.1:8080/yydb/app/situation/getLastDBsituation?"+param;
+			System.out.println(url);
+			String sendPost = HttpUtils.sendGet("http://127.0.0.1:8080/yydb/app/situation/getLastDBsituation", param);
+			System.out.println(sendPost);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	@Test
 	public void changeSituationTake()  {
 		try {

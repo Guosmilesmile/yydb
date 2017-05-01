@@ -140,7 +140,7 @@ public class AppDBAttendController extends AppBaseController{
 	}
 	
 	/**
-	 * 修改夺宝参与记录的支付状态
+	 * 参与夺宝
 	 * @param params
 	 * @return
 	 */

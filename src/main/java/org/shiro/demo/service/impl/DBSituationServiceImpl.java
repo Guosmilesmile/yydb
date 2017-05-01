@@ -107,6 +107,16 @@ public class DBSituationServiceImpl extends DefultBaseService implements IDBSitu
 				returnList.add(new DBSituationVO(dbsituationid,dbplanid, (String)os[1],(String)os[2],"",0,situation));
 			}
 		}
+		for(int i=0;i<returnList.size();i++){
+			DBSituationVO dbSituationVO = returnList.get(i);
+			List<QueryCondition> queryConditions = new ArrayList<QueryCondition>();
+			queryConditions.add(new QueryCondition("dbPlan.dbplanid="+dbSituationVO.getDbplanid()));
+			List<DBSituation> dbSituations = baseService.get(DBSituation.class, queryConditions );
+			if(dbSituations.size()==0){//进行中
+				dbSituationVO.setSituation(2);
+				returnList.set(i, dbSituationVO);
+			}
+		}
 		return returnList;
 	}
 
@@ -144,6 +154,47 @@ public class DBSituationServiceImpl extends DefultBaseService implements IDBSitu
 			queryConditions.add(new QueryCondition(" customer.wechatid ='"+wechatid+"' and dbPlan.dbplanid="+appAttendVO.getDbplanid()));
 			List<DBAttend> list = baseService.get(DBAttend.class, queryConditions );
 			appAttendVO.setSelfCount(list.size());
+			returnappAttendVOs.add(appAttendVO);
+		}
+		for(int i =0;i<returnappAttendVOs.size();i++){
+			AppAttendVO appAttendVO = returnappAttendVOs.get(i);
+			List<QueryCondition> queryConditions = new ArrayList<QueryCondition>();
+			queryConditions.add(new QueryCondition(" dbPlan.dbplanid="+appAttendVO.getDbplanid()));
+			List<DBSituation> list = baseService.get(DBSituation.class, queryConditions );
+			if(list.size()!=0){
+				appAttendVO.setIstake(list.get(0).getIstake());
+			}
+			returnappAttendVOs.set(i, appAttendVO);
+		}
+		Map<String, Object> returnMap = new HashMap<String, Object>();
+		returnMap.put("rows", returnappAttendVOs);
+		returnMap.put("total",total);
+		return returnMap;
+	}
+	
+	public Map<String, Object> getLastDBsituation(int page,int pageSize) {
+		String jpql = "";
+		Integer total = 0;
+		
+		jpql = "select o from DBSituation o  where o.customer is not null order by situationid desc";
+		List<DBSituation> dbSituations = baseService.getPaginationJpql(page, pageSize, jpql);
+		total = baseService.getByJpql(jpql).size();
+		
+		List<AppAttendVO> appAttendVOs = new ArrayList<AppAttendVO>();
+		for(DBSituation dbSituation : dbSituations){
+			DBPlan dbPlan = dbSituation.getDbPlan();
+			AppAttendVO appAttendVO = new AppAttendVO(dbPlan);
+			appAttendVO.setLuckdogWechatid(dbSituation.getCustomer().getWechatid());
+			appAttendVOs.add(appAttendVO);
+		}
+		List<AppAttendVO> returnappAttendVOs = new ArrayList<AppAttendVO>();
+		for(AppAttendVO appAttendVO : appAttendVOs){
+			int attendNumber = dbPlanService.getAttendNumber(appAttendVO.getDbplanid());
+			appAttendVO.setAttendNumber(attendNumber);
+			/*List<QueryCondition> queryConditions = new ArrayList<QueryCondition>();
+			queryConditions.add(new QueryCondition(" customer.wechatid ='"+wechatid+"' and dbPlan.dbplanid="+appAttendVO.getDbplanid()));
+			List<DBAttend> list = baseService.get(DBAttend.class, queryConditions );
+			appAttendVO.setSelfCount(list.size());*/
 			returnappAttendVOs.add(appAttendVO);
 		}
 		Map<String, Object> returnMap = new HashMap<String, Object>();

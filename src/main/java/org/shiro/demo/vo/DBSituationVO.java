@@ -19,7 +19,7 @@ public class DBSituationVO {
 	
 	private Integer istake;//是否领取 0：未领取 1：领取
 	
-	private Integer situation;//是否流标 0:流标 1:非流标
+	private Integer situation;//是否流标 0:流标 1:非流标  2：进行中
 
 	public DBSituationVO() {
 		super();

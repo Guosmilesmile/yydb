@@ -182,7 +182,11 @@ public class AppDBplanVO {
 		super();
 		this.id = dbPlan.getDbplanid();
 		this.block = dbPlan.getBlock();
-		this.imgurls = dbPlan.getGoods().getImgurls();
+		if(null!=dbPlan.getGoods().getImgurls()){
+			this.imgurls = dbPlan.getGoods().getImgurls();
+		}else{
+			this.imgurls = "";
+		}
 		this.split = dbPlan.getSplit();
 		this.startTime = dbPlan.getStartTime();
 		this.endTime = dbPlan.getEndTime();

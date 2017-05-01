@@ -35,7 +35,7 @@ public class AppDBPlanController extends AppBaseController{
 	
 	/**
 	 * 获取所有夺宝计划
-	 * @param params
+	 * @param params columnName 排序字段  
 	 * @return
 	 */
 	@ResponseBody
@@ -47,9 +47,13 @@ public class AppDBPlanController extends AppBaseController{
 			Integer page = Integer.parseInt(paramsMap.get("page"));
 			Integer pageSize = Integer.parseInt(paramsMap.get("pageSize"));
 			String columnName = paramsMap.get("columnName");
+			Integer order = 0;
+			if(paramsMap.containsKey("order")){
+				order = Integer.parseInt(paramsMap.get("order"));
+			}
 			//Pagination<DBPlan> dbPlanPagination = dbPlanService.getPagination(DBPlan.class, null, "order by dbplanid desc", page, pageSize);
 			//Map<String, Object> dataMap = AppDBplanVO.changeDBPlan2APPDBPlanVO(dbPlanPagination);
-			Map<String, Object> dataMap = dbPlanService.getDBPlanWithOrder(page, pageSize, columnName);
+			Map<String, Object> dataMap = dbPlanService.getDBPlanWithOrder(page, pageSize, columnName,order);
 			returnData.setCode(ReturnData.SUCCESS);
 			returnData.setMessage("成功");
 			returnData.setData(FastJsonTool.createJsonString(dataMap));

@@ -17,10 +17,11 @@ public interface IDBPlanService extends IBaseService{
 	 * 根据字段排序分页获取夺宝计划
 	 * @param page
 	 * @param pageSize
-	 * @param columnName
+	 * @param columnName 排序字段
+	 * @param order 0位降序 1位升序
 	 * @return
 	 */
-	public Map<String, Object> getDBPlanWithOrder(int page,int pageSize,String columnName);
+	public Map<String, Object> getDBPlanWithOrder(int page,int pageSize,String columnName,int order);
 	/**
 	 * 新增夺宝计划
 	 * @param user

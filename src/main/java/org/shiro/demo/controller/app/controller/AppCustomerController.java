@@ -75,14 +75,13 @@ public class AppCustomerController extends AppBaseController{
 	 */
 	@ResponseBody
 	@RequestMapping(value="/regist",method=RequestMethod.GET,produces = "text/json;charset=UTF-8")
-	public String regist(@RequestParam(value="params")String params){
+	public String regist(@RequestParam(value="params")String params,@RequestParam(value="avator")String avator){
 		ReturnData returnData = new ReturnData();
 		try {
 			Map<String, String> paramsMap = filterParam(params);
 			String wechatid = paramsMap.get("wechatid");
 			String wxname = paramsMap.get("wxname");
-			String wxavatar = paramsMap.get("wxavatar");
-			Customer customer = new Customer(wechatid, new Double(0), 0, "", 0l, "",wxname,wxavatar);
+			Customer customer = new Customer(wechatid, new Double(0), 0, "", 0l, "",wxname,avator);
 			boolean flag = customerService.insertCustomer(customer);
 			returnData.setCode(ReturnData.SUCCESS);
 			returnData.setMessage("成功");
@@ -155,4 +154,5 @@ public class AppCustomerController extends AppBaseController{
 		String resultdata = FastJsonTool.createJsonString(returnData);
 		return resultdata;
 	}
+	
 }

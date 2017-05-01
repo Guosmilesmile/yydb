@@ -79,11 +79,17 @@ public class DBPlanServiceImpl extends DefultBaseService implements IDBPlanServi
 		return appDBplanVO;
 	}
 
-	public Map<String, Object> getDBPlanWithOrder(int page, int pageSize,String columnName) {
+	public Map<String, Object> getDBPlanWithOrder(int page, int pageSize,String columnName,int order) {
 		List<QueryCondition> params = new ArrayList<QueryCondition>();
 		QueryCondition queryCondition = new QueryCondition("isfinish", QueryCondition.EQ, 0);
 		params.add(queryCondition);
-		Pagination<DBPlan> dbPlanPagination = baseService.getPagination(DBPlan.class, params, "order by "+columnName+" desc", page, pageSize);
+		String sqlString = "";
+		if(order == 0){
+			sqlString =  "order by "+columnName+" desc";
+		}else{
+			sqlString =  "order by "+columnName;
+		}
+		Pagination<DBPlan> dbPlanPagination = baseService.getPagination(DBPlan.class, params,sqlString, page, pageSize);
 		List<AppDBplanVO> appDBplanVOs = AppDBplanVO.changeDBPlan2APPDBPlanVOList(dbPlanPagination);
 		List<AppDBplanVO> returnAppDBplanVOs = new ArrayList<AppDBplanVO>();
 		for(AppDBplanVO appDBplanVO : appDBplanVOs){

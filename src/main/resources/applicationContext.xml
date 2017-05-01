@@ -158,6 +158,7 @@
         </property>
 		<property name="filterChainDefinitions">
 			<value>
+			/upload/** = anon
 			/getrasrepair = anon
 			/resources/** = anon
 			/login = anon

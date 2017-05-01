@@ -54,4 +54,14 @@ public interface IDBSituationService extends IBaseService{
 	 * @return
 	 */
 	public Map<String, Object> getDBsituationWithWechatid(int page,int pageSize, String wechatid) ;
+	
+	/**
+	 * 获取最新中奖记录
+	 * @param page
+	 * @param pageSize
+	 * @param wechatid
+	 * @return
+	 */
+	public Map<String, Object> getLastDBsituation(int page,int pageSize) ;
+	
 }

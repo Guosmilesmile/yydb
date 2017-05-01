@@ -104,14 +104,23 @@ public class DBAttendServiceImpl extends DefultBaseService implements IDBAttendS
 			List<QueryCondition> queryConditions = new ArrayList<QueryCondition>();
 			queryConditions.add(new QueryCondition("dbPlan.dbplanid="+appAttendVO.getDbplanid()));
 			List<DBSituation> dbSituations = baseService.get(DBSituation.class, queryConditions );
-			Customer customer = dbSituations.get(0).getCustomer();
+			Customer customer = null;
+			if(dbSituations.size()==0){
+				appAttendVO.setSituation(AppAttendVO.SITUATIONING);//进行中
+			}else{
+				customer = dbSituations.get(0).getCustomer();
+			}
 			if(null==customer){
 				appAttendVO.setLuckdogWechatid("");
+				appAttendVO.setSituation(AppAttendVO.SITUATIONNULL);//流标
 			}else{
 				appAttendVO.setLuckdogWechatid(customer.getWechatid());
+				appAttendVO.setSituation(AppAttendVO.SITUATIONFULL);//未流标
 			}
 			returnappAttendVOs.add(appAttendVO);
 		}
+		
+	
 		Map<String, Object> returnMap = new HashMap<String, Object>();
 		returnMap.put("rows", returnappAttendVOs);
 		returnMap.put("total",total);

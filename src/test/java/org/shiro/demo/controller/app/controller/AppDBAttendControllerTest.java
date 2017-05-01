@@ -18,7 +18,7 @@ public class AppDBAttendControllerTest {
 	    	byte[] model = Hex.decodeHex(AppProperties.model.toCharArray());
 	    	RSAPublicKey publicKey = RSAUtils.generateRSAPublicKey(model, exp);
 	    	Long currentTime = System.currentTimeMillis();
-			String temp = "wechatid=chris&timestamp="+currentTime+"&page=1&pageSize=5&isfinish=2";
+			String temp = "wechatid=chris&timestamp="+currentTime+"&page=1&pageSize=5&isfinish=0";
 			String param = "params="+RSAUtils.encryptString(publicKey, temp);
 			System.out.println(temp);
 			String url = "http://127.0.0.1:8080/yydb/app/dbattend/getDBAttendPage?"+param;

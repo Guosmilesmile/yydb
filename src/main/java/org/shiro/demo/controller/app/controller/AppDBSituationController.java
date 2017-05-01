@@ -34,6 +34,51 @@ public class AppDBSituationController extends AppBaseController{
 	 * @return
 	 */
 	@ResponseBody
+	@RequestMapping(value="/getLastDBsituation",method=RequestMethod.GET,produces = "text/json;charset=UTF-8")
+	public String getLastDBsituation(@RequestParam(value="params")String params){
+		ReturnData returnData = new ReturnData();
+		try {
+			Map<String, String> paramsMap = filterParam(params);
+			Integer page = Integer.parseInt(paramsMap.get("page"));
+			Integer pageSize = Integer.parseInt(paramsMap.get("pageSize"));
+			//Pagination<DBPlan> dbPlanPagination = dbPlanService.getPagination(DBPlan.class, null, "order by dbplanid desc", page, pageSize);
+			//Map<String, Object> dataMap = AppDBplanVO.changeDBPlan2APPDBPlanVO(dbPlanPagination);
+			Map<String, Object> dataMap = dbsituationService.getLastDBsituation( page, pageSize);
+			returnData.setCode(ReturnData.SUCCESS);
+			returnData.setMessage("成功");
+			returnData.setData(FastJsonTool.createJsonString(dataMap));
+		} catch(EncryptWrongExcetion e){
+			e.printStackTrace();
+			returnData.setCode(ReturnData.FAIL);
+			returnData.setMessage("接口数据有误");
+			returnData.setData("");
+		}catch (TimeOutException e) {
+			e.printStackTrace();
+			returnData.setCode(ReturnData.FAIL);
+			returnData.setMessage("接口已过期");
+			returnData.setData("");
+		}catch (ParamsWromgException e) {
+			e.printStackTrace();
+			returnData.setCode(ReturnData.FAIL);
+			returnData.setMessage("接口数据有误");
+			returnData.setData("");
+		}catch (Exception e) {
+			e.printStackTrace();
+			returnData.setCode(ReturnData.FAIL);
+			returnData.setMessage("接口数据有误");
+			returnData.setData("");
+		}
+		String resultdata = FastJsonTool.createJsonString(returnData);
+		return resultdata;
+	}
+	
+	
+	/**
+	 * 获取中奖记录
+	 * @param params
+	 * @return
+	 */
+	@ResponseBody
 	@RequestMapping(value="/getDBsituationWithWechatid",method=RequestMethod.GET,produces = "text/json;charset=UTF-8")
 	public String getDBsituationWithWechatid(@RequestParam(value="params")String params){
 		ReturnData returnData = new ReturnData();

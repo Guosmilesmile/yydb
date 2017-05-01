@@ -35,7 +35,7 @@ public class AppDBPlanControllerTest {
 			byte[] exp = Hex.decodeHex(AppProperties.exp.toCharArray());
 	    	byte[] model = Hex.decodeHex(AppProperties.model.toCharArray());
 	    	RSAPublicKey publicKey = RSAUtils.generateRSAPublicKey(model, exp);
-			String temp = "wechatid=123&timestamp=1490427594000&page=1&pageSize=5&columnName=money";
+			String temp = "wechatid=123&timestamp=1492909109000&page=1&pageSize=5&columnName=money&order=0";
 			String param = "params="+RSAUtils.encryptString(publicKey, temp);
 			String url = "http://127.0.0.1:8080/yydb/app/dbplan/getDBPlanPage?"+param;
 			System.out.println(url);

@@ -19,6 +19,12 @@ public class AppAttendVO {
 	
 	public final static Integer BLOCKWANG = 5;//万元区
 	
+	public final static Integer SITUATIONNULL = 0;//流标
+	
+	public final static Integer SITUATIONFULL = 1;//未流标
+	
+	public final static Integer SITUATIONING = 2;//进行中
+	
 	private Long id;
 	
 	private Long dbplanid;
@@ -50,7 +56,11 @@ public class AppAttendVO {
 	private Integer selfCount;//个人参数次数
 	
 	private Long systemTime;//系统时间
-
+	
+	private Integer istake = 0;//是否领取  未领取：0 已领取：1
+	
+	private Integer situation;//状态   0：流标  1：有中奖者 2：未得出结果
+	
 	public AppAttendVO(Long id, Integer block, String imgurls, Long split,
 			Long startTime, Long endTime, Integer attendNumber, Integer number,
 			Double money, String goodsName, String shopName, Integer isfinish,
@@ -192,8 +202,29 @@ public class AppAttendVO {
 	public void setSystemTime(Long systemTime) {
 		this.systemTime = systemTime;
 	}
+	public Long getDbplanid() {
+		return dbplanid;
+	}
+
+	public void setDbplanid(Long dbplanid) {
+		this.dbplanid = dbplanid;
+	}
 	
-	
+	public Integer getIstake() {
+		return istake;
+	}
+
+	public void setIstake(Integer istake) {
+		this.istake = istake;
+	}
+
+	public Integer getSituation() {
+		return situation;
+	}
+
+	public void setSituation(Integer situation) {
+		this.situation = situation;
+	}
 	public AppAttendVO(DBAttend dbAttend) {
 		super();
 		this.id = dbAttend.getAttendid();
@@ -233,13 +264,6 @@ public class AppAttendVO {
 		return appAttendVOs;
 	}
 
-	public Long getDbplanid() {
-		return dbplanid;
-	}
-
-	public void setDbplanid(Long dbplanid) {
-		this.dbplanid = dbplanid;
-	}
 	
 	public AppAttendVO(DBPlan dbPlan) {
 		super();
@@ -260,4 +284,7 @@ public class AppAttendVO {
 		this.selfCount = 0;
 		this.systemTime = System.currentTimeMillis()/1000;
 	}
+
+
+	
 }

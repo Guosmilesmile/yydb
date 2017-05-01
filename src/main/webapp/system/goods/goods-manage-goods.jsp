@@ -62,6 +62,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				{field:'imgurls',title:'图片',sortable:true,width:150,sortable:true,
 					formatter:function(value,row,index){
 						var str = "";
+						if(undefined==value)
+							return str;
 						if(!isNull(value)){
 							var splits = value.split(";");
 							for(var i=0;i<splits.length;i++){

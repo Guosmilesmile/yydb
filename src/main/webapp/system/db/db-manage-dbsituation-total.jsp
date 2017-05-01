@@ -70,6 +70,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							return "非流标";
 						}else if(0==value){
 							return "流标";
+						}else if(2==value){
+							return "进行中";
 						}
 					},
 				},
