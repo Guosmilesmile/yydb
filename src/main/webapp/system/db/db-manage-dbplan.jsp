@@ -91,11 +91,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					   iconCls: "icon-add",
 					   handler: addData,
 				},'-',
-				{//修改数据
-					   text:"编辑",
-					   iconCls: "icon-edit",
-					   handler: editData,
-				},'-',
 				{//删除数据
 					   text:"删除",
 					   iconCls: "icon-remove",
@@ -204,6 +199,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					var ids = [];
 					for(var i = 0; i < rows.length; ++i){
 							ids[i] = rows[i].id;
+							if(rows[i].isfinish==1){
+								$.messager.alert('警告','该竞标已结束，无法删除','error');
+								return;
+							}
 					}	
 					$.ajax({
 			    		type:'post',

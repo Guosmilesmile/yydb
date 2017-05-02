@@ -30,7 +30,7 @@ public interface IDBPlanService extends IBaseService{
 	public boolean insertDBPlan(DBPlan dbPlan);
 	
 	/**
-	 * 删除夺宝计划
+	 * 删除夺宝计划,对参加该计划的用户返回对应的余额
 	 * @param id 用户id
 	 * @return
 	 */
@@ -56,4 +56,13 @@ public interface IDBPlanService extends IBaseService{
 	 * @return
 	 */
 	public int getAttendNumber(Long id);
+	
+	/**
+	 * 通过微信id获取属于自己旗下的商品
+	 * @param page
+	 * @param pageSize
+	 * @param wechatid
+	 * @return
+	 */
+	public Map<String, Object> getDBPlanWithWechatid(int page, int pageSize,String wechatid);
 }

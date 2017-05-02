@@ -1,5 +1,6 @@
 package org.shiro.demo.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -33,7 +34,7 @@ public class DBSituation {
 	@JoinColumn(name = "dbplanid")
 	private DBPlan dbPlan;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY,cascade = {CascadeType.MERGE })
 	@JoinColumn(name = "customerid")
 	private Customer customer;
 

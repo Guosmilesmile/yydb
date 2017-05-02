@@ -115,6 +115,11 @@ public class DBSituationServiceImpl extends DefultBaseService implements IDBSitu
 			if(dbSituations.size()==0){//进行中
 				dbSituationVO.setSituation(2);
 				returnList.set(i, dbSituationVO);
+			}else if(dbSituations.size()!=0){
+				if(null == dbSituations.get(0).getCustomer()){//流标
+					dbSituationVO.setSituation(0);
+					returnList.set(i, dbSituationVO);
+				}
 			}
 		}
 		return returnList;

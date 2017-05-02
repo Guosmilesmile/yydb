@@ -1,5 +1,6 @@
 package org.shiro.demo.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -30,11 +31,11 @@ public class DBAttend {
 	@Column(name="isplay")
 	private Integer isplay;//是否付款
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY,cascade = {CascadeType.MERGE })
 	@JoinColumn(name = "customerid")
 	private Customer customer;//顾客
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY,cascade = {CascadeType.MERGE })
 	@JoinColumn(name = "dbplanid")
 	private DBPlan dbPlan;//参与夺宝计划
 

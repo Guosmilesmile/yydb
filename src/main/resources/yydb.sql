@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50151
 File Encoding         : 65001
 
-Date: 2017-04-21 09:37:37
+Date: 2017-05-02 22:46:24
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -76,8 +76,8 @@ CREATE TABLE `cmsrolepms` (
   PRIMARY KEY (`id`),
   KEY `FK_iiaf860xrkux4d333n06gqdap` (`pmsid`),
   KEY `FK_6sphp8ycu59cwo68b71u2jcye` (`roleid`),
-  CONSTRAINT `cmsrolepms_ibfk_1` FOREIGN KEY (`roleid`) REFERENCES `cmsrole` (`roleid`),
-  CONSTRAINT `cmsrolepms_ibfk_2` FOREIGN KEY (`pmsid`) REFERENCES `cmspermission` (`pmsid`)
+  CONSTRAINT `cmsrolepms_ibfk_2` FOREIGN KEY (`pmsid`) REFERENCES `cmspermission` (`pmsid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `cmsrolepms_ibfk_1` FOREIGN KEY (`roleid`) REFERENCES `cmsrole` (`roleid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
@@ -106,15 +106,15 @@ CREATE TABLE `cmsuser` (
   `password` varchar(100) CHARACTER SET utf8 DEFAULT NULL,
   PRIMARY KEY (`userid`),
   UNIQUE KEY `UK_726c0ppn7oftcawwsq6n4u6gn` (`account`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of cmsuser
 -- ----------------------------
 INSERT INTO `cmsuser` VALUES ('1', 'admin', '管理员', '$2a$10$RtCDFfOKE82JwsO4XOkSk.dyG9098Q.91PLsO8OiqlVtEGeUoo0mC');
 INSERT INTO `cmsuser` VALUES ('2', 'admin1', '123', '$2a$10$RtCDFfOKE82JwsO4XOkSk.dyG9098Q.91PLsO8OiqlVtEGeUoo0mC');
-INSERT INTO `cmsuser` VALUES ('5', 'user1', 'user12', '$2a$10$ug4/Xg5V6hZU8qOpJks/8ec73.k4IVmm6IKyE8kW0RoMCGlSoDSdC');
 INSERT INTO `cmsuser` VALUES ('6', 'user2', 'user2', '$2a$10$H5jH0FQVCmMusAinn/Ybr.D.CneHePD50lgiYmAORsuoETXh6MajK');
+INSERT INTO `cmsuser` VALUES ('8', 'user1', 'user1', '$2a$10$fi3jPVKBi0TsKV.PYAOTKu99w6dc/Pl6FiA4BrNuE91PwmRQoXSe.');
 
 -- ----------------------------
 -- Table structure for cmsuserrole
@@ -127,9 +127,9 @@ CREATE TABLE `cmsuserrole` (
   PRIMARY KEY (`id`),
   KEY `FK_7txs9153uvcm24p3n34pa1c8p` (`roleid`),
   KEY `FK_h8hq3ed5gko0yq3jforlirm9i` (`userid`),
-  CONSTRAINT `cmsuserrole_ibfk_1` FOREIGN KEY (`roleid`) REFERENCES `cmsrole` (`roleid`),
-  CONSTRAINT `cmsuserrole_ibfk_2` FOREIGN KEY (`userid`) REFERENCES `cmsuser` (`userid`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+  CONSTRAINT `cmsuserrole_ibfk_2` FOREIGN KEY (`userid`) REFERENCES `cmsuser` (`userid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `cmsuserrole_ibfk_1` FOREIGN KEY (`roleid`) REFERENCES `cmsrole` (`roleid`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of cmsuserrole
@@ -137,6 +137,7 @@ CREATE TABLE `cmsuserrole` (
 INSERT INTO `cmsuserrole` VALUES ('1', '1', '1');
 INSERT INTO `cmsuserrole` VALUES ('2', '2', '2');
 INSERT INTO `cmsuserrole` VALUES ('3', '1', '2');
+INSERT INTO `cmsuserrole` VALUES ('6', '8', '2');
 
 -- ----------------------------
 -- Table structure for c_category
@@ -146,17 +147,13 @@ CREATE TABLE `c_category` (
   `categoryid` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT '',
   PRIMARY KEY (`categoryid`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of c_category
 -- ----------------------------
 INSERT INTO `c_category` VALUES ('1', '生活');
 INSERT INTO `c_category` VALUES ('2', '食品');
-INSERT INTO `c_category` VALUES ('3', '家电');
-INSERT INTO `c_category` VALUES ('4', '电子');
-INSERT INTO `c_category` VALUES ('5', '住房');
-INSERT INTO `c_category` VALUES ('6', 'sdfsf');
 
 -- ----------------------------
 -- Table structure for c_customer
@@ -173,18 +170,14 @@ CREATE TABLE `c_customer` (
   `wxname` varchar(100) DEFAULT '',
   `wxavatar` varchar(255) DEFAULT '',
   PRIMARY KEY (`customerid`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of c_customer
 -- ----------------------------
-INSERT INTO `c_customer` VALUES ('1', 'chris', '0.00', '', '0', '0', '', '呜呜呜', 'http://tva3.sinaimg.cn/crop.195.100.205.205.50/b9d58e9bjw8ewzi8f3i4pj20k50p0tn3.jpg');
-INSERT INTO `c_customer` VALUES ('2', 'ssddddff', '100.00', '厦门市', '1', '12365488978', '戒不掉傻笑', '呜呜呜', 'http://tva3.sinaimg.cn/crop.195.100.205.205.50/b9d58e9bjw8ewzi8f3i4pj20k50p0tn3.jpg');
-INSERT INTO `c_customer` VALUES ('3', 'fsfsf', '100.00', '', '0', '0', '222', '呜呜呜', 'http://tva3.sinaimg.cn/crop.195.100.205.205.50/b9d58e9bjw8ewzi8f3i4pj20k50p0tn3.jpg');
-INSERT INTO `c_customer` VALUES ('4', 'dfgd', '100.00', '思明区', '1', '424', '333', '呜呜呜', 'http://tva3.sinaimg.cn/crop.195.100.205.205.50/b9d58e9bjw8ewzi8f3i4pj20k50p0tn3.jpg');
-INSERT INTO `c_customer` VALUES ('5', 'khjhk', '100.00', '思明区', '1', '0', '444', '呜呜呜', 'http://tva3.sinaimg.cn/crop.195.100.205.205.50/b9d58e9bjw8ewzi8f3i4pj20k50p0tn3.jpg');
-INSERT INTO `c_customer` VALUES ('6', 'sdfs', '100.00', '思明区', '0', '23424', '555', '呜呜呜', 'http://tva3.sinaimg.cn/crop.195.100.205.205.50/b9d58e9bjw8ewzi8f3i4pj20k50p0tn3.jpg');
-INSERT INTO `c_customer` VALUES ('7', 'sfdsf', '100.00', '', '0', '0', '', '呜呜呜', 'http://tva3.sinaimg.cn/crop.195.100.205.205.50/b9d58e9bjw8ewzi8f3i4pj20k50p0tn3.jpg');
+INSERT INTO `c_customer` VALUES ('1', 'wx_shop', '0.00', '厦大学生公寓4-401', '1', '13333333333', '专业炸鸡店家', '任性爱', 'sdfsdfsd');
+INSERT INTO `c_customer` VALUES ('11', 'okkDd1UrlsuGKtI8fFGk5A9E_SXo', '297.00', '', '0', '0', '', '雄', 'http://wx.qlogo.cn/mmopen/fzqakRrlufvTicQpdU7VxAgLFWGngXibkky7NlQcEpsicaqNHYrRYGkKziaRVzibthciaLml8RicwsdIYZ34CzW8LibSmz7gdicjzbu7b/0');
+INSERT INTO `c_customer` VALUES ('12', 'okkDd1VMAroGBBCDSBHMQVGg4mpw', '397.00', '', '0', '0', '', '郭煜', 'http://wx.qlogo.cn/mmopen/NyWcVjdbRYUOnibiaJqLV5QlycRIdE7NdF6Q42pCmJD4wib6xibuB6HPOxg6OULjIylHialrAZ29XqicibVGdYJ5G13kVguyCI4zbbW/0');
 
 -- ----------------------------
 -- Table structure for db_dbattend
@@ -199,18 +192,22 @@ CREATE TABLE `db_dbattend` (
   PRIMARY KEY (`attendid`),
   KEY `FK_lmlk434u8sad3se1j06033c2u` (`customerid`),
   KEY `FK_jaikym0vv8t3f1c0wn8pfa1rl` (`dbplanid`),
-  CONSTRAINT `FK_jaikym0vv8t3f1c0wn8pfa1rl` FOREIGN KEY (`dbplanid`) REFERENCES `db_dbplan` (`dbplanid`),
-  CONSTRAINT `FK_lmlk434u8sad3se1j06033c2u` FOREIGN KEY (`customerid`) REFERENCES `c_customer` (`customerid`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+  CONSTRAINT `FK_lmlk434u8sad3se1j06033c2u` FOREIGN KEY (`customerid`) REFERENCES `c_customer` (`customerid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_jaikym0vv8t3f1c0wn8pfa1rl` FOREIGN KEY (`dbplanid`) REFERENCES `db_dbplan` (`dbplanid`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of db_dbattend
 -- ----------------------------
-INSERT INTO `db_dbattend` VALUES ('1', '3', '1', '1489319672', '1');
-INSERT INTO `db_dbattend` VALUES ('2', '1', '1', '1489459179', '1');
-INSERT INTO `db_dbattend` VALUES ('3', '3', '1', '1489459179', '1');
-INSERT INTO `db_dbattend` VALUES ('18', '3', '1', '1490584020', '1');
-INSERT INTO `db_dbattend` VALUES ('19', '3', '1', '1490584074', '1');
+INSERT INTO `db_dbattend` VALUES ('25', '18', '1', '1493643895', '1');
+INSERT INTO `db_dbattend` VALUES ('26', '18', '11', '1493643906', '1');
+INSERT INTO `db_dbattend` VALUES ('27', '18', '11', '1493644104', '1');
+INSERT INTO `db_dbattend` VALUES ('28', '13', '11', '1493645158', '1');
+INSERT INTO `db_dbattend` VALUES ('29', '16', '11', '1493702609', '1');
+INSERT INTO `db_dbattend` VALUES ('30', '16', '11', '1493703730', '1');
+INSERT INTO `db_dbattend` VALUES ('31', '19', '12', '1493725553', '1');
+INSERT INTO `db_dbattend` VALUES ('32', '19', '12', '1493725656', '1');
+INSERT INTO `db_dbattend` VALUES ('33', '19', '12', '1493725663', '1');
 
 -- ----------------------------
 -- Table structure for db_dbplan
@@ -228,15 +225,19 @@ CREATE TABLE `db_dbplan` (
   `isfinish` int(1) DEFAULT NULL,
   PRIMARY KEY (`dbplanid`),
   KEY `FK_2iyr965ah1f6h0nvulr9k6gvg` (`goodsid`),
-  CONSTRAINT `FK_2iyr965ah1f6h0nvulr9k6gvg` FOREIGN KEY (`goodsid`) REFERENCES `g_goods` (`goodsid`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+  CONSTRAINT `FK_2iyr965ah1f6h0nvulr9k6gvg` FOREIGN KEY (`goodsid`) REFERENCES `g_goods` (`goodsid`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of db_dbplan
 -- ----------------------------
-INSERT INTO `db_dbplan` VALUES ('1', '26', '2', '50', '1489319672', '1489748075', '4', '200', '0');
-INSERT INTO `db_dbplan` VALUES ('3', '25', '2', '50', '1489319677', '1489748076', '4', '200', '1');
-INSERT INTO `db_dbplan` VALUES ('4', '25', '2', '100', '1489319674', '1489748076', '3', '300', '0');
+INSERT INTO `db_dbplan` VALUES ('13', '1', '2', '20', '1493641198', '1493645340', '5', '100', '1');
+INSERT INTO `db_dbplan` VALUES ('14', '2', null, '10', '1493814021', '1494418829', '20', '200', '0');
+INSERT INTO `db_dbplan` VALUES ('15', '3', '1', '1', '1493641243', '1494418846', '300', '300', '0');
+INSERT INTO `db_dbplan` VALUES ('16', '4', null, '10', '1493641261', '1494418864', '40', '400', '0');
+INSERT INTO `db_dbplan` VALUES ('17', '5', '2', '20', '1493641282', '1494418887', '25', '500', '0');
+INSERT INTO `db_dbplan` VALUES ('18', '40', '1', '1', '1493641302', '1493641319', '3', '3', '1');
+INSERT INTO `db_dbplan` VALUES ('19', '40', '1', '1', '1493725462', '1493726400', '3', '3', '1');
 
 -- ----------------------------
 -- Table structure for db_situation
@@ -250,15 +251,16 @@ CREATE TABLE `db_situation` (
   PRIMARY KEY (`situationid`),
   KEY `FK_ewx04f6je9lvyjm7ubtetbevu` (`customerid`),
   KEY `FK_iyocdaxpw5t7teq3lduvkli7c` (`dbplanid`),
-  CONSTRAINT `FK_ewx04f6je9lvyjm7ubtetbevu` FOREIGN KEY (`customerid`) REFERENCES `c_customer` (`customerid`),
-  CONSTRAINT `FK_iyocdaxpw5t7teq3lduvkli7c` FOREIGN KEY (`dbplanid`) REFERENCES `db_dbplan` (`dbplanid`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+  CONSTRAINT `FK_iyocdaxpw5t7teq3lduvkli7c` FOREIGN KEY (`dbplanid`) REFERENCES `db_dbplan` (`dbplanid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_ewx04f6je9lvyjm7ubtetbevu` FOREIGN KEY (`customerid`) REFERENCES `c_customer` (`customerid`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of db_situation
 -- ----------------------------
-INSERT INTO `db_situation` VALUES ('10', '3', '5', '0');
-INSERT INTO `db_situation` VALUES ('13', '1', '5', '0');
+INSERT INTO `db_situation` VALUES ('14', '18', '11', '1');
+INSERT INTO `db_situation` VALUES ('15', '13', null, null);
+INSERT INTO `db_situation` VALUES ('16', '19', '12', '1');
 
 -- ----------------------------
 -- Table structure for g_goods
@@ -274,16 +276,20 @@ CREATE TABLE `g_goods` (
   PRIMARY KEY (`goodsid`),
   KEY `FK_ihyitlqw009wf831t0h32e1e8` (`categoryid`),
   KEY `FK_fase2nlaf82nwn85iixkgfsfh` (`shopid`),
-  CONSTRAINT `FK_fase2nlaf82nwn85iixkgfsfh` FOREIGN KEY (`shopid`) REFERENCES `c_customer` (`customerid`),
-  CONSTRAINT `FK_ihyitlqw009wf831t0h32e1e8` FOREIGN KEY (`categoryid`) REFERENCES `c_category` (`categoryid`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+  CONSTRAINT `FK_ihyitlqw009wf831t0h32e1e8` FOREIGN KEY (`categoryid`) REFERENCES `c_category` (`categoryid`) ON DELETE SET NULL ON UPDATE SET NULL,
+  CONSTRAINT `FK_fase2nlaf82nwn85iixkgfsfh` FOREIGN KEY (`shopid`) REFERENCES `c_customer` (`customerid`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of g_goods
 -- ----------------------------
-INSERT INTO `g_goods` VALUES ('25', '杂粮煎饼', 'upload/1489027333012.jpg;upload/1489027414137.gif;', '1', '4', '是非得');
-INSERT INTO `g_goods` VALUES ('26', '是否', 'upload/1489027432083.jpg;upload/1489027432105.gif;upload/1489027436960.jpg;upload/1489027530085.JPG;', '2', '5', '沙发');
-INSERT INTO `g_goods` VALUES ('27', '辣条', '', '2', '2', '好吃');
+INSERT INTO `g_goods` VALUES ('1', '白斩鸡', 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2192772877,3040398893&fm=23&gp=0.jpg;https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2107057156,3985498294&fm=23&gp=0.jpg;https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1493638355&di=bb1cb77b88ec4df7f74ec18989b604fe&src=http://image.bitauto.com/dealer/news/100076918/6ce6bd90-8313-4dc5-aa4d-da54e1ad6760.jpg;https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2568018200,344673215&fm=23&gp=0.jpg', '2', '1', '好吃的白斩鸡');
+INSERT INTO `g_goods` VALUES ('2', '棒棒鸡', 'https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1493638414&di=b4986360c1e9a3f06556964ce9b8a461&src=http://img.cnys.com/upload/thumb/2016/11-02/0-t9YP2O.jpg;https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1493638414&di=6019809507b449646d469821a61fd4a1&src=http://img.dongqiudi.com/uploads9/allimg/160401/218-160401110UNW.jpg', '2', '1', '辣的棒棒鸡');
+INSERT INTO `g_goods` VALUES ('3', '炸鸡', 'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1389484765,1179592004&fm=117&gp=0.jpg;https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=802076414,552061395&fm=111&gp=0.jpg;https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2395666180,3501055607&fm=117&gp=0.jpg', '2', '1', '酥脆炸鸡');
+INSERT INTO `g_goods` VALUES ('4', '烤鸡', 'http://i3.meishichina.com/attachment/recipe/201102/201102151511274.jpg@!p800', '2', '1', '烤鸡');
+INSERT INTO `g_goods` VALUES ('5', '大盘鸡', null, '2', '1', '真的是大盘鸡');
+INSERT INTO `g_goods` VALUES ('40', '笔芯', 'upload/1493725539933.jpg;', '1', '1', '0.5mm超强笔芯');
+INSERT INTO `g_goods` VALUES ('41', '手表', '', '1', '1', '手表');
 
 -- ----------------------------
 -- Procedure structure for p_insertattend
@@ -292,6 +298,7 @@ DROP PROCEDURE IF EXISTS `p_insertattend`;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `p_insertattend`(IN `a_customerid` bigint,IN `a_dbplanid` bigint,IN `a_usebalance` int)
 BEGIN
+DECLARE luckycustomerid BIGINT DEFAULT null;
 DECLARE t_error INTEGER DEFAULT 0; 
 DECLARE result int DEFAULT 0 ;
 DECLARE totalnumber int DEFAULT 0 ;
@@ -310,7 +317,7 @@ if totalnumber > nownumber then
 					update c_customer set balance = balance - dsplit where customerid = a_customerid;
 					SELECT UNIX_TIMESTAMP() into current;
 					insert db_dbattend (dbplanid,customerid,isplay,createtime) values (a_dbplanid,a_customerid,1,current);
-					set result = 1;
+					set result = 1;	
 			else
 					set result = 2;
 			end if;
@@ -319,7 +326,11 @@ if totalnumber > nownumber then
 			insert db_dbattend (dbplanid,customerid,isplay,createtime) values (a_dbplanid,a_customerid,0,current);
 			set result = 1;
 	end if;
-	
+	if totalnumber -1 = nownumber then
+			select customerid into luckycustomerid from db_dbattend WHERE db_dbattend.dbplanid = a_dbplanid order by rand() limit 1;
+			insert into db_situation (dbplanid,customerid,istake) values (a_dbplanid,luckycustomerid,0);
+			update db_dbplan set db_dbplan.isfinish = 1 where db_dbplan.dbplanid = a_dbplanid;
+	end if;
 end if;
 IF t_error = 1 THEN  
 		ROLLBACK;	

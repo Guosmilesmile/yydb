@@ -107,7 +107,7 @@ public class DefultBaseService implements IBaseService {
 		return baseDao.executeBySQL(sql, params);
 	}
 
-	
+	@Transactional(propagation=Propagation.REQUIRED)
 	public <T>List<T> executeBySQLList(String sql, Object... params){
 		return baseDao.executeBySQLList(sql, params);
 	}

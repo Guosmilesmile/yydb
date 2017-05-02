@@ -10,11 +10,15 @@ import javax.annotation.Resource;
 import org.shiro.demo.controller.app.vo.AppDBplanVO;
 import org.shiro.demo.dao.util.Pagination;
 import org.shiro.demo.dao.util.QueryCondition;
+import org.shiro.demo.entity.Customer;
+import org.shiro.demo.entity.DBAttend;
 import org.shiro.demo.entity.DBPlan;
 import org.shiro.demo.service.IBaseService;
 import org.shiro.demo.service.IDBPlanService;
 import org.shiro.demo.vo.DBPlanVO;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service("dbplanService")
 public class DBPlanServiceImpl extends DefultBaseService implements IDBPlanService{
@@ -33,9 +37,19 @@ public class DBPlanServiceImpl extends DefultBaseService implements IDBPlanServi
 		return flag;
 	}
 
+	@Transactional(propagation=Propagation.REQUIRED)
 	public boolean deleteDBPlan(Long id) {
 		boolean flag = false;
 		try {
+			List<QueryCondition> queryConditions = new ArrayList<QueryCondition>();
+			queryConditions.add(new QueryCondition("dbPlan.dbplanid="+id));
+			List<DBAttend> list = baseService.get(DBAttend.class, queryConditions );
+			DBPlan dbPlan = baseService.getById(DBPlan.class, id);
+			for(DBAttend item : list){
+				Customer customer = item.getCustomer();
+				customer.setBalance(customer.getBalance()+dbPlan.getSplit());
+				baseService.update(customer);
+			}
 			baseService.delete(DBPlan.class, id);
 			flag = true;
 		} catch (Exception e) {
@@ -101,4 +115,20 @@ public class DBPlanServiceImpl extends DefultBaseService implements IDBPlanServi
 		return returnMap;
 	}
 	
+	public Map<String, Object> getDBPlanWithWechatid(int page, int pageSize,String wechatid) {
+		List<QueryCondition> params = new ArrayList<QueryCondition>();
+		QueryCondition queryCondition = new QueryCondition("goods.shop.wechatid="+"'"+wechatid+"'");
+		params.add(queryCondition);
+		String	sqlString =  "order by dbplanid desc";
+		Pagination<DBPlan> dbPlanPagination = baseService.getPagination(DBPlan.class, params,sqlString, page, pageSize);
+		List<AppDBplanVO> appDBplanVOs = AppDBplanVO.changeDBPlan2APPDBPlanVOList(dbPlanPagination);
+		List<AppDBplanVO> returnAppDBplanVOs = new ArrayList<AppDBplanVO>();
+		for(AppDBplanVO appDBplanVO : appDBplanVOs){
+			returnAppDBplanVOs.add(getAppDBplanVObyId(appDBplanVO.getId()));
+		}
+		Map<String, Object> returnMap = new HashMap<String, Object>();
+		returnMap.put("rows", returnAppDBplanVOs);
+		returnMap.put("total", dbPlanPagination.getRecordCount());
+		return returnMap;
+	}
 }

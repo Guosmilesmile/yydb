@@ -1,5 +1,6 @@
 package org.shiro.demo.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -49,7 +50,7 @@ public class DBPlan {
 	
 	@Column(name="isfinish")
 	private Integer isfinish = 0;//是否结束
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY,cascade = {CascadeType.MERGE })
 	@JoinColumn(name = "goodsid")
 	private Goods goods;
 
@@ -88,15 +89,15 @@ public class DBPlan {
 		this.number = number;
 		this.money = money;
 		this.goods = goods;
-		if(split>0&&split<=10){
+		if(split>0&&split<10){
 			this.block = DBPlan.BLOCKONE;
-		}else if(split>10&&split<=100){
+		}else if(split>= 10&&split<100){
 			this.block = DBPlan.BLOCKTEN;
-		}else if(split>100&&split<=1000){
+		}else if(split>=100&&split<1000){
 			this.block = DBPlan.BLOCKHUNDRED;
-		}else if(split>1000&&split<=10000){
+		}else if(split>=1000&&split<10000){
 			this.block = DBPlan.BLOCKTHOUSAND;
-		}else if(split>100000){
+		}else if(split>=100000){
 			this.block = DBPlan.BLOCKWANG;
 		}
 	}

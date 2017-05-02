@@ -61,7 +61,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 		type : 'combobox',
                 		options : {
                 			valueField: "value", textField: "text"  ,
-                        	data:[{"value": "1", "text": "非流标"},{"value": "0", "text": "流标"}],
+                        	data:[{"value": "1", "text": "非流标"},{"value": "0", "text": "流标"},{"value": "2", "text": "进行中"}],
                         	editable:false 
                 		}
                     },

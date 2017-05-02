@@ -9,9 +9,9 @@ import org.shiro.demo.controller.app.exception.EncryptWrongExcetion;
 import org.shiro.demo.controller.app.exception.ParamsWromgException;
 import org.shiro.demo.controller.app.exception.TimeOutException;
 import org.shiro.demo.dao.util.QueryCondition;
-import org.shiro.demo.entity.Category;
 import org.shiro.demo.entity.Customer;
 import org.shiro.demo.service.ICustomerService;
+import org.shiro.demo.service.IDBPlanService;
 import org.shiro.demo.util.FastJsonTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,91 +21,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping(value="app/customer")
-public class AppCustomerController extends AppBaseController{
+@RequestMapping(value="app/shop")
+public class AppShopController  extends AppBaseController{
 
 	@Autowired
 	private ICustomerService customerService;
 	
-	/**
-	 * 获取用户余额、微信头像、微信昵称信息
-	 * @param params
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value="/getbalance",method=RequestMethod.GET,produces = "text/json;charset=UTF-8")
-	public String getBalance(@RequestParam(value="params")String params){
-		ReturnData returnData = new ReturnData();
-		try {
-			Map<String, String> paramsMap = filterParam(params);
-			String wechatid = paramsMap.get("wechatid");
-			//Double balance = Double.parseDouble(paramsMap.get("balance"));
-			Customer customer = customerService.getCustomerbyWechatid(wechatid);
-			returnData.setCode(ReturnData.SUCCESS);
-			returnData.setMessage("成功");
-			Customer returnCustomer = new Customer();
-			returnCustomer.setBalance(customer.getBalance());
-			returnCustomer.setWxname(customer.getWxname());
-			returnCustomer.setWxavatar(customer.getWxavatar());
-			returnData.setData(FastJsonTool.createJsonString(returnCustomer));
-		} catch(EncryptWrongExcetion e){
-			e.printStackTrace();
-			returnData.setCode(ReturnData.FAIL);
-			returnData.setMessage("接口数据有误");
-			returnData.setData("");
-		}catch (TimeOutException e) {
-			e.printStackTrace();
-			returnData.setCode(ReturnData.FAIL);
-			returnData.setMessage("接口已过期");
-			returnData.setData("");
-		}catch (ParamsWromgException e) {
-			e.printStackTrace();
-			returnData.setCode(ReturnData.FAIL);
-			returnData.setMessage("接口数据有误");
-			returnData.setData("");
-		}
-		String resultdata = FastJsonTool.createJsonString(returnData);
-		return resultdata;
-	}
-	
-	/**
-	 * 注册用户
-	 * @param params
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value="/regist",method=RequestMethod.GET,produces = "text/json;charset=UTF-8")
-	public String regist(@RequestParam(value="params")String params,@RequestParam(value="avatar")String avatar){
-		ReturnData returnData = new ReturnData();
-		try {
-			Map<String, String> paramsMap = filterParam(params);
-			String wechatid = paramsMap.get("wechatid");
-			String wxname = paramsMap.get("wxname");
-			Customer customer = new Customer(wechatid, new Double(0), 0, "", 0l, "",wxname,avatar);
-			boolean flag = customerService.insertCustomer(customer);
-			returnData.setCode(ReturnData.SUCCESS);
-			returnData.setMessage("成功");
-			returnData.setData("");
-		} catch(EncryptWrongExcetion e){
-			e.printStackTrace();
-			returnData.setCode(ReturnData.FAIL);
-			returnData.setMessage("接口数据有误");
-			returnData.setData("");
-		}catch (TimeOutException e) {
-			e.printStackTrace();
-			returnData.setCode(ReturnData.FAIL);
-			returnData.setMessage("接口已过期");
-			returnData.setData("");
-		}catch (ParamsWromgException e) {
-			e.printStackTrace();
-			returnData.setCode(ReturnData.FAIL);
-			returnData.setMessage("接口数据有误");
-			returnData.setData("");
-		}
-		String resultdata = FastJsonTool.createJsonString(returnData);
-		return resultdata;
-	}
-	
+	@Autowired
+	private IDBPlanService dbPlanService;
 	
 	/**
 	 * login
@@ -155,4 +78,47 @@ public class AppCustomerController extends AppBaseController{
 		return resultdata;
 	}
 	
+	
+	/**
+	 * 获取所有夺宝计划
+	 * @param params columnName 排序字段  
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="/getDBPlanPage",method=RequestMethod.GET,produces = "text/json;charset=UTF-8")
+	public String getDBPlanPage(@RequestParam(value="params")String params){
+		ReturnData returnData = new ReturnData();
+		try {
+			Map<String, String> paramsMap = filterParam(params);
+			Integer page = Integer.parseInt(paramsMap.get("page"));
+			Integer pageSize = Integer.parseInt(paramsMap.get("pageSize"));
+			String wechatid = paramsMap.get("wechatid");
+			Map<String, Object> dataMap = dbPlanService.getDBPlanWithWechatid(page, pageSize, wechatid);
+			returnData.setCode(ReturnData.SUCCESS);
+			returnData.setMessage("成功");
+			returnData.setData(FastJsonTool.createJsonString(dataMap));
+		} catch(EncryptWrongExcetion e){
+			e.printStackTrace();
+			returnData.setCode(ReturnData.FAIL);
+			returnData.setMessage("接口数据有误");
+			returnData.setData("");
+		}catch (TimeOutException e) {
+			e.printStackTrace();
+			returnData.setCode(ReturnData.FAIL);
+			returnData.setMessage("接口已过期");
+			returnData.setData("");
+		}catch (ParamsWromgException e) {
+			e.printStackTrace();
+			returnData.setCode(ReturnData.FAIL);
+			returnData.setMessage("接口数据有误");
+			returnData.setData("");
+		}catch (Exception e) {
+			e.printStackTrace();
+			returnData.setCode(ReturnData.FAIL);
+			returnData.setMessage("接口数据有误");
+			returnData.setData("");
+		}
+		String resultdata = FastJsonTool.createJsonString(returnData);
+		return resultdata;
+	}
 }
